@@ -1,0 +1,114 @@
+{
+  "app_name": "Glean",
+  "personality": "1 iOS-Native Clean",
+  "personality_one_liner": "A calm, highly readable, and perfectly structured personal vault where your saved content takes center stage, devoid of artificial tech noise.",
+  "color": {
+    "surface": {"light": "#FBFBF9", "dark": "#161615"},
+    "onSurface": {"light": "#1C1C1A", "dark": "#FBFBF9"},
+    "surfaceSecondary": {"light": "#F3F3F0", "dark": "#232322"},
+    "onSurfaceSecondary": {"light": "#4E4E4A", "dark": "#D4D4D2"},
+    "surfaceTertiary": {"light": "#EBEBE6", "dark": "#2C2C2A"},
+    "onSurfaceTertiary": {"light": "#1C1C1A", "dark": "#FBFBF9"},
+    "surfaceInverse": {"light": "#161615", "dark": "#FBFBF9"},
+    "onSurfaceInverse": {"light": "#FBFBF9", "dark": "#161615"},
+    "brand": {"light": "#4A5D4E", "dark": "#8FA693"},
+    "brandPrimary": {"light": "#4A5D4E", "dark": "#8FA693"},
+    "onBrandPrimary": {"light": "#FBFBF9", "dark": "#161615"},
+    "brandSecondary": {"light": "#C26E5D", "dark": "#D89083"},
+    "onBrandSecondary": {"light": "#FBFBF9", "dark": "#161615"},
+    "brandTertiary": {"light": "#E4E7E1", "dark": "#354238"},
+    "onBrandTertiary": {"light": "#4A5D4E", "dark": "#8FA693"},
+    "success": {"light": "#4A5D4E", "dark": "#8FA693"},
+    "onSuccess": {"light": "#FBFBF9", "dark": "#161615"},
+    "warning": {"light": "#D99B41", "dark": "#D99B41"},
+    "onWarning": {"light": "#FBFBF9", "dark": "#161615"},
+    "error": {"light": "#B34A4A", "dark": "#B34A4A"},
+    "onError": {"light": "#FBFBF9", "dark": "#161615"},
+    "border": {"light": "#EBEBE6", "dark": "#2C2C2A"},
+    "borderStrong": {"light": "#D1D1CB", "dark": "#40403D"},
+    "divider": {"light": "#F3F3F0", "dark": "#232322"}
+  },
+  "typography": {
+    "displayFontFamily": "Satoshi",
+    "textFontFamily": "Satoshi",
+    "scale": { "sm": 12, "base": 14, "lg": 16, "xl": 20, "2xl": 24 }
+  },
+  "spacing": { 
+    "rule": "Generous iOS-native margins (typically 16-24), except strictly 12px for masonry grid gaps. No cramped elements. Minimum touch target 44pt via minHeight or hitSlop.", 
+    "xs": 4, "sm": 8, "md": 12, "lg": 16, "xl": 24, "2xl": 32, "3xl": 48 
+  },
+  "radius_tokens": { "sm": 6, "md": 12, "lg": 20, "pill": 999 },
+  "shadow_tier": "1",
+  "navigation": "bottom_tabs",
+  "icon_set": "Phosphor",
+  "glassmorphism": {
+    "enabled": true,
+    "do's": ["Bottom tab bar", "Sticky search header on Vault Home", "Add-sheet drag handle / header"],
+    "dont's": ["Cards", "Inputs", "Tags", "Lists", "Everywhere else"]
+  },
+  "platform_libraries": {
+    "glass": {
+      "ios": "expo-glass-effect",
+      "android": "expo-blur",
+      "low_end_android_fallback": "solid surfaceSecondary"
+    },
+    "image": "expo-image",
+    "blur": "expo-blur",
+    "bottom_sheet": "@gorhom/bottom-sheet",
+    "animation": "react-native-reanimated",
+    "gesture": "react-native-gesture-handler"
+  },
+  "screens": [
+    {
+      "name": "Auth",
+      "purpose": "Email/password login or registration acting as the entry point.",
+      "states": { "loading": "Centered brand spinner on CTA", "empty": "N/A", "error": "Inline text below inputs" },
+      "layout": "Root is full screen. Top 40% is an abstract brand hero image (no text overlay). Bottom 60% contains a large display title ('Glean', 24pt, 500 wgt), inputs for Email and Password (labels above inputs, surfaceSecondary background, border outline on focus), and a sticky CTA button anchored above the keyboard via KeyboardAvoidingView. Minimal chrome."
+    },
+    {
+      "name": "Vault Home",
+      "purpose": "Primary view of saved content as a beautiful, staggered 2-column masonry grid.",
+      "states": { "loading": "Skeleton tiles imitating masonry layout (random heights, shimmer)", "empty": "Illustration/Photo of a minimalist folder desk, 'Your vault is empty' text, and CTA pointing to the Add button", "error": "Centered 'Failed to load vault' + Retry CTA" },
+      "layout": "Root includes safe area. Top features a sticky header WITH glassmorphism containing a search bar input and circular Profile avatar. Below header: A horizontal scrollable tag rail (tag pills use brandTertiary bg). Below rail: A 2-col staggered masonry grid (gap: 12px strictly). Each card inside the grid uses surfaceSecondary, radius 12, shadow tier 1. Card structure: Thumbnail image at top (various aspect ratios), a floating platform badge (e.g. YouTube/X/Pinterest logo) absolutely positioned at top-right of image. Below image: Title/summary snippet (max 3 lines) and floating tag pills (brandTertiary) wrapped neatly. Grid must support pull-to-refresh. Ensure list bottom has padding to clear bottom tab bar."
+    },
+    {
+      "name": "Save / Add Half-Sheet",
+      "purpose": "Quick capture of a URL into the vault.",
+      "states": { "loading": "Shimmer effect on the text fields while AI reads the URL to auto-fill", "empty": "Empty URL input state waiting for paste", "error": "Red error text 'Invalid URL' under input" },
+      "layout": "Presented as a @gorhom/bottom-sheet. Drag handle area has glassmorphism. Content area is solid surface. Top: Large title 'Save Link' + close button. Middle: URL input field (large touch target, paste from clipboard detection button alongside it). When loading: Shimmer placeholder fields for Title, Summary, Tags. When success: Fields are auto-filled with AI response. Manual fallback form allows editing. Bottom: Sticky 'Save to Vault' CTA button."
+    },
+    {
+      "name": "Item Detail",
+      "purpose": "Deep dive into a single saved item, enriched by AI.",
+      "states": { "loading": "Spinner centered", "empty": "N/A", "error": "Error loading item + Retry button" },
+      "layout": "Full screen stack with safe area on bottom (no bottom tab). Top: Full-width hero image with vertical gradient scrim (transparent to surfaceInverse) at the bottom. Overlay Title and Platform Logo on the scrim. Content below: AI Summary block (surfaceSecondary background, 12 radius, 16 padding, text at base size), followed by editable Tags (wrapping flex row of pills) and Notes text area. Bottom of screen: Sticky 'Share' and 'Open Link' CTA buttons anchored above safe area. Back button sits floating at top left (glass or brandTertiary circle)."
+    }
+  ],
+  "images": {
+    "auth_hero": { "url": "https://images.unsplash.com/photo-1581084324492-c8076f130f86", "alt": "abstract green organic shapes" },
+    "vault_empty": { "url": "https://images.pexels.com/photos/28456460/pexels-photo-28456460.jpeg", "alt": "modern minimalist home interior desk" },
+    "platform_badge_instagram": { "url": "https://images.pexels.com/photos/20716655/pexels-photo-20716655.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940", "alt": "Instagram logo transparent png" },
+    "platform_badge_tiktok": { "url": "https://images.pexels.com/photos/14158914/pexels-photo-14158914.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940", "alt": "TikTok logo transparent png" },
+    "platform_badge_youtube": { "url": "https://images.pexels.com/photos/13883889/pexels-photo-13883889.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940", "alt": "YouTube logo transparent png" },
+    "platform_badge_x": { "url": "https://images.unsplash.com/photo-1694878981829-da6c6a172c44?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2ODh8MHwxfHNlYXJjaHwxfHxYJTIwVHdpdHRlciUyMGxvZ28lMjBibGFja3xlbnwwfHx8fDE3ODQyMjUyNDJ8MA&ixlib=rb-4.1.0&q=85", "alt": "X twitter logo black" },
+    "platform_badge_pinterest": { "url": "https://images.unsplash.com/photo-1704383293727-acb2b9d30e29?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzB8MHwxfHNlYXJjaHwyfHxQaW50ZXJlc3QlMjBsb2dvJTIwdHJhbnNwYXJlbnR8ZW58MHx8fHwxNzgyOTY0OTAzfDA&ixlib=rb-4.1.0&q=85", "alt": "Pinterest logo transparent" }
+  },
+  "instructions_to_main_agent": [
+    "HONOR THE PROVIDED DESIGN SYSTEM: Use strictly Moss Green (#4A5D4E) and Terracotta (#C26E5D). Do NOT introduce any purple, indigo, or navy under any circumstances. Fall back to near-black/dark-gray instead.",
+    "Do NOT use glassmorphism indiscriminately. It is heavily restricted to the Bottom Tab Bar, Sticky Search Header, and Add-sheet drag handle. Cards and tags must be solid.",
+    "Weight Cap is STRICTLY 500. Use Satoshi (if available) or Plus Jakarta Sans. Do not use weights above 500 (no 600, 700, bold, etc.). Distinguish hierarchy strictly through type scale (12, 14, 16, 20, 24).",
+    "For the Vault Home, you MUST implement a Pinterest-style masonry layout. Use MasonryFlashList or equivalent, ensuring variable card heights, lazy loading, and exact 12px gaps.",
+    "For cards in the masonry grid, ensure the platform badges sit floating over the thumbnails, and image aspect ratios can vary. Always reserve space for images to prevent UI jumps.",
+    "Use Phosphor icons consistently across all screens (outlines for inactive, filled for active in tabs).",
+    "No emojis allowed anywhere in the system UI.",
+    "Ensure Item Detail hero imagery has a vertical gradient scrim overlay for text readability, adhering strictly to the <Imagery_and_Texture> rules (Layer 0 image, Layer 1 linear-gradient vertical top-to-bottom up to 70%+ opacity, Layer 2 text).",
+    "All tap targets must have a minimum dimension of 44x44pt (use hitSlop where visual size is smaller)."
+  ],
+  "haptics": {
+    "button_press": "impactLight",
+    "tab_switch": "selection",
+    "refresh_pull": "impactMedium",
+    "save_success": "notificationSuccess",
+    "save_error": "notificationError"
+  }
+}
