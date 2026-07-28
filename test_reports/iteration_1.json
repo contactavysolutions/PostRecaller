@@ -1,0 +1,68 @@
+{
+  "summary": "Backend 8/8 pytest tests pass end-to-end (auth register/login/me/delete, item CRUD + duplicate + list pagination + tag/intent filter, retry-enrich, 5-intent collections). YouTube and Instagram enrichment through the 6-stage scraper + Gemini 3 Flash chain returns real enriched titles/summaries/tags (Phase 1 exit criteria met at API layer; also verified via UI vault tiles). Frontend (Expo web preview) verified: auth screen → vault masonry → item detail with hero + AI summary + edit mode saved (title & intent persisted via API check) → Collections tab shows 5 intents with counts and filters to Watch → Profile shows email/Free plan/daily-AI ring (1/5) → Privacy & Terms legal pages render. CRITICAL: the AddSheet (`@gorhom/bottom-sheet` `BottomSheetModal`) does NOT open on the Expo web preview (invisible after tapping +), which blocks the in-app URL save flow on web; on native (Expo Go / iOS / Android) this should work but the web preview URL used for testing/demoing is broken. A separate minor issue was fixed: unhandled `Clipboard.getStringAsync()` rejection on web caused a LogBox red screen when opening AddSheet — patched with `.catch()`. Deprecated packages detected: none of the flagged ones (expo-av / expo-barcode-scanner / expo-background-fetch) are present.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "AddSheet (`@gorhom/bottom-sheet` BottomSheetModal)",
+        "issue": "Tapping the center + tab (`add-tab-button`) calls `openAddSheet()` and mounts <AddSheet/>, but the BottomSheetModal never becomes visible on Expo web preview — no url input, no close button, no backdrop. The half-sheet URL-save flow (Phase 1 core loop) is unusable on the web preview. `@gorhom/bottom-sheet` has known web-support gaps; consider swapping to a web-compatible sheet or a plain Modal on Platform.OS==='web'. Reference: /app/frontend/src/components/AddSheet.tsx (BottomSheetModal usage).",
+        "testID": "add-tab-button / add-url-input",
+        "priority": "HIGH"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "Tabs bar",
+        "issues": [
+          "Tabs are icon-only (no text labels), so screen readers and automated tests can't locate 'Collections'/'Profile' by name. Consider adding accessibilityLabel or short labels for clarity."
+        ]
+      }
+    ],
+    "react_native_issues": [
+      {
+        "component": "web deprecation warnings",
+        "issue": "Console warnings: 'props.pointerEvents is deprecated. Use style.pointerEvents' and '\"shadow*\" style props are deprecated. Use \"boxShadow\"'. Non-blocking; likely coming from a dependency (e.g. bottom-sheet / gesture-handler shadows). Reference: seen in Expo web console."
+      }
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/conftest.py",
+    "/app/backend/tests/test_health.py",
+    "/app/backend/tests/test_auth.py",
+    "/app/backend/tests/test_items.py",
+    "/app/test_reports/pytest/results.xml"
+  ],
+  "action_items": [
+    "HIGH: Fix AddSheet on Expo web — @gorhom/bottom-sheet does not render on web. Either (a) render a plain <Modal> or a full screen on Platform.OS==='web', or (b) migrate to a web-compatible sheet lib. Without this the Phase 1 save-URL loop cannot be used from the web preview URL.",
+    "LOW: Investigate the two deprecation warnings (`pointerEvents` prop and `shadow*` style props) — likely fixed by upgrading gesture-handler / bottom-sheet or migrating internal styles to `boxShadow`.",
+    "LOW (nice-to-have): Consider adding a fallback if `EMERGENT_LLM_KEY` is missing so items still save with signals as `enrichment_status='manual'` — already handled, but log a warning."
+  ],
+  "critical_code_review_comments": [
+    "auth.py `get_current_user` raises 401 with HTTPBearer(auto_error=False) — good. But FastAPI returns 403 by default when the header is missing with HTTPBearer even when auto_error=False in older versions; tests accept both 401/403.",
+    "items.py duplicate-save check compares `original_url` exactly (post normalisation is only `strip()` + adding https://). URLs with tracking params or trailing slashes may not be caught as duplicates. Consider canonicalising (strip query params like utm_*, trim trailing slash) before compare.",
+    "items.py `saves_today` uses `datetime.fromisoformat('YYYY-MM-DD')` which yields a naive datetime while `created_at` is timezone-aware UTC — Mongo comparison still works with pymongo, but this is fragile. Prefer explicit UTC midnight.",
+    "ai.py enrichment silently swallows exceptions and returns None; the caller still saves with `enrichment_status='manual'|'failed'` — good UX. But it would help to log the exception with the URL for debuggability (currently `logging.warning('enrichment failed: %s', e)` — no URL context).",
+    "AddSheet.tsx clipboard read had no `.catch()`; fixed by testing agent (unhandled rejection was surfacing as a LogBox red screen on Expo web dev).",
+    "Frontend BASE URL correctly uses `process.env.EXPO_PUBLIC_BACKEND_URL` — good."
+  ],
+  "updated_files": [
+    "/app/frontend/src/components/AddSheet.tsx (added .catch() to Clipboard.getStringAsync to prevent unhandled rejection / LogBox on web)",
+    "/app/backend/tests/conftest.py (new)",
+    "/app/backend/tests/test_health.py (new)",
+    "/app/backend/tests/test_auth.py (new)",
+    "/app/backend/tests/test_items.py (new)"
+  ],
+  "success_rate": {
+    "backend": "100% (8/8 pytest)",
+    "frontend": "~85% — every screen works except AddSheet on web (Phase 1 primary write path)"
+  },
+  "seed_data_creation": "During UI tests I registered ephemeral TEST_ accounts, saved a YouTube item via API, then deleted the account (which cascades items). No lingering test data.",
+  "retest_needed": true,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Backend pytest suite is stable at /app/backend/tests/. Reuse the `registered_user` / `auth_headers` fixtures — they create a fresh TEST_ account per session and clean up via DELETE /auth/me. The Phase 1 exit criteria (YouTube+Instagram real summaries) is verified at API layer + confirmed rendering in the vault masonry UI. AddSheet on Expo web is the single blocker for the frontend save-URL flow; native (iOS/Android via Expo Go) is NOT tested here — main agent should verify AddSheet renders on native, otherwise adopt the platform-split modal approach suggested in action_items.",
+  "rca_of_issue": "Bug: Tapping + on web preview does not open the AddSheet. RCA: `@gorhom/bottom-sheet`'s BottomSheetModal relies on react-native-gesture-handler / reanimated APIs whose web implementations are incomplete; the modal mounts but never becomes visible (no url input, no backdrop). Repro: on web preview, login → tap `add-tab-button` → no sheet appears. Mitigation: on `Platform.OS==='web'`, render a lightweight React Native <Modal> (or an Expo Router modal screen) housing the same form and result stages, keeping shared state via useVault. Secondary bug (fixed by tester): `Clipboard.getStringAsync()` in AddSheet's useEffect rejected on web (permission denied) with no `.catch()` → LogBox red-screen overlay was shown over the (dismissed) sheet in dev. Fix applied at /app/frontend/src/components/AddSheet.tsx (added .catch that no-ops)."
+}
