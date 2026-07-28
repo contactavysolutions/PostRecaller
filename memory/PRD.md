@@ -53,6 +53,17 @@ semantic search → freemium (5 AI/day free, Pro unlimited) → shareable public
 - **Exit criteria met:** YouTube + Instagram + article links produce real enriched summaries in tiles.
 - **Verified:** backend 8/8 pytest pass; frontend flows verified on web preview.
 
+### Rename + Email/Auth iteration ✅ (2026-07-28)
+- Renamed app "Glean" → **PostRecaller** (name/slug/UI/backend/legal/docs; bundle IDs unchanged).
+- Welcome email on signup (fire-and-forget, never blocks registration).
+- Forgot Password: 6-digit code emailed → `/api/auth/forgot-password` (no user enumeration) +
+  `/api/auth/reset-password` (15-min expiry, single-use, 5-attempt cap). New `mailer.py` (Resend).
+- Frontend: "Forgot password?" link on login + two-step `/forgot-password` screen; new on-brand hero image.
+- Email via Resend using `RESEND_API_KEY` (Emergent-managed; empty in preview → mailer logs the code,
+  real delivery activates once the key is populated). Sender defaults to onboarding@resend.dev until a
+  domain is verified.
+- **Verified:** backend 14/14 pytest pass; forgot/reset UI flow verified on web preview.
+
 ## Prioritized Backlog
 ### P2 — Search & tags
 - Embeddings at save-time (store vector), cosine similarity + LLM re-rank top-20 semantic search.
