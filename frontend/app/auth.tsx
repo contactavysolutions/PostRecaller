@@ -59,7 +59,7 @@ export default function AuthScreen() {
         showsVerticalScrollIndicator={false}
       >
         <Text style={{ color: c.onSurface, fontFamily: fonts.medium, fontSize: 40, marginTop: spacing.sm }}>
-          Glean
+          PostRecaller
         </Text>
         <Text style={{ color: c.onSurfaceSecondary, fontFamily: fonts.regular, fontSize: fontSize.lg, marginBottom: spacing.xl }}>
           Everything you save, finally findable.

@@ -1,4 +1,4 @@
-// Glean design tokens — honoring the provided "iOS-Native Clean" system.
+// PostRecaller design tokens — honoring the provided "iOS-Native Clean" system.
 export type Mode = "light" | "dark";
 
 const raw = {

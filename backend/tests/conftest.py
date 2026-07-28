@@ -1,4 +1,4 @@
-"""Shared fixtures for Glean backend tests."""
+"""Shared fixtures for PostRecaller backend tests."""
 import os
 import uuid
 import pytest
@@ -29,7 +29,7 @@ def api_client():
 def test_user_creds():
     # Unique per session so we don't collide with an existing account
     return {
-        "email": f"TEST_glean_{uuid.uuid4().hex[:10]}@example.com",
+        "email": f"TEST_postrecaller_{uuid.uuid4().hex[:10]}@example.com",
         "password": "secret123",
     }
 

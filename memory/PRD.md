@@ -1,4 +1,7 @@
-# Glean — PRD & Build Log
+# PostRecaller — PRD & Build Log
+
+> Note: the app was renamed from "Glean" to **PostRecaller** (Glean was taken by other companies).
+> The original design doc below still references "Glean"; treat all such mentions as PostRecaller.
 
 ## Original Problem Statement
 Build "Glean" — an AI-powered universal content vault. Users save posts from Instagram, TikTok,

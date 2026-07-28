@@ -1,7 +1,7 @@
 import { storage } from "@/src/utils/storage";
 
 const BASE = `${process.env.EXPO_PUBLIC_BACKEND_URL}/api`;
-export const TOKEN_KEY = "glean_auth_token";
+export const TOKEN_KEY = "postrecaller_auth_token";
 
 export type ApiError = { status: number; detail: string };
 

@@ -102,7 +102,7 @@ def _fetch_reddit(url: str) -> dict:
         tok = requests.post(
             "https://www.reddit.com/api/v1/access_token",
             data={"grant_type": "client_credentials"},
-            headers={"Authorization": f"Basic {auth}", "User-Agent": "glean/1.0"},
+            headers={"Authorization": f"Basic {auth}", "User-Agent": "postrecaller/1.0"},
             timeout=8,
         )
         token = tok.json().get("access_token")
@@ -114,7 +114,7 @@ def _fetch_reddit(url: str) -> dict:
         )
         r = requests.get(
             api_url,
-            headers={"Authorization": f"Bearer {token}", "User-Agent": "glean/1.0"},
+            headers={"Authorization": f"Bearer {token}", "User-Agent": "postrecaller/1.0"},
             timeout=8,
         )
         data = r.json()

@@ -1,4 +1,4 @@
-"""Glean API — thin router. All logic lives in modules."""
+"""PostRecaller API — thin router. All logic lives in modules."""
 import logging
 
 from fastapi import FastAPI
@@ -13,9 +13,9 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
 )
-logger = logging.getLogger("glean")
+logger = logging.getLogger("postrecaller")
 
-app = FastAPI(title="Glean API")
+app = FastAPI(title="PostRecaller API")
 
 app.add_middleware(
     CORSMiddleware,
@@ -31,7 +31,7 @@ app.include_router(items_router)
 
 @app.get("/api/")
 async def root():
-    return {"service": "glean", "status": "ok"}
+    return {"service": "postrecaller", "status": "ok"}
 
 
 @app.on_event("startup")
@@ -44,7 +44,7 @@ async def startup():
     await db.ai_usage.create_index([("created_at", DESCENDING)])
     await db.debug_logs.create_index([("created_at", ASCENDING)], expireAfterSeconds=604800)
     await seed_admins()
-    logger.info("Glean startup complete")
+    logger.info("PostRecaller startup complete")
 
 
 @app.on_event("shutdown")

@@ -12,7 +12,7 @@ _IN_COST = 0.075 / 1_000_000
 _OUT_COST = 0.30 / 1_000_000
 
 SYSTEM = (
-    "You are Glean's content librarian. Given raw signals scraped from a saved link, "
+    "You are PostRecaller's content librarian. Given raw signals scraped from a saved link, "
     "produce a clean, useful catalog entry. Respond with STRICT JSON only, no markdown, "
     "no commentary."
 )

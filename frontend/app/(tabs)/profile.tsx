@@ -117,7 +117,7 @@ export default function Profile() {
           <Text testID="profile-email" style={{ color: c.onSurface, fontFamily: fonts.medium, fontSize: fontSize.xl }}>{user?.email}</Text>
           <View style={{ backgroundColor: user?.plan === "pro" ? c.brand : c.surfaceTertiary, borderRadius: radius.pill, paddingHorizontal: 12, paddingVertical: 4 }}>
             <Text style={{ color: user?.plan === "pro" ? c.onBrand : c.onSurfaceSecondary, fontFamily: fonts.medium, fontSize: fontSize.sm }}>
-              {user?.plan === "pro" ? "Glean Pro" : "Free plan"}
+              {user?.plan === "pro" ? "PostRecaller Pro" : "Free plan"}
             </Text>
           </View>
         </View>
