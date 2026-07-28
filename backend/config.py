@@ -28,6 +28,10 @@ ADMIN_EMAILS = [
 EMERGENT_LLM_KEY = os.environ.get("EMERGENT_LLM_KEY", "")
 ENRICH_MODEL = ("gemini", "gemini-3-flash-preview")
 
+# --- Email (Resend; Emergent-managed key populated as RESEND_API_KEY) ---
+RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "")
+RESEND_FROM_EMAIL = os.environ.get("RESEND_FROM_EMAIL", "PostRecaller <onboarding@resend.dev>")
+
 # --- Reddit (optional; OAuth client_credentials only, never scrape) ---
 REDDIT_CLIENT_ID = os.environ.get("REDDIT_CLIENT_ID", "")
 REDDIT_CLIENT_SECRET = os.environ.get("REDDIT_CLIENT_SECRET", "")

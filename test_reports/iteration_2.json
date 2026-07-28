@@ -1,0 +1,48 @@
+{
+  "summary": "PostRecaller Phase-1.5 bug-fix iteration verified end-to-end. Backend: 14/14 pytest pass — includes the 6 new tests in test_password_reset.py covering welcome-email fire-and-forget (register returns 201 in <5s, non-blocking), forgot-password happy path (200/{ok:true} + 6-digit code observed in backend logs at 'Password reset code for <email>: <code>'), forgot-password on unregistered email returns 200/{ok:true} with NO code generated (no user enumeration), reset-password happy path (200 -> login with NEW password 200, OLD password 401), 5 wrong codes return 400 'Invalid or expired code' then 6th returns 429 'Too many attempts', and Pydantic validation returns 422 for code length !=6 or password <6 chars. Existing auth (register/login/me/delete) and items suite remain green. Frontend (Expo web preview at 375x667): Auth screen renders new hero image (Unsplash notebook / journal – relevant to a save-and-recall content vault); 'Forgot password?' link (testID auth-forgot) appears ONLY in login mode and correctly hides after tapping auth-toggle to Register mode; tapping it navigates to /forgot-password. Step 1 email -> Send code advances to Step 2 which shows the 6-digit code input, new-password input, and Resend link. Completing with the code pulled from backend logs shows the 'Password updated' success screen with 'Back to log in' button; tapping it returns to /auth. Login with the new password succeeds via the real API. RESEND_API_KEY intentionally empty in preview -> emails NOT delivered (MOCKED); reset code path fully testable via backend logs as designed. No deprecated Expo packages introduced this iteration.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [],
+    "react_native_issues": [
+      {
+        "component": "web console deprecation warning",
+        "issue": "Console warning 'props.pointerEvents is deprecated. Use style.pointerEvents' still appears on load (carried over from prior iteration, likely from a dependency). Non-blocking. Reference: seen on https://glean-save.preview.emergentagent.com/auth"
+      }
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_password_reset.py",
+    "/app/backend/tests/test_auth.py",
+    "/app/backend/tests/test_items.py",
+    "/app/backend/tests/test_health.py",
+    "/app/test_reports/pytest/results.xml",
+    "/app/test_reports/pytest/reset_results.xml"
+  ],
+  "action_items": [
+    "None blocking. Optional: investigate the 'props.pointerEvents' deprecation warning (from a dependency)."
+  ],
+  "critical_code_review_comments": [
+    "auth.py forgot_password: correctly uses secrets.randbelow(1_000_000) for the 6-digit code, HMAC-SHA256 with JWT_SECRET for at-rest hashing (not raw), 15-minute expiry, and no user enumeration (always returns {ok:true}). Good.",
+    "auth.py reset_password: attempts gate is checked BEFORE the HMAC compare, so wrong attempts 1..5 return 400 and the 6th returns 429 — matches the spec. On success the reset_code_hash/expiry/attempts are $unset (single-use code). Correct.",
+    "mailer.py: correctly falls back to logging when RESEND_API_KEY is empty; welcome email is fire-and-forget via asyncio.create_task so register never blocks even if Resend times out. Good design.",
+    "models.py ResetPasswordIn: `code: str = Field(min_length=6, max_length=6)` and `new_password: str = Field(min_length=6, max_length=128)` — validation returns 422 as expected.",
+    "Frontend forgot-password.tsx: correct 3-step state machine (email -> code -> done), code input is numeric-sanitised and capped at 6 chars, resend button rewinds to sendCode without leaving the screen. All interactive elements have testIDs (forgot-email-input, forgot-code-input, forgot-new-password, forgot-resend, forgot-submit, forgot-back, forgot-goto-login).",
+    "auth.tsx: Forgot password link correctly rendered only when !isRegister, testID auth-forgot present, navigates via router.push('/forgot-password'). Hero image is a journal/notebook — relevant to a save/recall app."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_password_reset.py (new — 6 tests)"
+  ],
+  "success_rate": {
+    "backend": "100% (14/14 pytest — including 6 new reset-flow tests)",
+    "frontend": "100% for this iteration's UI surfaces (auth 'Forgot password?' link visibility toggle, /forgot-password 3-step flow end-to-end, success screen, back-to-login, login with new password)"
+  },
+  "seed_data_creation": "Each test registers a fresh TEST_ / test_* email via /api/auth/register and cleans up via DELETE /api/auth/me at the end. UI test also registered test_ui_reset@example.com, ran the full reset flow, then deleted the account (204). No lingering data.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Reset-flow regression is at /app/backend/tests/test_password_reset.py — it uses subprocess `tail` on /var/log/supervisor/backend.err.log + backend.out.log to fetch the 6-digit code from the 'Password reset code for <email>: <code>' log line emitted by mailer.py. Once RESEND_API_KEY is populated in production, delivery will silently switch to real Resend emails (no code change needed) — this test file will keep working because mailer.py always logs the code before attempting Resend delivery. Existing conftest.registered_user fixture still valid for authenticated endpoints. AddSheet on Expo web preview from iteration 1 is out of scope for this iteration and was not re-tested."
+}

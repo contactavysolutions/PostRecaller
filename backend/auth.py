@@ -1,4 +1,8 @@
 """Auth: bcrypt hashing, JWT issue/verify, current-user dependency, router."""
+import asyncio
+import hashlib
+import hmac
+import secrets
 from datetime import datetime, timedelta, timezone
 
 import bcrypt
@@ -14,7 +18,16 @@ from config import (
     FREE_DAILY_AI_LIMIT,
     db,
 )
-from models import LoginIn, RegisterIn, User, UserPublic, utcnow
+from mailer import send_reset_code_email, send_welcome_email
+from models import (
+    ForgotPasswordIn,
+    LoginIn,
+    RegisterIn,
+    ResetPasswordIn,
+    User,
+    UserPublic,
+    utcnow,
+)
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
 bearer = HTTPBearer(auto_error=False)
@@ -40,6 +53,10 @@ def create_access_token(user_id: str, email: str, is_admin: bool) -> str:
         JWT_SECRET,
         algorithm=JWT_ALGORITHM,
     )
+
+
+def _hash_code(code: str) -> str:
+    return hmac.new(JWT_SECRET.encode("utf-8"), code.encode("utf-8"), hashlib.sha256).hexdigest()
 
 
 def _today() -> str:
@@ -97,6 +114,8 @@ async def register(body: RegisterIn):
     doc = user.to_mongo()
     res = await db.users.insert_one(doc)
     doc["_id"] = res.inserted_id
+    # Fire-and-forget welcome email (never blocks or fails registration).
+    asyncio.create_task(send_welcome_email(email))
     return _public(doc)
 
 
@@ -121,3 +140,53 @@ async def delete_me(current=Depends(get_current_user)):
     await db.items.delete_many({"user_id": uid})
     await db.users.delete_one({"_id": current["_id"]})
     return None
+
+
+@router.post("/forgot-password")
+async def forgot_password(body: ForgotPasswordIn):
+    """Email a 6-digit reset code. Always returns ok (no user enumeration)."""
+    email = body.email.lower()
+    user = await db.users.find_one({"email": email})
+    if user:
+        code = f"{secrets.randbelow(1_000_000):06d}"
+        await db.users.update_one(
+            {"_id": user["_id"]},
+            {"$set": {
+                "reset_code_hash": _hash_code(code),
+                "reset_code_expires_at": utcnow() + timedelta(minutes=15),
+                "reset_code_attempts": 0,
+            }},
+        )
+        await send_reset_code_email(email, code)
+    return {"ok": True}
+
+
+@router.post("/reset-password")
+async def reset_password(body: ResetPasswordIn):
+    email = body.email.lower()
+    user = await db.users.find_one({"email": email})
+    invalid = HTTPException(status_code=400, detail="Invalid or expired code")
+    if not user or not user.get("reset_code_hash"):
+        raise invalid
+
+    exp = user.get("reset_code_expires_at")
+    if exp and exp.tzinfo is None:
+        exp = exp.replace(tzinfo=timezone.utc)
+    if not exp or utcnow() > exp:
+        raise invalid
+
+    if user.get("reset_code_attempts", 0) >= 5:
+        raise HTTPException(status_code=429, detail="Too many attempts — request a new code")
+
+    if not hmac.compare_digest(user["reset_code_hash"], _hash_code(body.code)):
+        await db.users.update_one({"_id": user["_id"]}, {"$inc": {"reset_code_attempts": 1}})
+        raise invalid
+
+    await db.users.update_one(
+        {"_id": user["_id"]},
+        {
+            "$set": {"password_hash": hash_password(body.new_password)},
+            "$unset": {"reset_code_hash": "", "reset_code_expires_at": "", "reset_code_attempts": ""},
+        },
+    )
+    return {"ok": True}

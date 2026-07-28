@@ -48,6 +48,7 @@ export default function RootLayout() {
                 <Stack screenOptions={{ headerShown: false, animation: "slide_from_right" }}>
                   <Stack.Screen name="(tabs)" />
                   <Stack.Screen name="auth" options={{ animation: "fade" }} />
+          <Stack.Screen name="forgot-password" />
                   <Stack.Screen name="item/[id]" />
                   <Stack.Screen name="collection/[intent]" />
                   <Stack.Screen name="legal/privacy" />

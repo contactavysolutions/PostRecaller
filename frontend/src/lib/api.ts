@@ -88,6 +88,16 @@ export const api = {
 
   deleteAccount: () => request<void>("/auth/me", { method: "DELETE" }),
 
+  forgotPassword: (email: string) =>
+    request<{ ok: boolean }>("/auth/forgot-password", { method: "POST", body: { email }, auth: false }),
+
+  resetPassword: (email: string, code: string, new_password: string) =>
+    request<{ ok: boolean }>("/auth/reset-password", {
+      method: "POST",
+      body: { email, code, new_password },
+      auth: false,
+    }),
+
   // ---- Items ----
   createItem: (url: string) =>
     request<{ duplicate: boolean; item: Item }>("/items", { method: "POST", body: { url } }),

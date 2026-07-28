@@ -49,7 +49,7 @@ export default function AuthScreen() {
     <View style={{ flex: 1, backgroundColor: c.surface }}>
       <StatusBar style={mode === "dark" ? "light" : "dark"} />
       <Image
-        source={{ uri: "https://images.unsplash.com/photo-1581084324492-c8076f130f86?auto=format&fit=crop&w=900&q=80" }}
+        source={{ uri: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?auto=format&fit=crop&w=900&q=80" }}
         style={{ width: "100%", height: "40%" }}
         contentFit="cover"
       />
@@ -92,6 +92,14 @@ export default function AuthScreen() {
             {isRegister ? "Already have an account? Log in" : "New here? Create an account"}
           </Text>
         </Pressable>
+
+        {!isRegister ? (
+          <Pressable testID="auth-forgot" onPress={() => router.push("/forgot-password")} style={{ marginTop: spacing.md }}>
+            <Text style={{ color: c.onSurfaceSecondary, fontFamily: fonts.regular, fontSize: fontSize.base }}>
+              Forgot password?
+            </Text>
+          </Pressable>
+        ) : null}
       </KeyboardAwareScrollView>
 
       <KeyboardStickyView offset={{ closed: 0, opened: insets.bottom }}>
