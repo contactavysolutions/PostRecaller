@@ -1,0 +1,37 @@
+{
+  "summary": "AddSheet + tab flow verified end-to-end on Expo web preview at 375x667. Backend was intentionally skipped per E1 (unchanged, already 14/14 green). All 7 requested UI checks pass: (1) tapping the center + tab (testID add-tab-button) opens the RN <Modal> sheet — add-url-input becomes visible; (2a) X button (add-sheet-close) dismisses the sheet; (2b) backdrop tap (add-sheet-backdrop) also dismisses the sheet; (3) reopen works — state resets each open (empty url field, back on 'input' stage); (4) full save flow: typed https://www.youtube.com/watch?v=dQw4w9WgXcQ into add-url-input, tapped add-save-button, observed AI enrichment (~10s), then 'Saved & enriched' card rendered with correct title 'Rick Astley - Never Gonna Give You Up (Official Video)', a thumbnail, and a real Gemini summary — new item also appeared in vault masonry behind the sheet with tags 'music video', '80s pop', 'internet culture'; (5) tapping 'View item' (add-view-item) closed the sheet and navigated to /item/<id> (observed /item/6a684c6ea74d36e44b7a75b8); (6) saving the same URL again after 'Save another' correctly showed the 'Already in your vault' duplicate state; (7) regression: vault masonry loaded, tag rail rendered, no crash on the tabs screen, no red-screen errors. The gorhom→RN Modal rewrite is working on web (which shares the same code path as native for this component). No new deprecated Expo packages introduced. Two carried-over dependency warnings still logged in the web console (non-blocking): 'props.pointerEvents is deprecated' and '\"shadow*\" style props are deprecated' — these originate from a dependency, not from the AddSheet change.",
+  "backend_issues": { "critical": [], "minor": [] },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [],
+    "react_native_issues": [
+      {
+        "component": "console deprecation warning (dependency)",
+        "issue": "Web console still logs 'props.pointerEvents is deprecated. Use style.pointerEvents' and '\"shadow*\" style props are deprecated. Use \"boxShadow\"'. Non-blocking, carried over from prior iterations, appears to come from a library (react-native-web / a dependency), not from AddSheet.tsx. Reference: seen at https://glean-save.preview.emergentagent.com after tabs mount."
+      }
+    ]
+  },
+  "test_report_links": [
+    "/app/test_reports/iteration_3.json"
+  ],
+  "action_items": [
+    "None blocking — the AddSheet gorhom → RN Modal rewrite is verified. Optional (low priority): investigate the 'props.pointerEvents' and 'shadow*' console deprecation warnings coming from a dependency."
+  ],
+  "critical_code_review_comments": [
+    "AddSheet.tsx correctly gates rendering behind <Modal visible={addSheetOpen}> and calls closeAddSheet() via onRequestClose, backdrop Pressable, and header X — all three dismiss paths are wired.",
+    "State reset is done inside a useEffect keyed on addSheetOpen (calls reset() when opened) — this is why reopening after a save returns to the empty 'input' stage; verified in TEST reopen.",
+    "openResult() closes the sheet first and defers router.push by 250ms — avoids the modal-close animation racing with the navigation, and this worked reliably in TEST5.",
+    "vault.ts store is minimal (addSheetOpen boolean + openAddSheet/closeAddSheet) — no leftover gorhom refs, matches the rewrite.",
+    "(tabs)/_layout.tsx wires the center + Pressable (testID add-tab-button) directly to Haptics + openAddSheet — no dependency on a bottom-sheet ref, so the reported native regression (haptic fires but sheet never presents) should be resolved on device as well since native and web now share the exact same RN Modal code path."
+  ],
+  "updated_files": [],
+  "success_rate": {
+    "backend": "skipped per E1 (14/14 in iteration_2)",
+    "frontend": "100% — 7/7 requested checks pass (open via +, close via X, close via backdrop, reopen resets, full save → Saved & enriched, View item navigates, duplicate save shows 'Already in your vault', vault masonry regresses cleanly)"
+  },
+  "seed_data_creation": "Registered plustester<epoch>@test.com / secret123 via the app's Register toggle and saved one YouTube item (Rick Astley). Item + user left in DB (small footprint); can be cleaned by main agent if desired.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "AddSheet on web preview is fully green after the gorhom removal. If E1 needs on-device confirmation, note that web and native now share identical code (single <Modal> for both platforms), so a green web run is a strong proxy — but the original bug was device-specific to Reanimated 4 + New Architecture + gorhom, which is no longer in this flow. Test flow implemented inline (no new pytest / playwright file committed) because this iteration was UI-only and single-flow; if regression coverage is desired, the script used lives in the tool call log for iteration 3 and can be lifted into /app/frontend/e2e/ later."
+}
