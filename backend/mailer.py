@@ -67,7 +67,6 @@ async def send_welcome_email(to: str) -> None:
 
 
 async def send_reset_code_email(to: str, code: str) -> None:
-    # Always log in preview so the flow is testable without live delivery.
     logger.info("Password reset code for %s: %s", to, code)
     inner = (
         "<p>Use this code to reset your PostRecaller password:</p>"
@@ -77,3 +76,15 @@ async def send_reset_code_email(to: str, code: str) -> None:
         "ignore this email.</p>"
     )
     await send_email(to, "Your PostRecaller reset code", _shell("Reset your password", inner))
+
+
+async def send_waitlist_email(to: str, position: int) -> None:
+    inner = (
+        "<p>Thanks for joining the PostRecaller waitlist — you're in early.</p>"
+        f"<p style='margin:16px 0;'>You're <strong style='color:{BRAND};'>#{position}</strong> "
+        "on the list.</p>"
+        "<p>PostRecaller turns every link you save — from Instagram, TikTok, YouTube, X, articles, "
+        "anywhere — into one beautiful, AI-searchable vault. We'll email you the moment your invite "
+        "is ready.</p>"
+    )
+    await send_email(to, "You're on the PostRecaller waitlist", _shell("You're on the list", inner))

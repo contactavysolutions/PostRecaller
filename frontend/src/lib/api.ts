@@ -122,4 +122,13 @@ export const api = {
 
   collections: () =>
     request<{ collections: { intent: string; count: number }[] }>("/collections"),
+
+  joinWaitlist: (email: string, source = "web") =>
+    request<{ ok: boolean; already: boolean; position: number; count: number }>("/waitlist", {
+      method: "POST",
+      body: { email, source },
+      auth: false,
+    }),
+
+  waitlistCount: () => request<{ count: number }>("/waitlist/count", { auth: false }),
 };

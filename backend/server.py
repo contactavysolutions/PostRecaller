@@ -8,6 +8,7 @@ from starlette.middleware.cors import CORSMiddleware
 from auth import router as auth_router, seed_admins
 from config import client, db
 from items import router as items_router
+from waitlist import router as waitlist_router
 
 logging.basicConfig(
     level=logging.INFO,
@@ -27,6 +28,7 @@ app.add_middleware(
 
 app.include_router(auth_router)
 app.include_router(items_router)
+app.include_router(waitlist_router)
 
 
 @app.get("/api/")
@@ -42,6 +44,8 @@ async def startup():
     await db.items.create_index([("user_id", ASCENDING), ("created_at", DESCENDING)])
     await db.items.create_index([("slug", ASCENDING)], unique=True, sparse=True)
     await db.ai_usage.create_index([("created_at", DESCENDING)])
+    await db.waitlist.create_index([("email", ASCENDING)], unique=True)
+    await db.waitlist.create_index([("created_at", ASCENDING)])
     await db.debug_logs.create_index([("created_at", ASCENDING)], expireAfterSeconds=604800)
     await seed_admins()
     logger.info("PostRecaller startup complete")

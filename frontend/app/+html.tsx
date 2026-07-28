@@ -12,6 +12,33 @@ export default function Root({ children }: PropsWithChildren) {
           name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no"
         />
+        <title>PostRecaller — Everything you save, finally findable</title>
+        <meta
+          name="description"
+          content="PostRecaller is an AI-powered vault for everything you save online — Instagram, TikTok, YouTube, X, articles. Auto-summarized, tagged, and instantly searchable. Join the waitlist."
+        />
+        {/* Open Graph / social link previews (LinkedIn, Reddit, etc.) */}
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="PostRecaller" />
+        <meta property="og:title" content="PostRecaller — Everything you save, finally findable" />
+        <meta
+          property="og:description"
+          content="One AI-powered vault for every link you save. Auto-summarized, tagged, and instantly searchable. Join the early-access waitlist."
+        />
+        <meta
+          property="og:image"
+          content="https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?auto=format&fit=crop&w=1200&h=630&q=80"
+        />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="PostRecaller — Everything you save, finally findable" />
+        <meta
+          name="twitter:description"
+          content="One AI-powered vault for every link you save. Auto-summarized, tagged, and instantly searchable. Join the waitlist."
+        />
+        <meta
+          name="twitter:image"
+          content="https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?auto=format&fit=crop&w=1200&h=630&q=80"
+        />
         {/*
           Disable body scrolling on web to make ScrollView components work correctly.
           If you want to enable scrolling, remove `ScrollViewStyleReset` and

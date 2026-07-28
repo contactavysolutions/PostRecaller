@@ -1,0 +1,41 @@
+{
+  "summary": "Waitlist feature verified end-to-end. Backend: 8/8 pytest cases green in /app/backend/tests/test_waitlist.py — POST /api/waitlist for a new email returns {ok:true, already:false, position:N, count:N} and the count endpoint reflects the increment; a duplicate submission (including case-insensitive variant) returns {already:true} with the SAME position and unchanged count (unique index on email is honored); invalid emails ('foo@', '@bar.com', 'not-an-email', '', missing field) all correctly return 422 via Pydantic EmailStr; no MongoDB _id leaks in the response; regression GET /api/ still returns status:ok. Frontend /waitlist page verified on both desktop (1280x900) and mobile (375x667): loads publicly with no auth redirect; testIDs 'waitlist-email-input' and 'waitlist-join-button' each appear exactly TWICE (hero + closing CTA band); invalid email surfaces the inline text 'Please enter a valid email'; submitting a fresh email shows the 'You're #N on the list' success card (observed #7); submitting the SAME email again on mobile also returned '#7' — confirming duplicate detection via the API; desktop shows two-column hero with the PhoneMock on the right; mobile stacks the phone mock below the copy; social-proof badge shows 'Private beta • Limited early invites' (count < 25, expected copy). Footer navigation works: 'Log in' → /auth, 'Privacy' → /legal/privacy, 'Terms' → /legal/terms. No console errors, no pageerrors, no red-screen. Email delivery is intentionally MOCKED (RESEND_API_KEY empty) — mailer.py logs a warning instead of sending, and the endpoint is not blocked by this (verified because /waitlist responses are 200 and tests pass).",
+  "backend_issues": { "critical": [], "minor": [] },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [],
+    "react_native_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_waitlist.py",
+    "/app/test_reports/pytest/waitlist_results.xml",
+    "/app/test_reports/iteration_4.json"
+  ],
+  "action_items": [
+    "None blocking. Optional: mailer.py currently uses the sync `resend` SDK inside asyncio.to_thread — fine, but consider swapping to `resend.Emails.send_async` (or aiohttp) when RESEND_API_KEY is populated to avoid a thread hop per send.",
+    "Optional: /api/waitlist recomputes total count + duplicate lookup on every call — cheap for a landing-page workload, but a single aggregation using `$or` or an upsert-with-check could shave a round trip if traffic spikes."
+  ],
+  "critical_code_review_comments": [
+    "waitlist.py correctly normalises email (lower + strip) before insert/lookup — matches the unique index behavior tested (case-insensitive dedup passes).",
+    "join_waitlist fires-and-forgets send_waitlist_email via asyncio.create_task — good; endpoint stays fast and email failure cannot break the join flow. mailer._send_sync also swallows exceptions and returns False, so a bad Resend response won't crash the request.",
+    "server.py startup creates unique index on waitlist.email and an ascending index on created_at — the position query in join_waitlist ({created_at: {$lte: existing.created_at}}) is index-backed. Good.",
+    "waitlist.tsx: two <WaitlistForm/> instances mount (hero + closing CTA), each with its own local state, so a success in one doesn't collapse the other — verified during testing (2 success cards after both submits).",
+    "onCount callback is threaded from both forms into the parent so the social-proof badge updates live after a successful join — nice detail.",
+    "Frontend uses process.env.EXPO_PUBLIC_BACKEND_URL (via api.ts) and joinWaitlist explicitly passes auth:false — so the public /waitlist page never sends a bearer token. Correct.",
+    "Success state renders inside the form; the raw TextInput is removed after success. This means a user who wants to add a second email must use the closing CTA — that is by design and works, but consider a subtle 'Add another email' link for shareability. Non-blocking."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_waitlist.py (new)",
+    "/app/test_reports/iteration_4.json (new)",
+    "/app/test_reports/pytest/waitlist_results.xml (new)"
+  ],
+  "success_rate": {
+    "backend": "100% (8/8 waitlist tests pass)",
+    "frontend": "100% (all 11 review-request checks pass on both 1280x900 and 375x667 viewports)"
+  },
+  "seed_data_creation": "Test emails inserted into db.waitlist during this run (prefixed TEST_waitlist_* and TEST_ui_*). Small footprint (<10 rows). Safe to purge with: db.waitlist.deleteMany({email: /^test_/i}).",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Waitlist backend + landing page are green. Reusable pytest suite is at /app/backend/tests/test_waitlist.py — run with `pytest backend/tests/test_waitlist.py -v`. For UI regression, the two testIDs to key off are 'waitlist-email-input' and 'waitlist-join-button' (each present twice — index [0] is hero, [-1] is closing CTA). RESEND_API_KEY is intentionally empty in preview; mailer logs a warning ('RESEND_API_KEY not set — email to X NOT delivered') — this is expected, don't flag as a bug. If the count crosses 25 the social-proof badge switches from 'Private beta • Limited early invites' to '{count} early savers already joined' — worth re-verifying once seed data or real traffic pushes the counter past 25."
+}
