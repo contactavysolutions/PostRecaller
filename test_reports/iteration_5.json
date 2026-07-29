@@ -1,0 +1,40 @@
+{
+  "summary": "Frontend-only regression test of the MetaMask-extension error guard added in /app/frontend/app/+html.tsx. CRITICAL: the guard is NOT active in the Expo web dev/preview build because +html.tsx is only used during static export/SSR, not by Metro's dev server. Runtime check confirms no <script> containing 'isExtNoise' exists in the served DOM, and a probe listener registered AFTER the guard still receives the simulated error event (propagatedPastGuard: true). A REAL unhandled Promise.reject(new Error('Failed to connect to MetaMask')) reproduces the red LogBox overlay on /waitlist, proving the fix does not solve the reported bug in preview. Initial page loads are clean for both '/' -> /auth and /waitlist, with only the known harmless pointerEvents/shadow* deprecation warnings in console. Waitlist form and auth screen render correctly; 'Forgot password?' link is present (testID auth-forgot).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {
+        "flow": "MetaMask/extension error guard",
+        "issue": "Guard script defined in /app/frontend/app/+html.tsx is not injected into the DOM in Expo web dev/preview (Metro dev server ignores +html.tsx; it only runs on static export). Verified: document.querySelectorAll('script') contains NO script with 'isExtNoise'; propagatedPastGuard=true. Real unhandled promise rejection with a 'Failed to connect to MetaMask' reason still shows the full-screen LogBox 'Uncaught Error' overlay on /waitlist. The user-reported bug remains reproducible in preview.",
+        "affected_testIDs": []
+      },
+      {
+        "flow": "MetaMask/extension error guard (design)",
+        "issue": "Even if the guard were loaded, it hooks window.addEventListener('error'/'unhandledrejection'). React Native LogBox on web installs itself via window.onerror and window.onunhandledrejection (property setters, not addEventListener). preventDefault/stopImmediatePropagation on an addEventListener listener does NOT prevent LogBox's onerror/onunhandledrejection handlers from firing. So the guard, once loaded, would still fail to suppress the overlay for real extension errors.",
+        "affected_testIDs": []
+      }
+    ],
+    "design_issues": [],
+    "react_native_issues": []
+  },
+  "test_report_links": ["/app/test_reports/iteration_5.json"],
+  "action_items": [
+    "Move the extension-error guard OUT of app/+html.tsx into a location that runs in Metro dev too. Options: (a) add a synchronous side-effect module imported as the FIRST import in app/_layout.tsx (e.g. src/lib/extensionErrorGuard.ts) that installs the handlers at module-load time; (b) put the <script> in app.json web.head (if using Expo router web config) so it is embedded by the dev bundler; (c) inject via a metro/HTML template if configured.",
+    "Change the guard to wrap window.onerror and window.onunhandledrejection (assignment-style, preserving any prior value) INSTEAD OF (or in addition to) addEventListener, since React Native LogBox uses the property-setter form on web. Example: const prev = window.onerror; window.onerror = function(msg, src, ln, col, err){ if (isExtNoise(msg, src)) return true; return prev ? prev.apply(this, arguments) : false; }; and same for window.onunhandledrejection with e.reason?.message.",
+    "Additionally call LogBox.ignoreLogs([/Failed to connect to MetaMask/i, /metamask/i, /chrome-extension:/i, /moz-extension:/i]) from react-native at app start to belt-and-suspenders the console/LogBox path.",
+    "After fix, retest by executing in browser: Promise.reject(new Error('Failed to connect to MetaMask')) — the LogBox red overlay must NOT appear, and app content must remain interactive.",
+    "Regression suggestion: keep +html.tsx guard as well so that exported/production HTML is also protected (that path was correct for prod SSR — just insufficient for dev preview)."
+  ],
+  "critical_code_review_comments": [
+    "+html.tsx is an Expo static-HTML customization; it does not participate in Metro's dev server. Any dev-time HTML customization must go through app.json/metro or an app-JS side-effect module.",
+    "Ordering: guard listeners are registered with capture=true, which is correct for beating other addEventListener listeners, but is powerless against window.onerror/onunhandledrejection property handlers — which is what LogBox uses. This design bug would exist even after the injection issue is fixed."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A (not tested per request)", "frontend": "40% (app renders cleanly, but the specific bug fix under review is non-functional in preview)"},
+  "seed_data_creation": "None. Waitlist submit test was attempted with a TEST_agent_<ts>@example.com but success text was not visibly captured within timeout; not investigated further as it was out of scope for this iteration and no regression signal beyond what earlier iterations already covered.",
+  "retest_needed": true,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "After main agent moves the guard to an app-JS side-effect module and switches to window.onerror/onunhandledrejection wrapping (plus LogBox.ignoreLogs), re-run: (1) load /waitlist and /auth clean, (2) in devtools console execute Promise.reject(new Error('Failed to connect to MetaMask')) and window.dispatchEvent(new ErrorEvent('error',{message:'Failed to connect to MetaMask',filename:'chrome-extension://x/y.js'})) — assert NO red 'Uncaught Error' overlay appears and 'finally findable' text stays visible. Also verify a genuine non-extension error still surfaces normally.",
+  "rca_of_issue": "Root cause: app/+html.tsx is only consumed by Expo Router's static HTML export pipeline. The dev server (Metro) serves its own generated index.html and does not include the +html.tsx content, so the guard <script> is never inserted into the DOM at preview time. Confirmed at runtime by querying all <script> tags — none contained the guard's identifier 'isExtNoise'. Secondary defect: even when injected, the guard only hooks addEventListener('error'/'unhandledrejection'), whereas React Native LogBox on web installs handlers via window.onerror and window.onunhandledrejection property setters, which are not affected by preventDefault/stopImmediatePropagation on addEventListener listeners. Reproduction (in preview browser console): Promise.reject(new Error('Failed to connect to MetaMask')) -> full-screen 'Uncaught Error — Failed to connect to MetaMask' LogBox overlay appears. Mitigation: (1) install the guard from an app-JS side-effect (first import in app/_layout.tsx) so it runs in dev; (2) wrap window.onerror & window.onunhandledrejection; (3) call LogBox.ignoreLogs([...metamask/extension patterns])."
+}

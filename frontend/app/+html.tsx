@@ -8,6 +8,40 @@ export default function Root({ children }: PropsWithChildren) {
       <head>
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+        {/*
+          Guard: browser wallet extensions (MetaMask, etc.) inject scripts into every
+          page and can throw "Failed to connect to MetaMask" on sites that don't use
+          web3 (PostRecaller has zero crypto code). In Expo web dev, such stray errors
+          hijack the error overlay. We swallow ONLY extension-originated errors so they
+          can't block our app; our own errors are untouched.
+        */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function () {
+                function isExtNoise(msg, src) {
+                  msg = String(msg || ""); src = String(src || "");
+                  return /metamask|ethereum|web3|failed to connect to metamask|chrome-extension|moz-extension/i.test(msg)
+                    || /chrome-extension:|moz-extension:/i.test(src);
+                }
+                window.addEventListener("error", function (e) {
+                  if (isExtNoise(e && e.message, (e && e.filename) || (e && e.target && e.target.src))) {
+                    if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+                    if (e.preventDefault) e.preventDefault();
+                    return true;
+                  }
+                }, true);
+                window.addEventListener("unhandledrejection", function (e) {
+                  var r = e && e.reason;
+                  var msg = (r && (r.message || r.stack)) || r || "";
+                  if (isExtNoise(msg, "")) {
+                    if (e.preventDefault) e.preventDefault();
+                  }
+                });
+              })();
+            `,
+          }}
+        />
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no"
