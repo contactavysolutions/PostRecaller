@@ -1,4 +1,3 @@
-import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
@@ -10,6 +9,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Button } from "@/src/components/Button";
+import { AuthHero } from "@/src/components/AuthHero";
 import { Input } from "@/src/components/Input";
 import { useAuth } from "@/src/store/auth";
 import { useTheme } from "@/src/theme/ThemeContext";
@@ -48,11 +48,7 @@ export default function AuthScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: c.surface }}>
       <StatusBar style={mode === "dark" ? "light" : "dark"} />
-      <Image
-        source={{ uri: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?auto=format&fit=crop&w=900&q=80" }}
-        style={{ width: "100%", height: "40%" }}
-        contentFit="cover"
-      />
+      <AuthHero />
       <KeyboardAwareScrollView
         bottomOffset={90}
         contentContainerStyle={{ padding: spacing.xl, paddingBottom: 120 }}
