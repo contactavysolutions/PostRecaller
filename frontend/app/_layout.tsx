@@ -1,3 +1,7 @@
+// Extension error guard MUST be imported first so its capture-phase listeners
+// attach before anything else can throw.
+import "@/src/lib/extensionErrorGuard";
+import { installExtensionErrorGuard } from "@/src/lib/extensionErrorGuard";
 import { Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
@@ -27,6 +31,8 @@ export default function RootLayout() {
   const hydrated = useAuth((s) => s.hydrated);
 
   useEffect(() => {
+    // Re-install after mount so our wrappers sit in front of LogBox's handlers.
+    installExtensionErrorGuard();
     hydrate();
   }, [hydrate]);
 

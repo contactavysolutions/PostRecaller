@@ -1,0 +1,27 @@
+{
+  "summary": "Frontend-only retest of the MetaMask/browser-extension error guard fix v2. All three primary scenarios pass: (1) synthetic PromiseRejectionEvent with reason 'Failed to connect to MetaMask' produces NO LogBox red overlay and 'finally findable' hero text stays visible/interactive; (2) real Promise.reject(new Error('Failed to connect to MetaMask')) produces NO overlay; (3) dispatched ErrorEvent with filename='chrome-extension://abc/inpage.js' produces NO overlay. Runtime probe confirms the guard actually loads in Metro dev: window.onerror and window.onunhandledrejection are wrapped by our custom functions (source inspected — matches extensionErrorGuard.ts). Negative control passes: an unhandledrejection whose reason is 'some genuine app error XYZ' is NOT swallowed by our wrapper (swallowed=false), i.e., real app errors will still surface normally. Positive control: the same wrapper does swallow a 'Failed to connect to MetaMask' rejection (swallowed=true). Regressions clean: /waitlist submit end-to-end still works ('You're #1 on the list' shown), and /auth (root '/' redirects to /auth) renders with a visible 'Forgot password?' link and testID 'auth-forgot' (count=1). No 'Uncaught Error' overlay on either /waitlist or /auth. Only known-harmless deprecation warnings appear in console (props.pointerEvents, shadow*).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [],
+    "react_native_issues": []
+  },
+  "test_report_links": ["/app/test_reports/iteration_6.json", "/app/test_reports/iteration_5.json"],
+  "action_items": [
+    "None required for this bug — fix is verified. Optional hardening (nice-to-have, not blocking): also intercept console.error calls containing 'chrome-extension' / 'metamask' so extension noise never spams the dev console; today LogBox.ignoreLogs already handles the LogBox path.",
+    "Optional: expose installExtensionErrorGuard() via a small unit test (jest/vitest) that exercises isNoise() with the four regex branches and the wrapper delegation for a non-noise error, to prevent future regressions."
+  ],
+  "critical_code_review_comments": [
+    "Guard v2 correctly (a) wraps window.onerror / window.onunhandledrejection property setters — which is what React Native LogBox on web actually uses — AND (b) also attaches capture-phase addEventListener listeners for defense in depth. This addresses both defects identified in iteration_5.",
+    "Guard is invoked twice: at module import time (side-effect in src/lib/extensionErrorGuard.ts) and again from a mount useEffect in app/_layout.tsx. The `listenersAttached` flag correctly prevents duplicate addEventListener registrations, but the two onerror/onunhandledrejection wraps could compound if third-party code overwrites them between calls. Current behavior is correct because on the second call prevOnError is our previous wrapper — nesting is safe (isNoise short-circuits, real errors delegate through). Minor: consider stamping window.onerror._pr_guard = true and skipping re-wrap if already stamped, to be extra safe.",
+    "+html.tsx kept for production/SSR export path — good defense-in-depth for the deployed static bundle."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A (frontend-only per request)", "frontend": "100% for the MetaMask guard fix and all listed regressions (7/7 scenarios pass)"},
+  "seed_data_creation": "Waitlist submit created a TEST_agent_<timestamp>@example.com entry (received 'You're #1 on the list'). Cleanup not required — waitlist entries are additive and use TEST_ prefix.",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Fix v2 is confirmed working end-to-end in the Expo web preview. If related regressions come in, sanity-check by evaluating in the browser: (a) window.onunhandledrejection.toString() should contain isNoise; (b) Promise.reject(new Error('Failed to connect to MetaMask')) should NOT produce a red LogBox overlay while 'finally findable' remains visible on /waitlist; (c) Promise.reject(new Error('genuine app error XYZ')) SHOULD still surface (guard must never globally mute real errors).",
+  "rca_of_issue": "N/A for this iteration — the bug from iteration_5 (guard living only in +html.tsx which Metro dev ignores, and hooking only addEventListener which cannot beat LogBox's window.onerror/onunhandledrejection property handlers) is resolved by fix v2: guard moved to src/lib/extensionErrorGuard.ts imported as the FIRST import in app/_layout.tsx (module-load side effect) and re-invoked in a mount useEffect. The guard now wraps both property handlers AND attaches capture-phase listeners, and calls LogBox.ignoreLogs for metamask/extension regexes. All three simulated MetaMask attack vectors are now suppressed while a synthetic non-extension rejection is NOT swallowed."
+}
