@@ -22,7 +22,6 @@ import {
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { PlatformBadge } from "@/src/components/PlatformBadge";
 import { api } from "@/src/lib/api";
 import { useTheme } from "@/src/theme/ThemeContext";
 
@@ -155,64 +154,28 @@ function WaitlistForm({
   );
 }
 
-// ---------------- Phone / vault mock ----------------
-function PhoneMock() {
-  const { c, radius, fonts, spacing } = useTheme();
-  const col1 = [
-    { p: "youtube", h: 108 },
-    { p: "x", h: 74 },
-    { p: "web", h: 90 },
-  ];
-  const col2 = [
-    { p: "instagram", h: 84 },
-    { p: "pinterest", h: 100 },
-    { p: "tiktok", h: 78 },
-  ];
-
-  const Tile = ({ p, h }: { p: string; h: number }) => (
-    <View style={{ backgroundColor: c.surface, borderRadius: radius.md, marginBottom: 10, overflow: "hidden", borderWidth: 1, borderColor: c.border }}>
-      <View style={{ height: h, backgroundColor: c.brandTertiary, alignItems: "flex-end", padding: 8 }}>
-        <PlatformBadge platform={p} size={14} />
-      </View>
-      <View style={{ padding: 8, gap: 6 }}>
-        <View style={{ height: 7, width: "85%", borderRadius: 4, backgroundColor: c.surfaceTertiary }} />
-        <View style={{ height: 7, width: "55%", borderRadius: 4, backgroundColor: c.surfaceTertiary }} />
-      </View>
-    </View>
-  );
-
+// ---------------- Chest artwork ----------------
+function ChestArt({ isWide }: { isWide: boolean }) {
+  const { c } = useTheme();
+  const size = isWide ? 460 : 300;
   return (
     <View
       style={{
-        width: 300,
-        height: 600,
-        borderRadius: 44,
-        backgroundColor: c.onSurface,
-        padding: 12,
+        borderRadius: 28,
+        backgroundColor: c.surface,
         shadowColor: "#000",
-        shadowOffset: { width: 0, height: 24 },
-        shadowOpacity: 0.22,
-        shadowRadius: 40,
-        elevation: 12,
+        shadowOffset: { width: 0, height: 20 },
+        shadowOpacity: 0.18,
+        shadowRadius: 36,
+        elevation: 10,
       }}
     >
-      <View style={{ flex: 1, backgroundColor: c.surfaceSecondary, borderRadius: 34, overflow: "hidden" }}>
-        {/* app header */}
-        <View style={{ paddingTop: 28, paddingHorizontal: 16, paddingBottom: 12, backgroundColor: c.surface }}>
-          <Text style={{ color: c.onSurface, fontFamily: fonts.medium, fontSize: 20 }}>Your Vault</Text>
-          <View style={{ flexDirection: "row", gap: 8, marginTop: 12 }}>
-            {["all", "watch", "read later", "recipes"].map((t, i) => (
-              <View key={t} style={{ height: 28, paddingHorizontal: 12, borderRadius: 999, backgroundColor: i === 0 ? c.brand : c.brandTertiary, justifyContent: "center" }}>
-                <Text style={{ color: i === 0 ? c.onBrand : c.onBrandTertiary, fontFamily: fonts.medium, fontSize: 11 }}>{t}</Text>
-              </View>
-            ))}
-          </View>
-        </View>
-        <View style={{ flexDirection: "row", padding: spacing.md, gap: 10 }}>
-          <View style={{ flex: 1 }}>{col1.map((t, i) => <Tile key={i} {...t} />)}</View>
-          <View style={{ flex: 1 }}>{col2.map((t, i) => <Tile key={i} {...t} />)}</View>
-        </View>
-      </View>
+      <Image
+        source={require("@/assets/images/auth_hero.png")}
+        style={{ width: size, height: size, borderRadius: 28 }}
+        contentFit="cover"
+        contentPosition="top"
+      />
     </View>
   );
 }
@@ -300,7 +263,7 @@ export default function Waitlist() {
 
             {/* right — phone mock */}
             <Animated.View entering={FadeInDown.duration(600).delay(120)} style={{ alignItems: "center", justifyContent: "center" }}>
-              <PhoneMock />
+              <ChestArt isWide={isWide} />
             </Animated.View>
           </View>
         </View>

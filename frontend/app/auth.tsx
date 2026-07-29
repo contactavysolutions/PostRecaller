@@ -54,7 +54,7 @@ export default function AuthScreen() {
         contentContainerStyle={{ padding: spacing.xl, paddingBottom: 120 }}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={{ color: c.onSurface, fontFamily: fonts.medium, fontSize: 40, marginTop: spacing.sm }}>
+        <Text style={{ color: c.onSurface, fontFamily: fonts.medium, fontSize: 40, letterSpacing: 0.5, marginTop: spacing.sm }}>
           PostRecaller
         </Text>
         <Text style={{ color: c.onSurfaceSecondary, fontFamily: fonts.regular, fontSize: fontSize.lg, marginBottom: spacing.xl }}>
