@@ -11,6 +11,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Button } from "@/src/components/Button";
 import { AuthHero } from "@/src/components/AuthHero";
 import { Input } from "@/src/components/Input";
+import { LogoIcon } from "@/src/components/LogoIcon";
 import { useAuth } from "@/src/store/auth";
 import { useTheme } from "@/src/theme/ThemeContext";
 
@@ -54,9 +55,12 @@ export default function AuthScreen() {
         contentContainerStyle={{ padding: spacing.xl, paddingBottom: 120 }}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={{ color: c.onSurface, fontFamily: fonts.medium, fontSize: 40, letterSpacing: 0.5, marginTop: spacing.sm }}>
-          PostRecaller
-        </Text>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 12, marginTop: spacing.sm }}>
+          <LogoIcon size={38} />
+          <Text style={{ color: c.onSurface, fontFamily: fonts.medium, fontSize: 36, letterSpacing: 0.5 }}>
+            PostRecaller
+          </Text>
+        </View>
         <Text style={{ color: c.onSurfaceSecondary, fontFamily: fonts.regular, fontSize: fontSize.lg, marginBottom: spacing.xl }}>
           Everything you save, finally findable.
         </Text>

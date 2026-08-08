@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /vault
+Disallow: /reset-password
+Disallow: /forgot-password
+
+Sitemap: https://postrecaller.com/sitemap.xml

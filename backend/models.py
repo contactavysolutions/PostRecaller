@@ -89,6 +89,7 @@ class Item(BaseDocument):
 class RegisterIn(BaseModel):
     email: EmailStr
     password: str = Field(min_length=6, max_length=128)
+    invite_token: Optional[str] = None
 
 
 class LoginIn(BaseModel):

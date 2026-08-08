@@ -88,3 +88,17 @@ async def send_waitlist_email(to: str, position: int) -> None:
         "is ready.</p>"
     )
     await send_email(to, "You're on the PostRecaller waitlist", _shell("You're on the list", inner))
+
+
+async def send_invite_email(to: str, invite_url: str) -> None:
+    inner = (
+        "<p>Good news — your PostRecaller invite is ready.</p>"
+        "<p>Click below to create your account and start building your findable vault.</p>"
+        f"<div style='text-align:center;margin:24px 0;'>"
+        f"<a href='{invite_url}' style='display:inline-block;background:{BRAND};color:#fff;"
+        "text-decoration:none;padding:14px 28px;border-radius:12px;font-weight:500;font-size:15px;'>"
+        "Claim your invite</a></div>"
+        "<p style='color:#8a8a85;font-size:12px;'>This link is unique to your email and expires in 7 days. "
+        f"If the button doesn't work, paste this into your browser:<br/><span style='color:{BRAND};word-break:break-all;'>{invite_url}</span></p>"
+    )
+    await send_email(to, "Your PostRecaller invite is here", _shell("You're in", inner))

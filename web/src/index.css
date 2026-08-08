@@ -1,0 +1,175 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* PostRecaller brand tokens — light theme */
+    --surface: 251 251 249;
+    --on-surface: 28 28 26;
+    --surface-secondary: 243 243 240;
+    --on-surface-secondary: 78 78 74;
+    --surface-tertiary: 235 235 230;
+    --on-surface-tertiary: 28 28 26;
+    --surface-inverse: 22 22 21;
+    --on-surface-inverse: 251 251 249;
+    --brand: 74 93 78;
+    --on-brand: 251 251 249;
+    --brand-secondary: 194 110 93;
+    --on-brand-secondary: 251 251 249;
+    --brand-tertiary: 228 231 225;
+    --on-brand-tertiary: 74 93 78;
+    --ds-border: 235 235 230;
+    --ds-border-strong: 209 209 203;
+    --ds-error: 179 74 74;
+    --ds-warning: 217 155 65;
+    --ds-success: 74 93 78;
+
+    /* Shadcn compatibility layer — mapped to brand palette */
+    --background: 60 14% 98%;         /* #FBFBF9 */
+    --foreground: 60 4% 11%;          /* #1C1C1A */
+    --card: 60 14% 98%;
+    --card-foreground: 60 4% 11%;
+    --popover: 60 14% 98%;
+    --popover-foreground: 60 4% 11%;
+    --primary: 132 12% 32%;           /* #4A5D4E */
+    --primary-foreground: 60 14% 98%;
+    --secondary: 60 10% 95%;          /* #F3F3F0 */
+    --secondary-foreground: 60 4% 11%;
+    --muted: 60 10% 95%;
+    --muted-foreground: 60 3% 30%;
+    --accent: 92 11% 89%;             /* #E4E7E1 */
+    --accent-foreground: 132 12% 32%;
+    --destructive: 0 42% 50%;
+    --destructive-foreground: 60 14% 98%;
+    --border: 60 12% 91%;             /* #EBEBE6 */
+    --input: 60 12% 91%;
+    --ring: 132 12% 32%;
+    --chart-1: 132 12% 32%;
+    --chart-2: 12 43% 56%;
+    --chart-3: 39 65% 55%;
+    --chart-4: 132 15% 52%;
+    --chart-5: 60 4% 40%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --surface: 22 22 21;
+    --on-surface: 251 251 249;
+    --surface-secondary: 35 35 34;
+    --on-surface-secondary: 212 212 210;
+    --surface-tertiary: 44 44 42;
+    --on-surface-tertiary: 251 251 249;
+    --surface-inverse: 251 251 249;
+    --on-surface-inverse: 22 22 21;
+    --brand: 143 166 147;
+    --on-brand: 22 22 21;
+    --brand-secondary: 216 144 131;
+    --on-brand-secondary: 22 22 21;
+    --brand-tertiary: 53 66 56;
+    --on-brand-tertiary: 143 166 147;
+    --ds-border: 44 44 42;
+    --ds-border-strong: 64 64 61;
+    --ds-error: 179 74 74;
+    --ds-warning: 217 155 65;
+    --ds-success: 143 166 147;
+
+    --background: 60 2% 8%;
+    --foreground: 60 14% 98%;
+    --card: 60 2% 8%;
+    --card-foreground: 60 14% 98%;
+    --popover: 60 2% 8%;
+    --popover-foreground: 60 14% 98%;
+    --primary: 132 12% 61%;
+    --primary-foreground: 60 2% 8%;
+    --secondary: 60 2% 14%;
+    --secondary-foreground: 60 14% 98%;
+    --muted: 60 2% 14%;
+    --muted-foreground: 60 3% 71%;
+    --accent: 132 12% 24%;
+    --accent-foreground: 132 12% 61%;
+    --destructive: 0 42% 50%;
+    --destructive-foreground: 60 14% 98%;
+    --border: 60 2% 17%;
+    --input: 60 2% 17%;
+    --ring: 132 12% 61%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  html {
+    font-family: 'Satoshi', 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  }
+  body {
+    margin: 0;
+    overflow-x: hidden;
+    @apply bg-surface text-on-surface;
+    font-family: 'Satoshi', 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+    font-weight: 400;
+    letter-spacing: -0.005em;
+  }
+
+  /* Strict weight cap: 500 max. Hierarchy through size only. */
+  h1, h2, h3, h4, h5, h6, .font-display {
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  /* Sticky glass search header (used on Vault). */
+  .glass-header {
+    background-color: rgb(var(--surface) / 0.72);
+    backdrop-filter: blur(20px) saturate(1.4);
+    -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  }
+
+  /* Focus rings — WCAG AA on brand */
+  :focus-visible {
+    outline: 2px solid rgb(var(--brand));
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  ::selection {
+    background: rgb(var(--brand-tertiary));
+    color: rgb(var(--on-brand-tertiary));
+  }
+}
+
+@layer components {
+  .btn-brand {
+    @apply inline-flex items-center justify-center gap-2 rounded-ds-md bg-brand text-on-brand px-6 min-h-[48px] text-ds-lg transition-all duration-200 hover:brightness-110 active:scale-[0.985] disabled:opacity-60 disabled:cursor-not-allowed;
+    font-weight: 500;
+  }
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 rounded-ds-md bg-transparent border border-ds-border text-on-surface px-6 min-h-[48px] text-ds-lg transition-all duration-200 hover:bg-surface-secondary active:scale-[0.985];
+    font-weight: 500;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-ds-md text-on-surface px-4 min-h-[44px] text-ds-base transition-colors duration-200 hover:bg-surface-secondary;
+    font-weight: 500;
+  }
+  .field-input {
+    @apply w-full min-h-[54px] px-[18px] rounded-ds-md bg-surface-secondary border border-ds-border text-on-surface text-ds-lg placeholder:text-on-surface-secondary/70 transition-colors duration-200 focus:outline-none focus:border-brand focus:bg-surface;
+  }
+  .field-input-error {
+    @apply border-ds-error focus:border-ds-error;
+  }
+  .pill {
+    @apply inline-flex items-center gap-2 rounded-ds-pill bg-brand-tertiary text-on-brand-tertiary px-3.5 py-1.5 text-ds-sm;
+    font-weight: 500;
+  }
+  .container-page {
+    @apply w-full max-w-[1120px] mx-auto;
+  }
+}
+
+@layer base {
+  [data-debug-wrapper="true"] {
+    display: contents !important;
+  }
+}

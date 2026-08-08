@@ -24,6 +24,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { api } from "@/src/lib/api";
 import { useTheme } from "@/src/theme/ThemeContext";
+import { LogoIcon } from "@/src/components/LogoIcon";
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 const MAX_W = 1120;
@@ -221,7 +222,10 @@ export default function Waitlist() {
         {/* Top bar */}
         <View style={{ paddingTop: insets.top + 12, paddingHorizontal: pad }}>
           <View style={{ width: "100%", maxWidth: MAX_W, alignSelf: "center", flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
-            <Text style={{ color: c.onSurface, fontFamily: fonts.medium, fontSize: 22 }}>PostRecaller</Text>
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+              <LogoIcon size={32} />
+              <Text style={{ color: c.onSurface, fontFamily: fonts.medium, fontSize: 22 }}>PostRecaller</Text>
+            </View>
             <Pressable testID="landing-login" onPress={() => router.push("/auth")} hitSlop={10}>
               <Text style={{ color: c.onSurfaceSecondary, fontFamily: fonts.medium, fontSize: fontSize.base }}>Log in</Text>
             </Pressable>

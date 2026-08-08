@@ -1,12 +1,13 @@
 """Waitlist capture for the public landing page."""
 import asyncio
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 from pydantic import BaseModel, EmailStr
 
 from config import db
 from mailer import send_waitlist_email
 from models import utcnow
+from rate_limit import limiter
 
 router = APIRouter(prefix="/api", tags=["waitlist"])
 
@@ -17,7 +18,8 @@ class WaitlistIn(BaseModel):
 
 
 @router.post("/waitlist")
-async def join_waitlist(body: WaitlistIn):
+@limiter.limit("10/minute")
+async def join_waitlist(request: Request, body: WaitlistIn):
     email = body.email.lower().strip()
     total = await db.waitlist.count_documents({})
     existing = await db.waitlist.find_one({"email": email})
@@ -27,7 +29,14 @@ async def join_waitlist(body: WaitlistIn):
         )
         return {"ok": True, "already": True, "position": position, "count": total}
 
-    await db.waitlist.insert_one({"email": email, "source": body.source, "created_at": utcnow()})
+    await db.waitlist.insert_one(
+        {
+            "email": email,
+            "source": body.source,
+            "status": "pending",
+            "created_at": utcnow(),
+        }
+    )
     total += 1
     asyncio.create_task(send_waitlist_email(email, total))
     return {"ok": True, "already": False, "position": total, "count": total}

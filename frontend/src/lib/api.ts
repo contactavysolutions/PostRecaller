@@ -1,6 +1,22 @@
-import { storage } from "@/src/utils/storage";
+import Constants from "expo-constants";
 
-const BASE = `${process.env.EXPO_PUBLIC_BACKEND_URL}/api`;
+function getBackendUrl(): string {
+  if (process.env.EXPO_PUBLIC_BACKEND_URL && !process.env.EXPO_PUBLIC_BACKEND_URL.includes("localhost")) {
+    return process.env.EXPO_PUBLIC_BACKEND_URL;
+  }
+  // Try deriving local IP from Expo host (works for physical devices via Expo Go)
+  const hostUri = Constants.expoConfig?.hostUri || (Constants as any).manifest2?.extra?.expoGo?.developer?.manifest?.debuggerHost;
+  if (hostUri) {
+    const ip = hostUri.split(":")[0];
+    if (ip && ip !== "localhost" && ip !== "127.0.0.1") {
+      return `http://${ip}:8000`;
+    }
+  }
+  return "http://192.168.68.64:8000";
+}
+
+const backendBase = getBackendUrl();
+const BASE = `${backendBase.replace(/\/$/, "")}/api`;
 export const TOKEN_KEY = "postrecaller_auth_token";
 
 export type ApiError = { status: number; detail: string };

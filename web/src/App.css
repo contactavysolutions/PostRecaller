@@ -1,0 +1,12 @@
+/* Global overrides. Tailwind + tokens live in index.css. */
+html, body, #root {
+  min-height: 100%;
+}
+
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}

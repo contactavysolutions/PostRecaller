@@ -122,7 +122,7 @@ async def list_items(
     intent: str | None = Query(None),
 ):
     user_id = str(current["_id"])
-    query: dict = {"user_id": user_id}
+    query: dict = {"user_id": user_id, "is_deleted": {"$ne": True}}
     if tag:
         query["tags"] = tag.lower()
     if intent:
@@ -143,7 +143,9 @@ async def list_items(
 
 @router.get("/items/{item_id}")
 async def get_item(item_id: str, current=Depends(get_current_user)):
-    doc = await db.items.find_one({"_id": _oid(item_id), "user_id": str(current["_id"])})
+    doc = await db.items.find_one(
+        {"_id": _oid(item_id), "user_id": str(current["_id"]), "is_deleted": {"$ne": True}}
+    )
     if not doc:
         raise HTTPException(status_code=404, detail="Item not found")
     return _serialize(doc)
@@ -169,10 +171,12 @@ async def update_item(item_id: str, body: ItemUpdateIn, current=Depends(get_curr
 
 @router.delete("/items/{item_id}", status_code=204)
 async def delete_item(item_id: str, current=Depends(get_current_user)):
-    res = await db.items.delete_one(
-        {"_id": _oid(item_id), "user_id": str(current["_id"])}
+    """Soft-delete: keep data but hide from all product queries."""
+    res = await db.items.update_one(
+        {"_id": _oid(item_id), "user_id": str(current["_id"]), "is_deleted": {"$ne": True}},
+        {"$set": {"is_deleted": True, "deleted_at": utcnow()}},
     )
-    if res.deleted_count == 0:
+    if res.matched_count == 0:
         raise HTTPException(status_code=404, detail="Item not found")
     return None
 
@@ -211,9 +215,23 @@ async def retry_enrich(item_id: str, current=Depends(get_current_user)):
 async def collections(current=Depends(get_current_user)):
     user_id = str(current["_id"])
     pipeline = [
-        {"$match": {"user_id": user_id, "intent": {"$ne": None}}},
+        {"$match": {"user_id": user_id, "intent": {"$ne": None}, "is_deleted": {"$ne": True}}},
         {"$group": {"_id": "$intent", "count": {"$sum": 1}}},
     ]
     rows = await db.items.aggregate(pipeline).to_list(50)
     counts = {r["_id"]: r["count"] for r in rows}
     return {"collections": [{"intent": i, "count": counts.get(i, 0)} for i in INTENTS]}
+
+
+@router.get("/tags")
+async def tags(current=Depends(get_current_user), limit: int = Query(30, ge=1, le=100)):
+    user_id = str(current["_id"])
+    pipeline = [
+        {"$match": {"user_id": user_id, "is_deleted": {"$ne": True}, "tags": {"$exists": True, "$ne": []}}},
+        {"$unwind": "$tags"},
+        {"$group": {"_id": "$tags", "count": {"$sum": 1}}},
+        {"$sort": {"count": -1, "_id": 1}},
+        {"$limit": limit},
+    ]
+    rows = await db.items.aggregate(pipeline).to_list(limit)
+    return {"tags": [{"tag": r["_id"], "count": r["count"]} for r in rows]}

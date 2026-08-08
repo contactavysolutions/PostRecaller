@@ -7,10 +7,12 @@ from motor.motor_asyncio import AsyncIOMotorClient
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / ".env")
+load_dotenv(ROOT_DIR.parent / ".env")
+load_dotenv(ROOT_DIR.parent / "atlas-credentials.env")
 
 # --- Mongo ---
-MONGO_URL = os.environ["MONGO_URL"]
-DB_NAME = os.environ["DB_NAME"]
+MONGO_URL = os.environ.get("MONGO_URL") or os.environ.get("MONGODB_URI", "mongodb://localhost:27017")
+DB_NAME = os.environ.get("DB_NAME", "postrecaller")
 
 client = AsyncIOMotorClient(MONGO_URL)
 db = client[DB_NAME]

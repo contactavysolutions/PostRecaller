@@ -13,7 +13,7 @@ const SECTIONS: { h: string; b: string }[] = [
   { h: "Free & Pro plans", b: "The free plan includes unlimited saves and 5 AI enrichments per day. PostRecaller Pro unlocks unlimited AI enrichments. You can cancel anytime." },
   { h: "Acceptable use", b: "Automated abuse, scraping of the service, or exceeding fair-use limits (200 saves/day) may result in rate limiting." },
   { h: "Termination", b: "You may delete your account at any time from the Profile screen, which permanently removes your data." },
-  { h: "Contact", b: "Questions about these terms? Email contactavysolutions@gmail.com." },
+  { h: "Contact", b: "Questions about these terms? Email support@postrecaller.com." },
 ];
 
 export default function Terms() {

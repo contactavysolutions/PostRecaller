@@ -7,7 +7,8 @@ from datetime import datetime, timedelta, timezone
 
 import bcrypt
 import jwt
-from fastapi import APIRouter, Depends, HTTPException
+from bson import ObjectId
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 from config import (
@@ -28,6 +29,7 @@ from models import (
     UserPublic,
     utcnow,
 )
+from rate_limit import limiter
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
 bearer = HTTPBearer(auto_error=False)
@@ -59,6 +61,16 @@ def _hash_code(code: str) -> str:
     return hmac.new(JWT_SECRET.encode("utf-8"), code.encode("utf-8"), hashlib.sha256).hexdigest()
 
 
+def hash_invite_token(token: str) -> str:
+    """Deterministic hash used to store & lookup invite tokens."""
+    return hmac.new(JWT_SECRET.encode("utf-8"), token.encode("utf-8"), hashlib.sha256).hexdigest()
+
+
+def generate_invite_token() -> str:
+    """URL-safe random invite token (~43 chars)."""
+    return secrets.token_urlsafe(32)
+
+
 def _today() -> str:
     return utcnow().strftime("%Y-%m-%d")
 
@@ -86,12 +98,22 @@ async def get_current_user(
         payload = jwt.decode(creds.credentials, JWT_SECRET, algorithms=[JWT_ALGORITHM])
     except jwt.PyJWTError:
         raise HTTPException(status_code=401, detail="Invalid token")
-    from bson import ObjectId
 
     user = await db.users.find_one({"_id": ObjectId(payload["sub"])})
     if not user:
         raise HTTPException(status_code=401, detail="User not found")
+    if user.get("is_suspended"):
+        raise HTTPException(status_code=403, detail="Account suspended")
+    if user.get("is_deleted"):
+        raise HTTPException(status_code=401, detail="Account deleted")
     return user
+
+
+async def require_admin(current=Depends(get_current_user)) -> dict:
+    email = (current.get("email") or "").lower()
+    if not (current.get("is_admin") or email in ADMIN_EMAILS):
+        raise HTTPException(status_code=403, detail="Admin only")
+    return current
 
 
 async def seed_admins() -> None:
@@ -101,32 +123,99 @@ async def seed_admins() -> None:
 
 
 # ---------------- routes ----------------
+@router.get("/invite/validate")
+async def validate_invite(token: str = Query(..., min_length=10, max_length=200)):
+    """Preflight for the register page: confirms invite exists, unused, unexpired.
+    Returns the email so the register form can prefill it. Never reveals invite ids.
+    """
+    invite = await db.invites.find_one({"token_hash": hash_invite_token(token)})
+    if not invite:
+        raise HTTPException(status_code=404, detail="Invalid invite link")
+    if invite.get("used_at"):
+        raise HTTPException(status_code=410, detail="This invite has already been used")
+    exp = invite.get("expires_at")
+    if exp and exp.tzinfo is None:
+        exp = exp.replace(tzinfo=timezone.utc)
+    if not exp or utcnow() > exp:
+        raise HTTPException(status_code=410, detail="This invite has expired")
+    return {"ok": True, "email": invite["email"]}
+
+
 @router.post("/register", response_model=UserPublic, status_code=201)
-async def register(body: RegisterIn):
-    email = body.email.lower()
+@limiter.limit("5/minute")
+async def register(request: Request, body: RegisterIn):
+    email = body.email.lower().strip()
+    is_admin_email = email in ADMIN_EMAILS
+
+    # Registration is open to everyone. If an invite_token is provided
+    # (e.g. from admin-approved waitlist), validate and consume it for
+    # tracking. Otherwise, allow registration freely (mobile, direct, etc.).
+    invite_doc = None
+    if body.invite_token:
+        invite_doc = await db.invites.find_one({"token_hash": hash_invite_token(body.invite_token)})
+        if not invite_doc:
+            raise HTTPException(status_code=400, detail="Invalid invite link")
+        if invite_doc.get("used_at"):
+            raise HTTPException(status_code=410, detail="This invite has already been used")
+        exp = invite_doc.get("expires_at")
+        if exp and exp.tzinfo is None:
+            exp = exp.replace(tzinfo=timezone.utc)
+        if not exp or utcnow() > exp:
+            raise HTTPException(status_code=410, detail="This invite has expired")
+        if (invite_doc.get("email") or "").lower() != email:
+            raise HTTPException(
+                status_code=400,
+                detail="This invite was issued to a different email address",
+            )
+
     if await db.users.find_one({"email": email}):
         raise HTTPException(status_code=400, detail="Email already registered")
+
     user = User(
         email=email,
         password_hash=hash_password(body.password),
-        is_admin=email in ADMIN_EMAILS,
+        is_admin=is_admin_email,
     )
     doc = user.to_mongo()
     res = await db.users.insert_one(doc)
     doc["_id"] = res.inserted_id
+
+    # Consume invite + mark waitlist entry as registered (if any).
+    if invite_doc:
+        await db.invites.update_one(
+            {"_id": invite_doc["_id"]},
+            {"$set": {"used_at": utcnow(), "used_by_user_id": str(res.inserted_id)}},
+        )
+        wl_id = invite_doc.get("waitlist_id")
+        if wl_id:
+            await db.waitlist.update_one(
+                {"_id": wl_id if isinstance(wl_id, ObjectId) else ObjectId(str(wl_id))},
+                {"$set": {"status": "registered", "registered_at": utcnow()}},
+            )
+
     # Fire-and-forget welcome email (never blocks or fails registration).
     asyncio.create_task(send_welcome_email(email))
     return _public(doc)
 
 
 @router.post("/login")
-async def login(body: LoginIn):
+@limiter.limit("5/minute")
+async def login(request: Request, body: LoginIn):
     email = body.email.lower()
     user = await db.users.find_one({"email": email})
     if not user or not verify_password(body.password, user["password_hash"]):
         raise HTTPException(status_code=401, detail="Incorrect email or password")
+    if user.get("is_deleted"):
+        raise HTTPException(status_code=401, detail="Account deleted")
+    if user.get("is_suspended"):
+        raise HTTPException(status_code=403, detail="Account suspended")
     token = create_access_token(str(user["_id"]), email, user.get("is_admin", False))
-    return {"access_token": token, "token_type": "bearer", "user": _public(user).model_dump()}
+    # Return a token & user shape compatible with older mobile clients.
+    return {
+        "access_token": token,
+        "token_type": "bearer",
+        "user": _public(user).model_dump(),
+    }
 
 
 @router.get("/me", response_model=UserPublic)
@@ -136,18 +225,27 @@ async def me(current=Depends(get_current_user)):
 
 @router.delete("/me", status_code=204)
 async def delete_me(current=Depends(get_current_user)):
+    """Soft-delete: preserves data but hides account and items."""
     uid = str(current["_id"])
-    await db.items.delete_many({"user_id": uid})
-    await db.users.delete_one({"_id": current["_id"]})
+    now = utcnow()
+    await db.users.update_one(
+        {"_id": current["_id"]},
+        {"$set": {"is_deleted": True, "deleted_at": now}},
+    )
+    await db.items.update_many(
+        {"user_id": uid, "is_deleted": {"$ne": True}},
+        {"$set": {"is_deleted": True, "deleted_at": now}},
+    )
     return None
 
 
 @router.post("/forgot-password")
-async def forgot_password(body: ForgotPasswordIn):
+@limiter.limit("3/minute")
+async def forgot_password(request: Request, body: ForgotPasswordIn):
     """Email a 6-digit reset code. Always returns ok (no user enumeration)."""
     email = body.email.lower()
     user = await db.users.find_one({"email": email})
-    if user:
+    if user and not user.get("is_deleted"):
         code = f"{secrets.randbelow(1_000_000):06d}"
         await db.users.update_one(
             {"_id": user["_id"]},
@@ -162,7 +260,8 @@ async def forgot_password(body: ForgotPasswordIn):
 
 
 @router.post("/reset-password")
-async def reset_password(body: ResetPasswordIn):
+@limiter.limit("5/minute")
+async def reset_password(request: Request, body: ResetPasswordIn):
     email = body.email.lower()
     user = await db.users.find_one({"email": email})
     invalid = HTTPException(status_code=400, detail="Invalid or expired code")

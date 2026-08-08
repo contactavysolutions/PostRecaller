@@ -3,11 +3,15 @@ import logging
 
 from fastapi import FastAPI
 from pymongo import ASCENDING, DESCENDING
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
 from starlette.middleware.cors import CORSMiddleware
 
+from admin import router as admin_router
 from auth import router as auth_router, seed_admins
 from config import client, db
 from items import router as items_router
+from rate_limit import limiter
 from waitlist import router as waitlist_router
 
 logging.basicConfig(
@@ -17,6 +21,8 @@ logging.basicConfig(
 logger = logging.getLogger("postrecaller")
 
 app = FastAPI(title="PostRecaller API")
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 app.add_middleware(
     CORSMiddleware,
@@ -29,6 +35,7 @@ app.add_middleware(
 app.include_router(auth_router)
 app.include_router(items_router)
 app.include_router(waitlist_router)
+app.include_router(admin_router)
 
 
 @app.get("/api/")
@@ -46,6 +53,9 @@ async def startup():
     await db.ai_usage.create_index([("created_at", DESCENDING)])
     await db.waitlist.create_index([("email", ASCENDING)], unique=True)
     await db.waitlist.create_index([("created_at", ASCENDING)])
+    await db.invites.create_index([("token_hash", ASCENDING)], unique=True)
+    await db.invites.create_index([("email", ASCENDING)])
+    await db.invites.create_index([("expires_at", ASCENDING)])
     await db.debug_logs.create_index([("created_at", ASCENDING)], expireAfterSeconds=604800)
     await seed_admins()
     logger.info("PostRecaller startup complete")

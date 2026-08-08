@@ -1,8 +1,13 @@
 """AI enrichment via Gemini 3 Flash (Emergent LLM key) + cost logging."""
 import json
+import logging
 import re
 
-from emergentintegrations.llm.chat import LlmChat, UserMessage
+try:
+    from emergentintegrations.llm.chat import LlmChat, UserMessage
+except ImportError:
+    LlmChat = None  # Emergent SDK not available locally — enrichment will be skipped.
+    UserMessage = None
 
 from config import EMERGENT_LLM_KEY, ENRICH_MODEL, INTENTS, db
 from models import utcnow
@@ -63,7 +68,7 @@ def _parse_json(raw: str) -> dict:
 
 async def enrich(user_id: str, url: str, signals: dict) -> dict | None:
     """Return {title, summary, intent, tags, author} or None on failure."""
-    if not EMERGENT_LLM_KEY:
+    if not EMERGENT_LLM_KEY or LlmChat is None:
         return None
     title = signals.get("title") or ""
     description = signals.get("description") or ""
@@ -114,7 +119,7 @@ async def enrich(user_id: str, url: str, signals: dict) -> dict | None:
 
 async def enrich_note(user_id: str, content: str) -> dict | None:
     """Tag a pure-text personal note."""
-    if not EMERGENT_LLM_KEY or not content.strip():
+    if not EMERGENT_LLM_KEY or LlmChat is None or not content.strip():
         return None
     prompt = (
         "This is a personal text note. Return STRICT JSON with keys: "
