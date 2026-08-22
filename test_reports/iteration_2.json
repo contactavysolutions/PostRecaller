@@ -11,7 +11,7 @@
     "react_native_issues": [
       {
         "component": "web console deprecation warning",
-        "issue": "Console warning 'props.pointerEvents is deprecated. Use style.pointerEvents' still appears on load (carried over from prior iteration, likely from a dependency). Non-blocking. Reference: seen on https://glean-save.preview.emergentagent.com/auth"
+        "issue": "Console warning 'props.pointerEvents is deprecated. Use style.pointerEvents' still appears on load (carried over from prior iteration, likely from a dependency). Non-blocking. Reference: seen on https://post-memory-web.preview.emergentagent.com/auth"
       }
     ]
   },

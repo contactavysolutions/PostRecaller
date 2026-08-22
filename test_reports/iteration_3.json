@@ -8,7 +8,7 @@
     "react_native_issues": [
       {
         "component": "console deprecation warning (dependency)",
-        "issue": "Web console still logs 'props.pointerEvents is deprecated. Use style.pointerEvents' and '\"shadow*\" style props are deprecated. Use \"boxShadow\"'. Non-blocking, carried over from prior iterations, appears to come from a library (react-native-web / a dependency), not from AddSheet.tsx. Reference: seen at https://glean-save.preview.emergentagent.com after tabs mount."
+        "issue": "Web console still logs 'props.pointerEvents is deprecated. Use style.pointerEvents' and '\"shadow*\" style props are deprecated. Use \"boxShadow\"'. Non-blocking, carried over from prior iterations, appears to come from a library (react-native-web / a dependency), not from AddSheet.tsx. Reference: seen at https://post-memory-web.preview.emergentagent.com after tabs mount."
       }
     ]
   },
