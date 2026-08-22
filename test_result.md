@@ -186,31 +186,103 @@
 ##         - working: true
 ##           agent: "main"
 ##           comment: "Verified via screenshot on web preview - hero, waitlist form, features render correctly and on-brand."
-##   - task: "Auth / vault / collections / profile / item detail screens"
+##         - working: true
+##           agent: "testing"
+##           comment: "✅ WAITLIST FLOW PASSED. Tested: hero text 'Everything you save, finally findable' visible, waitlist form submission with valid email (waitlist1787378070@example.com) successful, success state 'You're #2 on the list' displayed correctly, 'Log in' link navigates to /auth. Note: Email validation requires valid TLD (rejected .test domain with 422 error, works with .com/.example.com)."
+##   - task: "Auth flow (register, login, logout, wrong password, forgot password)"
 ##     implemented: true
-##     working: "NA"
-##     file: "frontend/app/auth.tsx, frontend/app/(tabs)/*, frontend/app/item/[id].tsx"
+##     working: true
+##     file: "frontend/app/auth.tsx, frontend/app/forgot-password.tsx"
 ##     stuck_count: 0
 ##     priority: "high"
-##     needs_retesting: true
+##     needs_retesting: false
 ##     status_history:
 ##         - working: "NA"
 ##           agent: "main"
 ##           comment: "Code identical to already-tested GitHub repo state (prior test_reports show these flows passed), but not re-verified in this fresh session yet."
+##         - working: true
+##           agent: "testing"
+##           comment: "✅ ALL AUTH FLOWS PASSED (6/6). Tested: (1) Register new user (testuser1787378070@gmail.com) - 201 Created, auto-login successful, landed in vault home. (2) Logout - redirected to /auth correctly. (3) Login with correct credentials - 200 OK, landed in vault. (4) Wrong password - 401 error, error indication displayed on page. (5) Forgot password - navigated to /forgot-password, email submitted, code entry screen visible (reset code 437089 logged in backend). (6) Back navigation working. Password reset email sent successfully to Gmail addresses."
+##   - task: "Profile tab (user info, AI usage, logout)"
+##     implemented: true
+##     working: true
+##     file: "frontend/app/(tabs)/profile.tsx"
+##     stuck_count: 0
+##     priority: "high"
+##     needs_retesting: false
+##     status_history:
+##         - working: "NA"
+##           agent: "main"
+##           comment: "Code identical to already-tested GitHub repo state (prior test_reports show these flows passed), but not re-verified in this fresh session yet."
+##         - working: true
+##           agent: "testing"
+##           comment: "✅ PROFILE TAB PASSED. Tested: profile email displayed correctly (testuser1787378070@gmail.com), daily AI usage indicator visible (shows usage ring with X/5 enrichments), plan badge visible ('Free plan'), logout button working (redirects to /auth). Privacy Policy and Terms of Service links navigate correctly to /legal/privacy and /legal/terms."
+##   - task: "Vault / Save-a-link flow (AI enrichment, masonry grid, item detail, filtering)"
+##     implemented: true
+##     working: true
+##     file: "frontend/app/(tabs)/index.tsx, frontend/app/(tabs)/add.tsx, frontend/src/components/AddSheet.tsx, frontend/app/item/[id].tsx, frontend/src/lib/api.ts"
+##     stuck_count: 0
+##     priority: "high"
+##     needs_retesting: false
+##     status_history:
+##         - working: "NA"
+##           agent: "main"
+##           comment: "Code identical to already-tested GitHub repo state (prior test_reports show these flows passed), but not re-verified in this fresh session yet."
+##         - working: false
+##           agent: "testing"
+##           comment: "❌ VAULT SAVE-A-LINK FLOW FAILED. Tested: (1) '+' add button clicked successfully, AddSheet modal opened. (2) YouTube URL (https://www.youtube.com/watch?v=dQw4w9WgXcQ) filled in URL input. (3) 'Save to Vault' button clicked. (4) ERROR: API call to POST /api/items failed with 'Something went wrong' error message displayed in AddSheet. (5) AI enrichment did not complete within 30 seconds - no success state ('Saved & enriched' or 'Already in your vault') appeared. (6) Background vault shows 'Failed to load vault' error with 'Tap to retry'. Backend logs show no POST /api/items requests from this test session after login, suggesting frontend error before API call. Possible causes: auth token issue, session expiry, or frontend state management problem. CRITICAL: Core feature (save-a-link with AI enrichment) not working."
+##         - working: false
+##           agent: "main"
+##           comment: "ROOT CAUSE FOUND via diagnostic console.error injected into ItemGrid.tsx catch block + manual browser fetch verification: /app/frontend/src/lib/api.ts's authHeaders() calls `storage.secureGet(...)` but the file NEVER IMPORTS `storage` from '@/src/utils/storage' - a genuine missing-import bug present in the pulled repo code itself. This throws `ReferenceError: storage is not defined` on EVERY authenticated request (listItems, createItem, me, etc.), silently swallowed by bare try/catch blocks in ItemGrid.tsx and AddSheet.tsx (generic 'Failed to load vault' / 'Something went wrong' messages shown instead of the real error - confirmed console log: 'error: [ItemGrid] load failed: ReferenceError: storage is not defined'). Confirmed manual fetch with a valid token to /api/items worked fine (200, backend/CORS not at fault) - isolating this to the missing import. FIX: added `import { storage } from \"@/src/utils/storage\";` to api.ts, reverted the temporary diagnostic console.error. Manually re-verified after restart: vault home now shows 'Your vault is empty' (was 'Failed to load vault'). Requesting testing agent to re-verify full vault/save-link/item-detail/collections flow end to end."
+##         - working: true
+##           agent: "testing"
+##           comment: "🎉 FIX VERIFIED - ALL 6/6 STEPS PASSED. Login OK. Vault home loads 'Your vault is empty' (no more error). Save-a-link: AddSheet -> YouTube URL -> 'AI is reading...' -> 'Saved & enriched' in 4s with real Gemini 3 Flash enrichment (title='Rick Astley - Never Gonna Give You Up (Official Music Video)'). Item Detail shows AI summary, tags, intent='Watch', edit/delete/share options. Masonry grid shows item with platform badge + tag pills; tag filtering works. Collections tab shows 'Watch' bucket with count, filters correctly. No console errors, no network failures, no LogBox overlays. Core feature confirmed fully functional and production-ready."
+##         - working: true
+##           agent: "testing"
+##           comment: "✅ ALL VAULT/SAVE-A-LINK TESTS PASSED (6/6 steps). FIX VERIFIED! The missing storage import in api.ts has been successfully resolved. Comprehensive end-to-end test results: (1) Login successful with testuser1787378070@gmail.com. (2) Vault home loads correctly WITHOUT 'Failed to load vault' error - shows 'Your vault is empty' as expected. (3) Save-a-link flow WORKS PERFECTLY: '+' button opens AddSheet modal, YouTube URL (https://www.youtube.com/watch?v=dQw4w9WgXcQ) filled, 'Save to Vault' clicked, 'AI is reading...' loading state displayed, SUCCESS: 'Saved & enriched' state reached in 4 seconds with item preview showing 'Rick Astley - Never Gonna Give You Up (Official Music Video)'. (4) Item detail view WORKS: AI Summary visible with enriched content, Tags section shows 5 tags (music video, 80s pop, rick astley, internet culture, entertainment), Intent 'Watch' visible, all edit/delete/share options functional. (5) Vault masonry grid WORKS: Item appears in grid with thumbnail and platform badge (YouTube), tag rail visible with 'All' and individual tag pills, tag filtering works (tested 'music video' filter and reset to 'All'). (6) Collections tab WORKS: 'Watch' intent bucket visible with count, clicking collection filters correctly. NO console errors (only 2 minor React Native deprecation warnings for pointerEvents and shadow* props - not critical). NO network failures - all API calls succeeded. AI enrichment completed successfully in 4 seconds using Gemini 3 Flash. Core feature fully functional!"
+##   - task: "Collections tab (intent buckets)"
+##     implemented: true
+##     working: true
+##     file: "frontend/app/(tabs)/collections.tsx"
+##     stuck_count: 0
+##     priority: "medium"
+##     needs_retesting: false
+##     status_history:
+##         - working: "NA"
+##           agent: "main"
+##           comment: "Code identical to already-tested GitHub repo state (prior test_reports show these flows passed), but not re-verified in this fresh session yet."
+##         - working: "NA"
+##           agent: "testing"
+##           comment: "NOT TESTED. Could not test collections tab because vault save-a-link flow failed, so no items exist to populate collections. Requires vault flow to be fixed first."
+##         - working: true
+##           agent: "testing"
+##           comment: "✅ COLLECTIONS TAB PASSED. Tested after vault save-a-link fix: Collections page loads correctly with header 'Organized by what you intend to do'. Intent buckets display correctly - 'Watch' collection visible with item count (expected for YouTube video saved in previous test). Clicking 'Watch' collection navigates to filtered view showing only items with 'Watch' intent. Collections API integration working correctly."
+##   - task: "Legal pages (privacy, terms)"
+##     implemented: true
+##     working: true
+##     file: "frontend/app/legal/privacy.tsx, frontend/app/legal/terms.tsx"
+##     stuck_count: 0
+##     priority: "low"
+##     needs_retesting: false
+##     status_history:
+##         - working: "NA"
+##           agent: "main"
+##           comment: "Code identical to already-tested GitHub repo state (prior test_reports show these flows passed), but not re-verified in this fresh session yet."
+##         - working: true
+##           agent: "testing"
+##           comment: "✅ LEGAL PAGES PASSED. Tested: Privacy Policy link from profile navigates to /legal/privacy correctly, Terms of Service link navigates to /legal/terms correctly. Both pages render without errors."
 
 ## metadata:
 ##   created_by: "main_agent"
 ##   version: "1.0"
-##   test_sequence: 2
-##   run_ui: false
+##   test_sequence: 3
+##   run_ui: true
 
 ## test_plan:
 ##   current_focus:
-##     - "Auth: register/login/me/delete/forgot-password/reset-password"
-##     - "Items/Vault: create (scrape+AI enrich), list, patch, delete, collections"
-##     - "Waitlist capture + count"
+##     - "All core features tested and working"
 ##   stuck_tasks: []
-##   test_all: true
+##   test_all: false
 ##   test_priority: "high_first"
 
 ## agent_communication:
@@ -239,28 +311,40 @@
 ##         permission before any frontend UI testing.
 ##     - agent: "testing"
 ##       message: >
-##         ✅ BACKEND REGRESSION COMPLETE - ALL TESTS PASSED (28/28, 100% success rate).
+##         ✅ FRONTEND E2E TESTING COMPLETE - PARTIAL SUCCESS (4/6 flows passed, 1 CRITICAL FAILURE).
 ##         
-##         HEALTH: GET /api/ returns {"service":"postrecaller","status":"ok"} ✓
+##         PASSED FLOWS (4/6):
+##         1. ✅ Waitlist landing (/waitlist) - hero text, form submission, success state (#2 position), Log in link navigation all working.
+##         2. ✅ Auth flow (/auth, /forgot-password) - register (201), login (200), logout, wrong password (401 error shown), forgot password (code entry screen), back navigation all working.
+##         3. ✅ Profile tab (/profile) - email display, AI usage indicator, plan badge, logout, legal links (privacy/terms) all working.
+##         4. ✅ Legal pages (/legal/privacy, /legal/terms) - both pages render correctly.
 ##         
-##         AUTH (10/10 passed): register ✓, duplicate detection ✓, login ✓, wrong password 401 ✓, 
-##         GET /me with/without/bad token ✓, forgot-password ✓ (reset code 922647 logged in backend), 
-##         reset-password with wrong code 400 ✓, DELETE /me soft-delete ✓ (token invalidated). 
-##         Rate limiting configured (5/min register+login, 3/min forgot-password).
+##         FAILED FLOWS (1/6 - CRITICAL):
+##         ❌ Vault / Save-a-link flow - CORE FEATURE NOT WORKING. AddSheet modal opens, URL input works, but POST /api/items fails with "Something went wrong" error. AI enrichment never completes. Background vault shows "Failed to load vault" error. Backend logs show no POST /api/items requests from this session, suggesting frontend error before API call (possible auth token/session issue).
 ##         
-##         ITEMS/VAULT (11/11 passed): AI ENRICHMENT WORKING! YouTube URL enriched with 
-##         Gemini 3 Flash (title, summary, intent='Watch', tags, platform='youtube', 
-##         enrichment_status='enriched'). Duplicate detection ✓, list/get/patch/delete ✓, 
-##         retry enrich ✓, collections ✓. AI usage: 2 calls, 508 input tokens, 196 output tokens, $0.0001.
+##         NOT TESTED (1/6):
+##         ⚠ Collections tab - could not test because no items exist (vault save-a-link failed).
 ##         
-##         WAITLIST (3/3 passed): count ✓, join ✓, duplicate handling ✓ (returns already:true, no crash).
+##         NOTES:
+##         - Email validation requires valid TLD (.test rejected with 422, .com/.example.com work).
+##         - Backend APIs all working (28/28 passed in prior backend testing).
+##         - Issue appears to be frontend-specific, likely auth token management or state issue.
+##         - Test credentials: testuser1787378070@gmail.com / TestPass123!
 ##         
-##         ADMIN (4/4 passed): contactavysolutions@gmail.com auto-elevated (is_admin:true via seed_admins). 
-##         GET /admin/waitlist ✓, /admin/users ✓, /admin/health ✓ (MongoDB 0ms ping, LLM key configured, 
-##         Resend key present HTTP 401, Reddit optional not configured), /admin/usage ✓. Non-admin 403 ✓.
+##         RECOMMENDATION: Main agent must investigate and fix the vault save-a-link flow (frontend auth token handling, API error handling in AddSheet component). This is the core feature of the app and is currently broken.
+##     - agent: "testing"
+##       message: >
+##         🎉 FIX VERIFIED - ALL TESTS PASSING! Re-tested vault/save-a-link flow after main agent's fix (added missing storage import to api.ts). COMPREHENSIVE E2E TEST RESULTS (6/6 STEPS PASSED):
 ##         
-##         EMAIL: RESEND_API_KEY present and email sending attempted. Failed for example.com test addresses 
-##         (expected, Resend rejects test domains) but backend handled gracefully - no crashes.
+##         ✅ Step 1: Login successful with testuser1787378070@gmail.com / TestPass123!
+##         ✅ Step 2: Vault home loads WITHOUT "Failed to load vault" error - shows "Your vault is empty" empty state as expected
+##         ✅ Step 3: Save-a-link flow WORKS PERFECTLY - '+' button opens AddSheet, YouTube URL filled, "AI is reading..." loading state displayed, "Saved & enriched" success state reached in 4 seconds with item preview showing "Rick Astley - Never Gonna Give You Up (Official Music Video)"
+##         ✅ Step 4: Item detail view loads correctly - AI Summary visible with enriched content, Tags section shows 5 tags (music video, 80s pop, rick astley, internet culture, entertainment), Intent "Watch" visible, all edit/delete/share options functional
+##         ✅ Step 5: Vault masonry grid displays item with thumbnail and YouTube platform badge, tag rail visible with "All" and individual tag pills, tag filtering works (tested "music video" filter and reset to "All")
+##         ✅ Step 6: Collections tab loads correctly - "Watch" intent bucket visible with count, clicking collection filters correctly
 ##         
-##         NO CRITICAL ISSUES FOUND. All backend APIs working correctly. Backend ready for production.
-##         Main agent should summarize and finish - backend testing complete.
+##         NO CONSOLE ERRORS (only 2 minor React Native deprecation warnings - not critical)
+##         NO NETWORK FAILURES - all API calls succeeded
+##         NO RED LOGBOX ERRORS during entire flow
+##         
+##         AI enrichment completed successfully in 4 seconds using Gemini 3 Flash. Core feature fully functional! App is production-ready.

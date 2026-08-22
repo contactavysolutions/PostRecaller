@@ -46,7 +46,7 @@ export function ItemGrid({
         setCursor(res.next_cursor);
         setHasMore(res.has_more);
         onData?.(res.items);
-      } catch {
+      } catch (e) {
         setError(true);
       } finally {
         setLoading(false);

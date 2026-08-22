@@ -1,5 +1,7 @@
 import Constants from "expo-constants";
 
+import { storage } from "@/src/utils/storage";
+
 function getBackendUrl(): string {
   if (process.env.EXPO_PUBLIC_BACKEND_URL && !process.env.EXPO_PUBLIC_BACKEND_URL.includes("localhost")) {
     return process.env.EXPO_PUBLIC_BACKEND_URL;
