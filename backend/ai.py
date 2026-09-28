@@ -1,20 +1,26 @@
-"""AI enrichment via Gemini 3 Flash (Emergent LLM key) + cost logging."""
+"""AI enrichment via Gemini Flash + cost logging.
+
+Supports direct Google Gemini API (GEMINI_API_KEY) via httpx,
+with backward-compatible fallback to emergentintegrations if available.
+"""
+import asyncio
 import json
 import logging
 import re
+import httpx
 
 try:
     from emergentintegrations.llm.chat import LlmChat, UserMessage
 except ImportError:
-    LlmChat = None  # Emergent SDK not available locally — enrichment will be skipped.
+    LlmChat = None
     UserMessage = None
 
-from config import EMERGENT_LLM_KEY, ENRICH_MODEL, INTENTS, db
+from config import GEMINI_API_KEY, EMERGENT_LLM_KEY, ENRICH_MODEL, INTENTS, db
 from models import utcnow
 
-# Rough Gemini Flash pricing (USD per token) for cost estimation.
-_IN_COST = 0.075 / 1_000_000
-_OUT_COST = 0.30 / 1_000_000
+# Gemini Flash pricing (USD per token) for cost estimation.
+_IN_COST = 0.10 / 1_000_000
+_OUT_COST = 0.40 / 1_000_000
 
 SYSTEM = (
     "You are PostRecaller's content librarian. Given raw signals scraped from a saved link, "
@@ -42,18 +48,25 @@ Return only the JSON object."""
 
 
 async def _log_usage(user_id: str, purpose: str, in_tokens: int, out_tokens: int):
-    est = in_tokens * _IN_COST + out_tokens * _OUT_COST
-    await db.ai_usage.insert_one(
-        {
-            "user_id": user_id,
-            "model": ENRICH_MODEL[1],
-            "purpose": purpose,
-            "input_tokens": in_tokens,
-            "output_tokens": out_tokens,
-            "est_cost_usd": round(est, 6),
-            "created_at": utcnow(),
-        }
-    )
+    try:
+        est = in_tokens * _IN_COST + out_tokens * _OUT_COST
+        model_name = ENRICH_MODEL if isinstance(ENRICH_MODEL, str) else ENRICH_MODEL[-1]
+        await asyncio.wait_for(
+            db.ai_usage.insert_one(
+                {
+                    "user_id": user_id,
+                    "model": model_name,
+                    "purpose": purpose,
+                    "input_tokens": in_tokens,
+                    "output_tokens": out_tokens,
+                    "est_cost_usd": round(est, 6),
+                    "created_at": utcnow(),
+                }
+            ),
+            timeout=1.5,
+        )
+    except Exception as e:
+        logging.getLogger(__name__).warning("failed to log ai_usage to db: %s", e)
 
 
 def _parse_json(raw: str) -> dict:
@@ -66,9 +79,63 @@ def _parse_json(raw: str) -> dict:
     return json.loads(raw)
 
 
+async def _call_gemini_api(prompt: str, system_message: str = SYSTEM) -> tuple[str, int, int]:
+    """Call Google Gemini REST API directly using httpx."""
+    api_key = GEMINI_API_KEY or EMERGENT_LLM_KEY
+    if not api_key:
+        raise ValueError("Missing GEMINI_API_KEY / EMERGENT_LLM_KEY")
+
+    model = ENRICH_MODEL if isinstance(ENRICH_MODEL, str) else ENRICH_MODEL[-1]
+    if model.startswith("models/"):
+        model = model.replace("models/", "")
+    if not model or "gemini-2.0" in model or "gemini-2.5" in model:
+        model = "gemini-flash-lite-latest"
+
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={api_key}"
+    payload = {
+        "contents": [
+            {
+                "role": "user",
+                "parts": [{"text": prompt}],
+            }
+        ],
+        "systemInstruction": {
+            "parts": [{"text": system_message}],
+        },
+        "generationConfig": {
+            "temperature": 0.2,
+            "responseMimeType": "application/json",
+        },
+    }
+
+    async with httpx.AsyncClient(timeout=60.0) as client:
+        last_err = None
+        for attempt in range(3):
+            try:
+                resp = await client.post(url, json=payload)
+                if resp.status_code in (429, 503) and attempt < 2:
+                    await asyncio.sleep(1.0 * (attempt + 1))
+                    continue
+                resp.raise_for_status()
+                data = resp.json()
+
+                text_out = data["candidates"][0]["content"]["parts"][0]["text"]
+                usage = data.get("usageMetadata", {})
+                in_tokens = usage.get("promptTokenCount", len(prompt) // 4)
+                out_tokens = usage.get("candidatesTokenCount", len(text_out) // 4)
+                return text_out, in_tokens, out_tokens
+            except (httpx.HTTPStatusError, httpx.RequestError) as e:
+                last_err = e
+                if attempt < 2:
+                    await asyncio.sleep(1.0 * (attempt + 1))
+                else:
+                    raise last_err
+
+
 async def enrich(user_id: str, url: str, signals: dict) -> dict | None:
     """Return {title, summary, intent, tags, author} or None on failure."""
-    if not EMERGENT_LLM_KEY or LlmChat is None:
+    api_key = GEMINI_API_KEY or EMERGENT_LLM_KEY
+    if not api_key:
         return None
     title = signals.get("title") or ""
     description = signals.get("description") or ""
@@ -85,18 +152,21 @@ async def enrich(user_id: str, url: str, signals: dict) -> dict | None:
         text=text[:3000],
     )
     try:
-        chat = LlmChat(
-            api_key=EMERGENT_LLM_KEY,
-            session_id=f"enrich-{user_id}",
-            system_message=SYSTEM,
-        ).with_model(*ENRICH_MODEL)
-        response = await chat.send_message(UserMessage(text=prompt))
-        text_out = response if isinstance(response, str) else str(response)
-        data = _parse_json(text_out)
+        if LlmChat is not None and not GEMINI_API_KEY and EMERGENT_LLM_KEY.startswith("emg_"):
+            chat = LlmChat(
+                api_key=EMERGENT_LLM_KEY,
+                session_id=f"enrich-{user_id}",
+                system_message=SYSTEM,
+            ).with_model("gemini", "gemini-3-flash-preview")
+            response = await chat.send_message(UserMessage(text=prompt))
+            text_out = response if isinstance(response, str) else str(response)
+            in_tokens = len(prompt) // 4
+            out_tokens = len(text_out) // 4
+        else:
+            text_out, in_tokens, out_tokens = await _call_gemini_api(prompt, SYSTEM)
 
-        await _log_usage(
-            user_id, "enrichment", len(prompt) // 4, len(text_out) // 4
-        )
+        data = _parse_json(text_out)
+        await _log_usage(user_id, "enrichment", in_tokens, out_tokens)
 
         intent = data.get("intent")
         if intent not in INTENTS:
@@ -110,16 +180,15 @@ async def enrich(user_id: str, url: str, signals: dict) -> dict | None:
             "tags": tags,
             "author": data.get("author") or signals.get("author"),
         }
-    except Exception as e:  # noqa
-        import logging
-
+    except Exception as e:
         logging.getLogger(__name__).warning("enrichment failed: %s", e)
         return None
 
 
 async def enrich_note(user_id: str, content: str) -> dict | None:
     """Tag a pure-text personal note."""
-    if not EMERGENT_LLM_KEY or LlmChat is None or not content.strip():
+    api_key = GEMINI_API_KEY or EMERGENT_LLM_KEY
+    if not api_key or not content.strip():
         return None
     prompt = (
         "This is a personal text note. Return STRICT JSON with keys: "
@@ -127,13 +196,19 @@ async def enrich_note(user_id: str, content: str) -> dict | None:
         '"tags" (3-6 lowercase). Note:\n' + content[:2000]
     )
     try:
-        chat = LlmChat(
-            api_key=EMERGENT_LLM_KEY, session_id=f"note-{user_id}", system_message=SYSTEM
-        ).with_model(*ENRICH_MODEL)
-        response = await chat.send_message(UserMessage(text=prompt))
-        text_out = response if isinstance(response, str) else str(response)
+        if LlmChat is not None and not GEMINI_API_KEY and EMERGENT_LLM_KEY.startswith("emg_"):
+            chat = LlmChat(
+                api_key=EMERGENT_LLM_KEY, session_id=f"note-{user_id}", system_message=SYSTEM
+            ).with_model("gemini", "gemini-3-flash-preview")
+            response = await chat.send_message(UserMessage(text=prompt))
+            text_out = response if isinstance(response, str) else str(response)
+            in_tokens = len(prompt) // 4
+            out_tokens = len(text_out) // 4
+        else:
+            text_out, in_tokens, out_tokens = await _call_gemini_api(prompt, SYSTEM)
+
         data = _parse_json(text_out)
-        await _log_usage(user_id, "note_enrichment", len(prompt) // 4, len(text_out) // 4)
+        await _log_usage(user_id, "note_enrichment", in_tokens, out_tokens)
         intent = data.get("intent") if data.get("intent") in INTENTS else "Read Later"
         tags = [str(t).strip().lower() for t in (data.get("tags") or []) if str(t).strip()][:6]
         return {
@@ -142,5 +217,6 @@ async def enrich_note(user_id: str, content: str) -> dict | None:
             "intent": intent,
             "tags": tags,
         }
-    except Exception:
+    except Exception as e:
+        logging.getLogger(__name__).warning("note enrichment failed: %s", e)
         return None

@@ -1,8 +1,8 @@
 // Central axios instance + typed API surface. Token stored in localStorage.
 import axios from "axios";
 
-const BASE = process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
-const API = `${BASE.replace(/\/$/, "")}/api`;
+const BASE = process.env.REACT_APP_BACKEND_URL || "";
+const API = BASE ? `${BASE.replace(/\/$/, "")}/api` : "/api";
 
 const TOKEN_KEY = "postrecaller.token";
 
@@ -101,6 +101,14 @@ export const api = {
     client.post(`/admin/items/${id}/re-enrich`).then((r) => r.data),
 
   adminHealth: () => client.get("/admin/health").then((r) => r.data),
+  adminDatabase: () => client.get("/admin/database").then((r) => r.data),
+  adminAnalytics: (days = 30) =>
+    client.get("/admin/analytics", { params: { days } }).then((r) => r.data),
+  adminCampaigns: () => client.get("/admin/campaigns").then((r) => r.data),
+  adminCreateCampaign: (data) =>
+    client.post("/admin/campaigns", data).then((r) => r.data),
+  adminDeleteCampaign: (id) =>
+    client.delete(`/admin/campaigns/${id}`).then((r) => r.data),
 
   // ------- items (Vault) -------
   listItems: (params = {}) =>
@@ -112,6 +120,34 @@ export const api = {
   retryEnrich: (id) => client.post(`/items/${id}/enrich`).then((r) => r.data),
   listTags: () => client.get("/tags").then((r) => r.data),
   listCollections: () => client.get("/collections").then((r) => r.data),
+  importArchive: async (fileOrContent, filename = "") => {
+    let payload = fileOrContent;
+    let contentType = "application/octet-stream";
+    let fname = filename;
+
+    if (typeof window !== "undefined" && (fileOrContent instanceof File || fileOrContent instanceof Blob)) {
+      fname = fname || fileOrContent.name || "import.bin";
+      payload = fileOrContent;
+    } else if (typeof fileOrContent === "string") {
+      contentType = "text/plain; charset=utf-8";
+      fname = fname || "import.txt";
+    } else {
+      contentType = "application/json";
+      payload = JSON.stringify(fileOrContent);
+      fname = fname || "import.json";
+    }
+
+    const url = `/items/import-archive${fname ? `?filename=${encodeURIComponent(fname)}` : ""}`;
+    return client
+      .post(url, payload, {
+        headers: { "Content-Type": contentType },
+        timeout: 60000,
+      })
+      .then((r) => r.data);
+  },
+  importBookmarks: async (file) => {
+    return api.importArchive(file, "bookmarks.html");
+  },
 };
 
 export const rawClient = client;

@@ -185,6 +185,54 @@ export default function VaultPage() {
     [refreshTags]
   );
 
+  // -------- polling for items undergoing background enrichment --------
+  const pendingItems = useMemo(
+    () => items.filter((it) => it.enrichment_status === "pending"),
+    [items]
+  );
+
+  useEffect(() => {
+    if (pendingItems.length === 0) return;
+
+    let isMounted = true;
+    const interval = setInterval(async () => {
+      try {
+        const results = await Promise.allSettled(
+          pendingItems.map((it) => api.getItem(it.id))
+        );
+
+        if (!isMounted) return;
+
+        let anyUpdated = false;
+        const updatedMap = new Map();
+
+        results.forEach((res) => {
+          if (res.status === "fulfilled" && res.value) {
+            const item = res.value;
+            if (item.enrichment_status !== "pending") {
+              updatedMap.set(item.id, item);
+              anyUpdated = true;
+            }
+          }
+        });
+
+        if (anyUpdated) {
+          setItems((prev) =>
+            prev.map((it) => (updatedMap.has(it.id) ? updatedMap.get(it.id) : it))
+          );
+          refreshTags();
+        }
+      } catch {
+        // Silently ignore transient network blips during polling
+      }
+    }, 2500);
+
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, [pendingItems, refreshTags]);
+
   const visibleItems = useMemo(
     () => filterClientSide(items, debouncedQuery),
     [items, debouncedQuery]

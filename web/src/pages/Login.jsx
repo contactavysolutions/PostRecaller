@@ -5,6 +5,7 @@ import { toast } from "sonner";
 
 import { AuthShell, Field } from "@/components/AuthShell";
 import { api, auth } from "@/lib/api";
+import { IS_WAITLIST_MODE } from "@/constants/config";
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
@@ -48,8 +49,13 @@ export default function Login() {
         <div className="flex items-center justify-between gap-2">
           <span>
             No account yet?{" "}
-            <Link to="/" className="text-brand hover:underline" data-testid="login-back-home" style={{ fontWeight: 500 }}>
-              Join the waitlist
+            <Link
+              to={IS_WAITLIST_MODE ? "/" : "/register"}
+              className="text-brand hover:underline"
+              data-testid="login-back-home"
+              style={{ fontWeight: 500 }}
+            >
+              {IS_WAITLIST_MODE ? "Join the waitlist" : "Create one"}
             </Link>
           </span>
           <Link to="/forgot-password" data-testid="login-forgot" className="text-on-surface hover:underline" style={{ fontWeight: 500 }}>

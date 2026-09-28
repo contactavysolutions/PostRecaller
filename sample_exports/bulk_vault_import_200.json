@@ -1,0 +1,1006 @@
+{
+  "collection": "Comprehensive Knowledge & Web Vault",
+  "description": "200 curated bookmarks across technology, design, science, culture, and recipes",
+  "items": [
+    {
+      "title": "W3C Web Standards",
+      "url": "https://www.w3.org/standards/",
+      "category": "Web Standards & Docs"
+    },
+    {
+      "title": "MDN Web Platform",
+      "url": "https://developer.mozilla.org/en-US/",
+      "category": "Web Standards & Docs"
+    },
+    {
+      "title": "ECMAScript Language Specification",
+      "url": "https://tc39.es/ecma262/",
+      "category": "Web Standards & Docs"
+    },
+    {
+      "title": "WHATWG HTML Living Standard",
+      "url": "https://html.spec.whatwg.org/multipage/",
+      "category": "Web Standards & Docs"
+    },
+    {
+      "title": "Can I use... Browser Support Tables",
+      "url": "https://caniuse.com/",
+      "category": "Web Standards & Docs"
+    },
+    {
+      "title": "Web.dev Performance Guidelines",
+      "url": "https://web.dev/",
+      "category": "Web Standards & Docs"
+    },
+    {
+      "title": "A11y Project Accessibility Checklist",
+      "url": "https://www.a11yproject.com/checklist/",
+      "category": "Web Standards & Docs"
+    },
+    {
+      "title": "OWASP Top 10 Web Security Risks",
+      "url": "https://owasp.org/www-project-top-ten/",
+      "category": "Web Standards & Docs"
+    },
+    {
+      "title": "IETF Internet Engineering Task Force",
+      "url": "https://www.ietf.org/",
+      "category": "Web Standards & Docs"
+    },
+    {
+      "title": "IANA Protocol Registries",
+      "url": "https://www.iana.org/",
+      "category": "Web Standards & Docs"
+    },
+    {
+      "title": "HTTP Archive Web Almanac",
+      "url": "https://almanac.httparchive.org/",
+      "category": "Web Standards & Docs"
+    },
+    {
+      "title": "Unicode Consortium",
+      "url": "https://home.unicode.org/",
+      "category": "Web Standards & Docs"
+    },
+    {
+      "title": "WebAssembly Official Site",
+      "url": "https://webassembly.org/",
+      "category": "Web Standards & Docs"
+    },
+    {
+      "title": "Rust Programming Language",
+      "url": "https://www.rust-lang.org/",
+      "category": "Web Standards & Docs"
+    },
+    {
+      "title": "Go Programming Language",
+      "url": "https://go.dev/",
+      "category": "Web Standards & Docs"
+    },
+    {
+      "title": "Node.js JavaScript Runtime",
+      "url": "https://nodejs.org/en",
+      "category": "Web Standards & Docs"
+    },
+    {
+      "title": "Deno Modern JavaScript Runtime",
+      "url": "https://deno.com/",
+      "category": "Web Standards & Docs"
+    },
+    {
+      "title": "Bun Fast All-in-One JavaScript Runtime",
+      "url": "https://bun.sh/",
+      "category": "Web Standards & Docs"
+    },
+    {
+      "title": "GraphQL Data Query Language",
+      "url": "https://graphql.org/",
+      "category": "Web Standards & Docs"
+    },
+    {
+      "title": "gRPC High Performance RPC Framework",
+      "url": "https://grpc.io/",
+      "category": "Web Standards & Docs"
+    },
+    {
+      "title": "React - The Library for Web and Native UI",
+      "url": "https://react.dev/",
+      "category": "Frameworks & Tooling"
+    },
+    {
+      "title": "Next.js App Router Framework",
+      "url": "https://nextjs.org/",
+      "category": "Frameworks & Tooling"
+    },
+    {
+      "title": "Vite Next Generation Frontend Tooling",
+      "url": "https://vitejs.dev/",
+      "category": "Frameworks & Tooling"
+    },
+    {
+      "title": "Vue.js The Progressive JavaScript Framework",
+      "url": "https://vuejs.org/",
+      "category": "Frameworks & Tooling"
+    },
+    {
+      "title": "Nuxt The Intuitive Vue Framework",
+      "url": "https://nuxt.com/",
+      "category": "Frameworks & Tooling"
+    },
+    {
+      "title": "Svelte Cybernetically Enhanced Web Apps",
+      "url": "https://svelte.dev/",
+      "category": "Frameworks & Tooling"
+    },
+    {
+      "title": "Angular Web Application Platform",
+      "url": "https://angular.dev/",
+      "category": "Frameworks & Tooling"
+    },
+    {
+      "title": "Remix Full Stack Web Framework",
+      "url": "https://remix.run/",
+      "category": "Frameworks & Tooling"
+    },
+    {
+      "title": "Astro Web Framework for Content-Driven Websites",
+      "url": "https://astro.build/",
+      "category": "Frameworks & Tooling"
+    },
+    {
+      "title": "Tailwind CSS Utility-First Framework",
+      "url": "https://tailwindcss.com/",
+      "category": "Frameworks & Tooling"
+    },
+    {
+      "title": "Radix UI Unstyled Accessible Components",
+      "url": "https://www.radix-ui.com/",
+      "category": "Frameworks & Tooling"
+    },
+    {
+      "title": "Shadcn UI Re-usable Components",
+      "url": "https://ui.shadcn.com/",
+      "category": "Frameworks & Tooling"
+    },
+    {
+      "title": "Chakra UI Component Library",
+      "url": "https://chakra-ui.com/",
+      "category": "Frameworks & Tooling"
+    },
+    {
+      "title": "Zustand Small Fast State Management",
+      "url": "https://zustand.docs.pmnd.rs/",
+      "category": "Frameworks & Tooling"
+    },
+    {
+      "title": "TanStack Query Powerful Asynchronous State",
+      "url": "https://tanstack.com/query/latest",
+      "category": "Frameworks & Tooling"
+    },
+    {
+      "title": "Redux Toolkit Opinionated Redux",
+      "url": "https://redux-toolkit.js.org/",
+      "category": "Frameworks & Tooling"
+    },
+    {
+      "title": "Jest JavaScript Testing Framework",
+      "url": "https://jestjs.io/",
+      "category": "Frameworks & Tooling"
+    },
+    {
+      "title": "Vitest Blazing Fast Unit Test Framework",
+      "url": "https://vitest.dev/",
+      "category": "Frameworks & Tooling"
+    },
+    {
+      "title": "Playwright End-to-End Testing",
+      "url": "https://playwright.dev/",
+      "category": "Frameworks & Tooling"
+    },
+    {
+      "title": "Cypress Web Testing Framework",
+      "url": "https://www.cypress.io/",
+      "category": "Frameworks & Tooling"
+    },
+    {
+      "title": "Linux Kernel Source Tree",
+      "url": "https://github.com/torvalds/linux",
+      "category": "Open Source & Code Repos"
+    },
+    {
+      "title": "CPython Programming Language Implementation",
+      "url": "https://github.com/python/cpython",
+      "category": "Open Source & Code Repos"
+    },
+    {
+      "title": "Chromium Web Browser Engine",
+      "url": "https://github.com/chromium/chromium",
+      "category": "Open Source & Code Repos"
+    },
+    {
+      "title": "VS Code Code Editor",
+      "url": "https://github.com/microsoft/vscode",
+      "category": "Open Source & Code Repos"
+    },
+    {
+      "title": "Kubernetes Container Orchestration",
+      "url": "https://github.com/kubernetes/kubernetes",
+      "category": "Open Source & Code Repos"
+    },
+    {
+      "title": "Docker Engine Source",
+      "url": "https://github.com/moby/moby",
+      "category": "Open Source & Code Repos"
+    },
+    {
+      "title": "TensorFlow Machine Learning Library",
+      "url": "https://github.com/tensorflow/tensorflow",
+      "category": "Open Source & Code Repos"
+    },
+    {
+      "title": "PyTorch Deep Learning Platform",
+      "url": "https://github.com/pytorch/pytorch",
+      "category": "Open Source & Code Repos"
+    },
+    {
+      "title": "Transformers Hugging Face State-of-the-Art ML",
+      "url": "https://github.com/huggingface/transformers",
+      "category": "Open Source & Code Repos"
+    },
+    {
+      "title": "Homebrew The Missing Package Manager for macOS",
+      "url": "https://github.com/Homebrew/brew",
+      "category": "Open Source & Code Repos"
+    },
+    {
+      "title": "Neovim Hyperextensible Vim-based Text Editor",
+      "url": "https://github.com/neovim/neovim",
+      "category": "Open Source & Code Repos"
+    },
+    {
+      "title": "Ansible Simple IT Automation",
+      "url": "https://github.com/ansible/ansible",
+      "category": "Open Source & Code Repos"
+    },
+    {
+      "title": "Terraform Infrastructure as Code",
+      "url": "https://github.com/hashicorp/terraform",
+      "category": "Open Source & Code Repos"
+    },
+    {
+      "title": "Redis In-Memory Data Store",
+      "url": "https://github.com/redis/redis",
+      "category": "Open Source & Code Repos"
+    },
+    {
+      "title": "Nginx High Performance Web Server",
+      "url": "https://github.com/nginx/nginx",
+      "category": "Open Source & Code Repos"
+    },
+    {
+      "title": "Apache Kafka Distributed Streaming Platform",
+      "url": "https://github.com/apache/kafka",
+      "category": "Open Source & Code Repos"
+    },
+    {
+      "title": "Elasticsearch Distributed Search Engine",
+      "url": "https://github.com/elastic/elasticsearch",
+      "category": "Open Source & Code Repos"
+    },
+    {
+      "title": "SQLite C-language Library Database Engine",
+      "url": "https://github.com/sqlite/sqlite",
+      "category": "Open Source & Code Repos"
+    },
+    {
+      "title": "Curl Command Line Tool and Library for Transferring Data",
+      "url": "https://github.com/curl/curl",
+      "category": "Open Source & Code Repos"
+    },
+    {
+      "title": "Git Fast Scalable Distributed Revision Control",
+      "url": "https://github.com/git/git",
+      "category": "Open Source & Code Repos"
+    },
+    {
+      "title": "AWS Architecture Center",
+      "url": "https://aws.amazon.com/architecture/",
+      "category": "Cloud & Infrastructure"
+    },
+    {
+      "title": "Google Cloud Documentation",
+      "url": "https://cloud.google.com/docs",
+      "category": "Cloud & Infrastructure"
+    },
+    {
+      "title": "Microsoft Azure Fundamentals",
+      "url": "https://azure.microsoft.com/en-us/resources/cloud-computing-dictionary/what-is-cloud-computing",
+      "category": "Cloud & Infrastructure"
+    },
+    {
+      "title": "Cloudflare Learning Center",
+      "url": "https://www.cloudflare.com/learning/",
+      "category": "Cloud & Infrastructure"
+    },
+    {
+      "title": "Vercel Edge Network Architecture",
+      "url": "https://vercel.com/docs/edge-network/overview",
+      "category": "Cloud & Infrastructure"
+    },
+    {
+      "title": "Netlify Modern Web Architecture",
+      "url": "https://www.netlify.com/platform/core/",
+      "category": "Cloud & Infrastructure"
+    },
+    {
+      "title": "Supabase The Open Source Firebase Alternative",
+      "url": "https://supabase.com/docs",
+      "category": "Cloud & Infrastructure"
+    },
+    {
+      "title": "Fly.io Run your apps close to your users",
+      "url": "https://fly.io/docs/",
+      "category": "Cloud & Infrastructure"
+    },
+    {
+      "title": "Railway Instant Application Deployments",
+      "url": "https://railway.app/",
+      "category": "Cloud & Infrastructure"
+    },
+    {
+      "title": "Render Unified Cloud Platform",
+      "url": "https://render.com/docs",
+      "category": "Cloud & Infrastructure"
+    },
+    {
+      "title": "Neon Serverless Postgres for Developers",
+      "url": "https://neon.tech/docs/introduction",
+      "category": "Cloud & Infrastructure"
+    },
+    {
+      "title": "PlanetScale Serverless MySQL Platform",
+      "url": "https://planetscale.com/docs",
+      "category": "Cloud & Infrastructure"
+    },
+    {
+      "title": "Upstash Serverless Redis and Kafka",
+      "url": "https://upstash.com/docs/introduction",
+      "category": "Cloud & Infrastructure"
+    },
+    {
+      "title": "Datadog Cloud Monitoring Guide",
+      "url": "https://docs.datadoghq.com/",
+      "category": "Cloud & Infrastructure"
+    },
+    {
+      "title": "Grafana Observability and Visualization",
+      "url": "https://grafana.com/docs/",
+      "category": "Cloud & Infrastructure"
+    },
+    {
+      "title": "Prometheus Monitoring System and Time Series Database",
+      "url": "https://prometheus.io/docs/introduction/overview/",
+      "category": "Cloud & Infrastructure"
+    },
+    {
+      "title": "HashiCorp Vault Secrets Management",
+      "url": "https://developer.hashicorp.com/vault",
+      "category": "Cloud & Infrastructure"
+    },
+    {
+      "title": "Postman API Platform Documentation",
+      "url": "https://learning.postman.com/docs/introduction/overview/",
+      "category": "Cloud & Infrastructure"
+    },
+    {
+      "title": "Sentry Application Performance Monitoring",
+      "url": "https://docs.sentry.io/",
+      "category": "Cloud & Infrastructure"
+    },
+    {
+      "title": "Stripe Developer Documentation",
+      "url": "https://stripe.com/docs",
+      "category": "Cloud & Infrastructure"
+    },
+    {
+      "title": "ArXiv Computer Science and AI Preprints",
+      "url": "https://arxiv.org/corr",
+      "category": "AI & Data Science"
+    },
+    {
+      "title": "OpenAI Research Index",
+      "url": "https://openai.com/research/index",
+      "category": "AI & Data Science"
+    },
+    {
+      "title": "Google DeepMind Publications",
+      "url": "https://deepmind.google/research/publications/",
+      "category": "AI & Data Science"
+    },
+    {
+      "title": "Meta AI Research Papers and Models",
+      "url": "https://ai.meta.com/research/",
+      "category": "AI & Data Science"
+    },
+    {
+      "title": "Anthropic Research and Model Alignment",
+      "url": "https://www.anthropic.com/research",
+      "category": "AI & Data Science"
+    },
+    {
+      "title": "Papers with Code Machine Learning State-of-the-Art",
+      "url": "https://paperswithcode.com/",
+      "category": "AI & Data Science"
+    },
+    {
+      "title": "Distill Machine Learning Research Visualizations",
+      "url": "https://distill.pub/",
+      "category": "AI & Data Science"
+    },
+    {
+      "title": "Kaggle Machine Learning Competitions and Datasets",
+      "url": "https://www.kaggle.com/",
+      "category": "AI & Data Science"
+    },
+    {
+      "title": "Hugging Face Hub Models and Datasets",
+      "url": "https://huggingface.co/models",
+      "category": "AI & Data Science"
+    },
+    {
+      "title": "Fast.ai Practical Deep Learning for Coders",
+      "url": "https://www.fast.ai/",
+      "category": "AI & Data Science"
+    },
+    {
+      "title": "Stanford CS229 Machine Learning Lecture Notes",
+      "url": "https://cs229.stanford.edu/",
+      "category": "AI & Data Science"
+    },
+    {
+      "title": "MIT 6.S191 Introduction to Deep Learning",
+      "url": "http://introtodeeplearning.com/",
+      "category": "AI & Data Science"
+    },
+    {
+      "title": "Scikit-Learn Machine Learning in Python",
+      "url": "https://scikit-learn.org/stable/",
+      "category": "AI & Data Science"
+    },
+    {
+      "title": "Pandas Data Analysis Toolkit",
+      "url": "https://pandas.pydata.org/",
+      "category": "AI & Data Science"
+    },
+    {
+      "title": "NumPy The Fundamental Package for Scientific Computing",
+      "url": "https://numpy.org/",
+      "category": "AI & Data Science"
+    },
+    {
+      "title": "SciPy Fundamental Algorithms for Scientific Computing",
+      "url": "https://scipy.org/",
+      "category": "AI & Data Science"
+    },
+    {
+      "title": "Polars Lightning-Fast DataFrame Library",
+      "url": "https://pola.rs/",
+      "category": "AI & Data Science"
+    },
+    {
+      "title": "DuckDB An in-process SQL OLAP database",
+      "url": "https://duckdb.org/",
+      "category": "AI & Data Science"
+    },
+    {
+      "title": "LangChain Application Framework for LLMs",
+      "url": "https://www.langchain.com/",
+      "category": "AI & Data Science"
+    },
+    {
+      "title": "LlamaIndex Data Framework for LLM Applications",
+      "url": "https://www.llamaindex.ai/",
+      "category": "AI & Data Science"
+    },
+    {
+      "title": "NASA Official Space Exploration Portal",
+      "url": "https://www.nasa.gov/",
+      "category": "Science & Discovery"
+    },
+    {
+      "title": "James Webb Space Telescope News Center",
+      "url": "https://webbtelescope.org/",
+      "category": "Science & Discovery"
+    },
+    {
+      "title": "Hubble Space Telescope Images Archive",
+      "url": "https://hubblesite.org/",
+      "category": "Science & Discovery"
+    },
+    {
+      "title": "European Southern Observatory VLT Telescopes",
+      "url": "https://www.eso.org/public/",
+      "category": "Science & Discovery"
+    },
+    {
+      "title": "CERN European Organization for Nuclear Research",
+      "url": "https://home.cern/",
+      "category": "Science & Discovery"
+    },
+    {
+      "title": "National Science Foundation Discoveries",
+      "url": "https://www.nsf.gov/discoveries/",
+      "category": "Science & Discovery"
+    },
+    {
+      "title": "Nature International Weekly Journal of Science",
+      "url": "https://www.nature.com/",
+      "category": "Science & Discovery"
+    },
+    {
+      "title": "Science AAAS Leading Scientific Discoveries",
+      "url": "https://www.science.org/",
+      "category": "Science & Discovery"
+    },
+    {
+      "title": "Scientific American Science and Technology News",
+      "url": "https://www.scientificamerican.com/",
+      "category": "Science & Discovery"
+    },
+    {
+      "title": "Phys.org Physics and Technology News",
+      "url": "https://phys.org/",
+      "category": "Science & Discovery"
+    },
+    {
+      "title": "Space.com Astronomy and Space Exploration",
+      "url": "https://www.space.com/",
+      "category": "Science & Discovery"
+    },
+    {
+      "title": "Quanta Magazine Illuminating Basic Science and Math",
+      "url": "https://www.quantamagazine.org/",
+      "category": "Science & Discovery"
+    },
+    {
+      "title": "NOAA National Oceanic and Atmospheric Administration",
+      "url": "https://www.noaa.gov/",
+      "category": "Science & Discovery"
+    },
+    {
+      "title": "USGS United States Geological Survey Earthquake Hazards",
+      "url": "https://www.usgs.gov/programs/earthquake-hazards",
+      "category": "Science & Discovery"
+    },
+    {
+      "title": "SETI Institute Search for Extraterrestrial Intelligence",
+      "url": "https://www.seti.org/",
+      "category": "Science & Discovery"
+    },
+    {
+      "title": "Smithsonian National Air and Space Museum",
+      "url": "https://airandspace.si.edu/",
+      "category": "Science & Discovery"
+    },
+    {
+      "title": "Woods Hole Oceanographic Institution",
+      "url": "https://www.whoi.edu/",
+      "category": "Science & Discovery"
+    },
+    {
+      "title": "Sloan Digital Sky Survey Mapping the Universe",
+      "url": "https://www.sdss.org/",
+      "category": "Science & Discovery"
+    },
+    {
+      "title": "European Space Agency Exploration Portal",
+      "url": "https://www.esa.int/",
+      "category": "Science & Discovery"
+    },
+    {
+      "title": "JPL Jet Propulsion Laboratory Missions",
+      "url": "https://www.jpl.nasa.gov/",
+      "category": "Science & Discovery"
+    },
+    {
+      "title": "Figma Collaborative Interface Design Tool",
+      "url": "https://www.figma.com/",
+      "category": "Design & Creative Arts"
+    },
+    {
+      "title": "Dribbble Creative Showcase and Portfolios",
+      "url": "https://dribbble.com/",
+      "category": "Design & Creative Arts"
+    },
+    {
+      "title": "Behance Creative Work Showcase",
+      "url": "https://www.behance.net/",
+      "category": "Design & Creative Arts"
+    },
+    {
+      "title": "Awwwards Website Design Recognition",
+      "url": "https://www.awwwards.com/",
+      "category": "Design & Creative Arts"
+    },
+    {
+      "title": "Siteinspire Web Design Inspiration",
+      "url": "https://www.siteinspire.com/",
+      "category": "Design & Creative Arts"
+    },
+    {
+      "title": "Godly Curated Web Design Inspiration",
+      "url": "https://godly.website/",
+      "category": "Design & Creative Arts"
+    },
+    {
+      "title": "Mobbin Mobile and Web App Design Patterns",
+      "url": "https://mobbin.com/",
+      "category": "Design & Creative Arts"
+    },
+    {
+      "title": "Land-book Product Landing Page Gallery",
+      "url": "https://land-book.com/",
+      "category": "Design & Creative Arts"
+    },
+    {
+      "title": "Fontsource Self-Host Open Source Fonts",
+      "url": "https://fontsource.org/",
+      "category": "Design & Creative Arts"
+    },
+    {
+      "title": "Typewolf What's Trending in Web Typography",
+      "url": "https://www.typewolf.com/",
+      "category": "Design & Creative Arts"
+    },
+    {
+      "title": "Laws of UX Behavioral Design Guidelines",
+      "url": "https://lawsofux.com/",
+      "category": "Design & Creative Arts"
+    },
+    {
+      "title": "Design Systems Repo Catalog of Design Systems",
+      "url": "https://designsystemsrepo.com/",
+      "category": "Design & Creative Arts"
+    },
+    {
+      "title": "Nielsen Norman Group UX Research and Training",
+      "url": "https://www.nngroup.com/",
+      "category": "Design & Creative Arts"
+    },
+    {
+      "title": "Apple Human Interface Guidelines",
+      "url": "https://developer.apple.com/design/human-interface-guidelines/",
+      "category": "Design & Creative Arts"
+    },
+    {
+      "title": "Google Material Design 3 Design System",
+      "url": "https://m3.material.io/",
+      "category": "Design & Creative Arts"
+    },
+    {
+      "title": "IBM Carbon Design System",
+      "url": "https://carbondesignsystem.com/",
+      "category": "Design & Creative Arts"
+    },
+    {
+      "title": "Shopify Polaris Design System",
+      "url": "https://polaris.shopify.com/",
+      "category": "Design & Creative Arts"
+    },
+    {
+      "title": "Atlassian Design System",
+      "url": "https://atlassian.design/",
+      "category": "Design & Creative Arts"
+    },
+    {
+      "title": "Stripe Design System Press",
+      "url": "https://stripe.com/design",
+      "category": "Design & Creative Arts"
+    },
+    {
+      "title": "GitHub Primer Design System",
+      "url": "https://primer.style/",
+      "category": "Design & Creative Arts"
+    },
+    {
+      "title": "BBC World News International Reporting",
+      "url": "https://www.bbc.com/news",
+      "category": "News & Culture"
+    },
+    {
+      "title": "The New York Times In-Depth Journalism",
+      "url": "https://www.nytimes.com/",
+      "category": "News & Culture"
+    },
+    {
+      "title": "The Washington Post Politics and Investigations",
+      "url": "https://www.washingtonpost.com/",
+      "category": "News & Culture"
+    },
+    {
+      "title": "Reuters International Financial and Political News",
+      "url": "https://www.reuters.com/",
+      "category": "News & Culture"
+    },
+    {
+      "title": "Associated Press Independent Global News",
+      "url": "https://apnews.com/",
+      "category": "News & Culture"
+    },
+    {
+      "title": "NPR National Public Radio Broadcasts",
+      "url": "https://www.npr.org/sections/news/",
+      "category": "News & Culture"
+    },
+    {
+      "title": "The Guardian International Edition",
+      "url": "https://www.theguardian.com/international",
+      "category": "News & Culture"
+    },
+    {
+      "title": "The Atlantic Ideas and Cultural Essays",
+      "url": "https://www.theatlantic.com/",
+      "category": "News & Culture"
+    },
+    {
+      "title": "The New Yorker Culture, Fiction, and Cartoons",
+      "url": "https://www.newyorker.com/",
+      "category": "News & Culture"
+    },
+    {
+      "title": "The Economist World Politics and Business",
+      "url": "https://www.economist.com/",
+      "category": "News & Culture"
+    },
+    {
+      "title": "Wired Future Technology, Science, and Culture",
+      "url": "https://www.wired.com/",
+      "category": "News & Culture"
+    },
+    {
+      "title": "The Verge Consumer Tech and Digital Culture",
+      "url": "https://www.theverge.com/",
+      "category": "News & Culture"
+    },
+    {
+      "title": "Ars Technica Deep Dives into Tech and Policy",
+      "url": "https://arstechnica.com/",
+      "category": "News & Culture"
+    },
+    {
+      "title": "TechCrunch Startup News and Venture Capital",
+      "url": "https://techcrunch.com/",
+      "category": "News & Culture"
+    },
+    {
+      "title": "Engadget Reviews and Hardware News",
+      "url": "https://www.engadget.com/",
+      "category": "News & Culture"
+    },
+    {
+      "title": "Fast Company Business Innovation and Technology",
+      "url": "https://www.fastcompany.com/",
+      "category": "News & Culture"
+    },
+    {
+      "title": "Bloomberg Global Business and Financial Markets",
+      "url": "https://www.bloomberg.com/",
+      "category": "News & Culture"
+    },
+    {
+      "title": "Financial Times Global Economy and Markets",
+      "url": "https://www.ft.com/",
+      "category": "News & Culture"
+    },
+    {
+      "title": "Wall Street Journal Business and Finance",
+      "url": "https://www.wsj.com/",
+      "category": "News & Culture"
+    },
+    {
+      "title": "ProPublica Investigative Journalism in the Public Interest",
+      "url": "https://www.propublica.org/",
+      "category": "News & Culture"
+    },
+    {
+      "title": "Serious Eats Science of Great Cooking",
+      "url": "https://www.seriouseats.com/",
+      "category": "Food & Recipes"
+    },
+    {
+      "title": "NYT Cooking Thousands of Curated Recipes",
+      "url": "https://cooking.nytimes.com/",
+      "category": "Food & Recipes"
+    },
+    {
+      "title": "Bon Appetit Restaurant Recipes and Reviews",
+      "url": "https://www.bonappetit.com/",
+      "category": "Food & Recipes"
+    },
+    {
+      "title": "Epicurious Food, Cooking, and Entertaining",
+      "url": "https://www.epicurious.com/",
+      "category": "Food & Recipes"
+    },
+    {
+      "title": "Food52 Home Cooking Recipes and Community",
+      "url": "https://food52.com/",
+      "category": "Food & Recipes"
+    },
+    {
+      "title": "Smitten Kitchen Unfussy Food for Real Kitchens",
+      "url": "https://smittenkitchen.com/",
+      "category": "Food & Recipes"
+    },
+    {
+      "title": "King Arthur Baking Recipes and Bread Techniques",
+      "url": "https://www.kingarthurbaking.com/recipes",
+      "category": "Food & Recipes"
+    },
+    {
+      "title": "Sally's Baking Addiction Trusted Baking Recipes",
+      "url": "https://sallysbakingaddiction.com/",
+      "category": "Food & Recipes"
+    },
+    {
+      "title": "Woks of Life Traditional Chinese Cooking",
+      "url": "https://thewoksoflife.com/",
+      "category": "Food & Recipes"
+    },
+    {
+      "title": "Just One Cookbook Japanese Home Cooking Recipes",
+      "url": "https://www.justonecookbook.com/",
+      "category": "Food & Recipes"
+    },
+    {
+      "title": "Maangchi Authentic Korean Cooking with Video",
+      "url": "https://www.maangchi.com/",
+      "category": "Food & Recipes"
+    },
+    {
+      "title": "Ottolenghi Middle Eastern and Mediterranean Recipes",
+      "url": "https://ottolenghi.co.uk/pages/recipes",
+      "category": "Food & Recipes"
+    },
+    {
+      "title": "Minimalist Baker Fast Simple Plant-Based Recipes",
+      "url": "https://minimalistbaker.com/",
+      "category": "Food & Recipes"
+    },
+    {
+      "title": "Budget Bytes Delicious Recipes Designed for Small Budgets",
+      "url": "https://www.budgetbytes.com/",
+      "category": "Food & Recipes"
+    },
+    {
+      "title": "America's Test Kitchen Recipe Reviews and Equipment Tests",
+      "url": "https://www.americastestkitchen.com/",
+      "category": "Food & Recipes"
+    },
+    {
+      "title": "Allrecipes Community Rated Recipes",
+      "url": "https://www.allrecipes.com/",
+      "category": "Food & Recipes"
+    },
+    {
+      "title": "Food Network Celebrity Chef Recipes",
+      "url": "https://www.foodnetwork.com/",
+      "category": "Food & Recipes"
+    },
+    {
+      "title": "Taste of Home Classic American Comfort Food",
+      "url": "https://www.tasteofhome.com/",
+      "category": "Food & Recipes"
+    },
+    {
+      "title": "Cookie and Kate Whole Food Vegetarian Recipes",
+      "url": "https://cookieandkate.com/",
+      "category": "Food & Recipes"
+    },
+    {
+      "title": "Pinch of Yum Fresh Flavorful Weeknight Recipes",
+      "url": "https://pinchofyum.com/",
+      "category": "Food & Recipes"
+    },
+    {
+      "title": "Wikipedia The Free Encyclopedia",
+      "url": "https://en.wikipedia.org/wiki/Main_Page",
+      "category": "Knowledge & Education"
+    },
+    {
+      "title": "Khan Academy Free Online Courses and Lessons",
+      "url": "https://www.khanacademy.org/",
+      "category": "Knowledge & Education"
+    },
+    {
+      "title": "MIT OpenCourseWare Free Lecture Notes and Exams",
+      "url": "https://ocw.mit.edu/",
+      "category": "Knowledge & Education"
+    },
+    {
+      "title": "Stanford Online Learning Portal",
+      "url": "https://online.stanford.edu/",
+      "category": "Knowledge & Education"
+    },
+    {
+      "title": "Harvard University Free Online Learning",
+      "url": "https://pll.harvard.edu/catalog/free",
+      "category": "Knowledge & Education"
+    },
+    {
+      "title": "Coursera Online Courses from Top Universities",
+      "url": "https://www.coursera.org/",
+      "category": "Knowledge & Education"
+    },
+    {
+      "title": "edX Interactive Online Courses and Degrees",
+      "url": "https://www.edx.org/",
+      "category": "Knowledge & Education"
+    },
+    {
+      "title": "Internet Archive Universal Access to All Knowledge",
+      "url": "https://archive.org/",
+      "category": "Knowledge & Education"
+    },
+    {
+      "title": "Project Gutenberg Free eBooks of Classic Literature",
+      "url": "https://www.gutenberg.org/",
+      "category": "Knowledge & Education"
+    },
+    {
+      "title": "Stanford Encyclopedia of Philosophy",
+      "url": "https://plato.stanford.edu/",
+      "category": "Knowledge & Education"
+    },
+    {
+      "title": "Library of Congress Digital Collections",
+      "url": "https://www.loc.gov/",
+      "category": "Knowledge & Education"
+    },
+    {
+      "title": "British Library Online Treasures",
+      "url": "https://www.bl.uk/",
+      "category": "Knowledge & Education"
+    },
+    {
+      "title": "JSTOR Digital Library of Academic Journals",
+      "url": "https://www.jstor.org/",
+      "category": "Knowledge & Education"
+    },
+    {
+      "title": "PubMed Biomedical Literature from MEDLINE",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/",
+      "category": "Knowledge & Education"
+    },
+    {
+      "title": "TED Ideas Worth Spreading Talks",
+      "url": "https://www.ted.com/talks",
+      "category": "Knowledge & Education"
+    },
+    {
+      "title": "Big Think Articles and Videos from Leading Thinkers",
+      "url": "https://bigthink.com/",
+      "category": "Knowledge & Education"
+    },
+    {
+      "title": "Nautilus Science, Culture, and Philosophy Journal",
+      "url": "https://nautil.us/",
+      "category": "Knowledge & Education"
+    },
+    {
+      "title": "Aeon Digital Magazine of Ideas and Philosophy",
+      "url": "https://aeon.co/",
+      "category": "Knowledge & Education"
+    },
+    {
+      "title": "Our World in Data Research on Global Problems",
+      "url": "https://ourworldindata.org/",
+      "category": "Knowledge & Education"
+    },
+    {
+      "title": "Gapminder An Up-to-date Fact-based Worldview",
+      "url": "https://www.gapminder.org/",
+      "category": "Knowledge & Education"
+    }
+  ]
+}

@@ -36,7 +36,7 @@ export function GlassView({
       experimentalBlurMethod="dimezisBlurView"
       style={[{ backgroundColor: "transparent" }, style]}
     >
-      <View style={{ backgroundColor: mode === "dark" ? "rgba(22,22,21,0.35)" : "rgba(251,251,249,0.35)", flex: 1 }}>
+      <View style={{ backgroundColor: mode === "dark" ? "rgba(22,22,21,0.35)" : "rgba(251,251,249,0.35)", width: "100%" }}>
         {children}
       </View>
     </BlurView>

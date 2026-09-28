@@ -9,9 +9,13 @@ import {
   Heartbeat,
   SignOut,
   ShieldCheck,
+  ChartPieSlice,
+  Megaphone,
 } from "@phosphor-icons/react";
 
 import { api, auth } from "@/lib/api";
+import { AnalyticsTab } from "./AnalyticsTab";
+import { CampaignsTab } from "./CampaignsTab";
 import { WaitlistTab } from "./WaitlistTab";
 import { UsersTab } from "./UsersTab";
 import { UsageTab } from "./UsageTab";
@@ -19,16 +23,18 @@ import { ItemsTab } from "./ItemsTab";
 import { HealthTab } from "./HealthTab";
 
 const TABS = [
-  { key: "waitlist", label: "Waitlist", Icon: PaperPlaneTilt, Component: WaitlistTab },
-  { key: "users", label: "Users", Icon: Users, Component: UsersTab },
+  { key: "analytics", label: "Analytics", Icon: ChartPieSlice, Component: AnalyticsTab },
+  { key: "campaigns", label: "Campaigns & Ads", Icon: Megaphone, Component: CampaignsTab },
   { key: "usage", label: "AI Usage", Icon: ChartLineUp, Component: UsageTab },
+  { key: "users", label: "Users", Icon: Users, Component: UsersTab },
   { key: "items", label: "Items", Icon: Rows, Component: ItemsTab },
-  { key: "health", label: "System", Icon: Heartbeat, Component: HealthTab },
+  { key: "waitlist", label: "Waitlist", Icon: PaperPlaneTilt, Component: WaitlistTab },
+  { key: "health", label: "Database & Infra", Icon: Heartbeat, Component: HealthTab },
 ];
 
 export default function AdminDashboard() {
   const nav = useNavigate();
-  const [active, setActive] = useState(() => localStorage.getItem("admin.tab") || "waitlist");
+  const [active, setActive] = useState(() => localStorage.getItem("admin.tab") || "analytics");
   const [me, setMe] = useState(null);
 
   useEffect(() => {

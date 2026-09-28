@@ -1,8 +1,12 @@
 import Constants from "expo-constants";
+import { Platform } from "react-native";
 
 import { storage } from "@/src/utils/storage";
 
 function getBackendUrl(): string {
+  if (Platform.OS === "web") {
+    return process.env.EXPO_PUBLIC_BACKEND_URL || "http://localhost:8000";
+  }
   if (process.env.EXPO_PUBLIC_BACKEND_URL && !process.env.EXPO_PUBLIC_BACKEND_URL.includes("localhost")) {
     return process.env.EXPO_PUBLIC_BACKEND_URL;
   }
@@ -14,7 +18,7 @@ function getBackendUrl(): string {
       return `http://${ip}:8000`;
     }
   }
-  return "http://192.168.68.64:8000";
+  return "http://192.168.68.61:8000";
 }
 
 const backendBase = getBackendUrl();
@@ -149,4 +153,53 @@ export const api = {
     }),
 
   waitlistCount: () => request<{ count: number }>("/waitlist/count", { auth: false }),
+
+  importArchive: async (
+    contentOrPayload: string | { content?: string; html?: string; json?: string; filename?: string },
+    filename?: string,
+    fileBytes?: Uint8Array | Blob
+  ) => {
+    const headers: Record<string, string> = await authHeaders();
+    let body: BodyInit;
+    let url = `${BASE}/items/import-archive`;
+    if (filename) {
+      url += `?filename=${encodeURIComponent(filename)}`;
+    }
+
+    if (fileBytes) {
+      headers["Content-Type"] = "application/octet-stream";
+      body = fileBytes as any;
+    } else if (typeof contentOrPayload === "string") {
+      headers["Content-Type"] = "text/plain; charset=utf-8";
+      body = contentOrPayload;
+    } else {
+      headers["Content-Type"] = "application/json";
+      body = JSON.stringify(contentOrPayload);
+    }
+
+    const res = await fetch(url, {
+      method: "POST",
+      headers,
+      body,
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      throw { status: res.status, detail: data?.detail || "Import failed" };
+    }
+    return data as {
+      status: string;
+      platform: string;
+      platform_display: string;
+      total_found: number;
+      unique_valid: number;
+      imported: number;
+      skipped_duplicate: number;
+      ai_enrichment_queued: number;
+      source_files?: string[];
+    };
+  },
+
+  importBookmarks: async (htmlOrJson: string | { html: string }) => {
+    return api.importArchive(htmlOrJson, "bookmarks.html");
+  },
 };

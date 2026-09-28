@@ -9,7 +9,7 @@ import {
   Trash,
 } from "phosphor-react-native";
 import React, { useCallback, useState } from "react";
-import { Modal, Pressable, ScrollView, Text, View } from "react-native";
+import { Modal, Platform, Pressable, ScrollView, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Svg, { Circle } from "react-native-svg";
 
@@ -105,8 +105,10 @@ export default function Profile() {
     </Pressable>
   );
 
+  const topPadding = Math.max(insets.top, Platform.OS === "android" ? 38 : 16) + spacing.xs;
+
   return (
-    <View style={{ flex: 1, backgroundColor: c.surface, paddingTop: insets.top }}>
+    <View style={{ flex: 1, backgroundColor: c.surface, paddingTop: topPadding }}>
       <StatusBar style={mode === "dark" ? "light" : "dark"} />
       <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: tabBottom + 24, gap: spacing.xl }} showsVerticalScrollIndicator={false}>
         {/* Identity */}

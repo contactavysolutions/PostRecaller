@@ -2,10 +2,9 @@ import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { MagnifyingGlass } from "phosphor-react-native";
 import React, { useCallback, useState } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { Platform, Pressable, ScrollView, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { GlassView } from "@/src/components/GlassView";
 import { ItemGrid } from "@/src/components/ItemGrid";
 import { TagPill } from "@/src/components/TagPill";
 import { Item } from "@/src/lib/api";
@@ -35,28 +34,37 @@ export default function VaultHome() {
 
   const initials = (user?.email?.[0] || "?").toUpperCase();
   const tabBottom = 58 + insets.bottom;
+  const topPadding = Math.max(insets.top, Platform.OS === "android" ? 38 : 16) + spacing.xs;
 
   return (
     <View style={{ flex: 1, backgroundColor: c.surface }}>
       <StatusBar style={mode === "dark" ? "light" : "dark"} />
 
-      {/* Sticky glass header */}
-      <GlassView intensity={50} style={{ paddingTop: insets.top }}>
-        <View style={{ paddingHorizontal: spacing.lg, paddingBottom: spacing.md, paddingTop: spacing.sm, flexDirection: "row", alignItems: "center", gap: spacing.md }}>
+      {/* Primary search header — solid, properly padded below status bar */}
+      <View
+        style={{
+          paddingTop: topPadding,
+          paddingHorizontal: spacing.lg,
+          paddingBottom: spacing.sm,
+          backgroundColor: c.surface,
+          zIndex: 10,
+        }}
+      >
+        <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.md }}>
           <Pressable
             testID="vault-search-bar"
             onPress={() => router.push("/search")}
             style={{
               flex: 1,
-              height: 44,
-              borderRadius: 22,
+              height: 46,
+              borderRadius: 23,
               backgroundColor: c.surfaceSecondary,
               borderWidth: 1,
               borderColor: c.border,
               flexDirection: "row",
               alignItems: "center",
               paddingHorizontal: 14,
-              gap: 8,
+              gap: 10,
             }}
           >
             <MagnifyingGlass size={20} color={c.onSurfaceSecondary} />
@@ -72,11 +80,11 @@ export default function VaultHome() {
             <Text style={{ color: c.onBrand, fontFamily: fonts.medium, fontSize: fontSize.lg }}>{initials}</Text>
           </Pressable>
         </View>
-      </GlassView>
+      </View>
 
-      {/* Tag rail (chrome — single horizontal scroller, never wraps) */}
+      {/* Tag rail — sits cleanly below the search bar */}
       {tags.length > 0 ? (
-        <View style={{ height: 56, borderBottomWidth: 0.5, borderBottomColor: c.border }}>
+        <View style={{ height: 50, borderBottomWidth: 0.5, borderBottomColor: c.border, backgroundColor: c.surface }}>
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}

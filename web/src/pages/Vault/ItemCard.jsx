@@ -1,5 +1,5 @@
 // Single masonry card — variable height, thumbnail with platform badge, title + tags.
-import { ArrowSquareOut, Sparkle, Warning } from "@phosphor-icons/react";
+import { ArrowSquareOut, CircleNotch, Sparkle, Warning } from "@phosphor-icons/react";
 import { PLATFORM_META, platformOf } from "./platforms";
 
 function PlatformBadge({ platform }) {
@@ -51,9 +51,9 @@ export function ItemCard({ item, onClick, index = 0 }) {
 
       <div className="p-3.5 flex flex-col gap-2">
         {isPending && (
-          <div className="flex items-center gap-2 text-brand text-ds-sm">
-            <Sparkle size={13} weight="fill" className="animate-pulse" />
-            <span style={{ fontWeight: 500 }}>Enriching…</span>
+          <div className="flex items-center gap-2 px-2.5 py-1 rounded-ds-pill bg-brand-tertiary/80 border border-brand/20 text-brand text-ds-sm w-fit" data-testid="item-card-pending">
+            <CircleNotch size={14} weight="bold" className="animate-spin text-brand flex-shrink-0" />
+            <span style={{ fontWeight: 500 }}>Enriching in background…</span>
           </div>
         )}
         {isFailed && (
@@ -65,20 +65,33 @@ export function ItemCard({ item, onClick, index = 0 }) {
         <h3 className="text-on-surface text-[14px] leading-[1.35] line-clamp-3" style={{ fontWeight: 500, letterSpacing: "-0.005em" }}>
           {item.title || item.original_url}
         </h3>
-        {item.summary && (
-          <p className="text-on-surface-secondary text-[12.5px] leading-[1.45] line-clamp-2">
-            {item.summary}
-          </p>
-        )}
-        {item.tags?.length ? (
-          <div className="flex flex-wrap gap-1.5 pt-0.5">
-            {item.tags.slice(0, 3).map((t) => (
-              <span key={t} className="text-[10.5px] px-2 py-0.5 rounded-ds-pill bg-brand-tertiary text-on-brand-tertiary" style={{ fontWeight: 500 }}>
-                #{t}
-              </span>
-            ))}
+        {isPending ? (
+          <div className="flex flex-col gap-2 pt-1 pb-1" aria-hidden>
+            <div className="h-3 w-4/5 rounded-full bg-gradient-to-r from-surface-tertiary/80 via-surface-tertiary to-surface-tertiary/80 bg-[length:800px_100%] animate-shimmer" />
+            <div className="h-3 w-3/5 rounded-full bg-gradient-to-r from-surface-tertiary/80 via-surface-tertiary to-surface-tertiary/80 bg-[length:800px_100%] animate-shimmer" />
+            <div className="flex gap-1.5 pt-1">
+              <div className="h-4 w-14 rounded-ds-pill bg-surface-tertiary/80 animate-pulse" />
+              <div className="h-4 w-12 rounded-ds-pill bg-surface-tertiary/80 animate-pulse" />
+            </div>
           </div>
-        ) : null}
+        ) : (
+          <>
+            {item.summary && (
+              <p className="text-on-surface-secondary text-[12.5px] leading-[1.45] line-clamp-2">
+                {item.summary}
+              </p>
+            )}
+            {item.tags?.length ? (
+              <div className="flex flex-wrap gap-1.5 pt-0.5">
+                {item.tags.slice(0, 3).map((t) => (
+                  <span key={t} className="text-[10.5px] px-2 py-0.5 rounded-ds-pill bg-brand-tertiary text-on-brand-tertiary" style={{ fontWeight: 500 }}>
+                    #{t}
+                  </span>
+                ))}
+              </div>
+            ) : null}
+          </>
+        )}
       </div>
 
       {/* Hover overlay: open-external hint */}

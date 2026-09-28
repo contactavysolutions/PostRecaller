@@ -5,6 +5,7 @@ import { toast } from "sonner";
 
 import { AuthShell, Field } from "@/components/AuthShell";
 import { api, auth } from "@/lib/api";
+import { IS_WAITLIST_MODE } from "@/constants/config";
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
@@ -71,8 +72,8 @@ export default function Register() {
     }
   };
 
-  // --- No invite token → invite-only gate.
-  if (!inviteToken) {
+  // --- No invite token → invite-only gate (only in waitlist mode).
+  if (IS_WAITLIST_MODE && !inviteToken) {
     return (
       <AuthShell
         title="Registration is invite-only"
@@ -126,11 +127,11 @@ export default function Register() {
     );
   }
 
-  // --- Valid invite → registration form.
+  // --- Valid invite or open registration → registration form.
   return (
     <AuthShell
-      title="Claim your invite"
-      subtitle="One quick form and your vault is ready."
+      title={inviteToken ? "Claim your invite" : "Create your account"}
+      subtitle={inviteToken ? "One quick form and your vault is ready." : "One quick form and your vault is ready."}
       testId="register-page"
       footer={
         <span>

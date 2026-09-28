@@ -14,7 +14,7 @@ load_dotenv(ROOT_DIR.parent / "atlas-credentials.env")
 MONGO_URL = os.environ.get("MONGO_URL") or os.environ.get("MONGODB_URI", "mongodb://localhost:27017")
 DB_NAME = os.environ.get("DB_NAME", "postrecaller")
 
-client = AsyncIOMotorClient(MONGO_URL)
+client = AsyncIOMotorClient(MONGO_URL, serverSelectionTimeoutMS=2000)
 db = client[DB_NAME]
 
 # --- Auth ---
@@ -27,8 +27,9 @@ ADMIN_EMAILS = [
 ]
 
 # --- LLM ---
-EMERGENT_LLM_KEY = os.environ.get("EMERGENT_LLM_KEY", "")
-ENRICH_MODEL = ("gemini", "gemini-3-flash-preview")
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY") or os.environ.get("EMERGENT_LLM_KEY", "")
+EMERGENT_LLM_KEY = GEMINI_API_KEY
+ENRICH_MODEL = os.environ.get("GEMINI_MODEL", "gemini-flash-lite-latest")
 
 # --- Email (Resend; Emergent-managed key populated as RESEND_API_KEY) ---
 RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "")
@@ -38,9 +39,14 @@ RESEND_FROM_EMAIL = os.environ.get("RESEND_FROM_EMAIL", "PostRecaller <onboardin
 REDDIT_CLIENT_ID = os.environ.get("REDDIT_CLIENT_ID", "")
 REDDIT_CLIENT_SECRET = os.environ.get("REDDIT_CLIENT_SECRET", "")
 
+# --- Jina Reader (optional; lifts rate limit from 20 RPM to 500 RPM) ---
+JINA_API_KEY = os.environ.get("JINA_API_KEY", "")
+
 # --- Freemium / abuse limits ---
 FREE_DAILY_AI_LIMIT = 5
 DAILY_SAVE_CAP = 200
+MAX_BOOKMARK_IMPORT_LIMIT = int(os.environ.get("MAX_BOOKMARK_IMPORT_LIMIT", "1000"))
+BOOKMARK_ENRICH_CONCURRENCY = int(os.environ.get("BOOKMARK_ENRICH_CONCURRENCY", "3"))
 
 # Valid intent buckets (collections)
 INTENTS = ["Read Later", "Try Recipe", "Watch", "Shop", "Learn"]

@@ -117,3 +117,16 @@ class ItemUpdateIn(BaseModel):
     tags: Optional[List[str]] = None
     intent: Optional[str] = None
     content: Optional[str] = None
+
+
+class CreateCampaignIn(BaseModel):
+    name: str
+    channel: str = "meta"  # meta | google | tiktok | apple_search | influencer | organic
+    spend_usd: float = 0.0
+    status: str = "active"  # active | completed | paused
+    utm_source: Optional[str] = None
+    utm_campaign: Optional[str] = None
+    impressions: int = 0
+    clicks: int = 0
+    notes: Optional[str] = None
+

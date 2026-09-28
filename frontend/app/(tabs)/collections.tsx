@@ -11,7 +11,7 @@ import {
 } from "phosphor-react-native";
 import React, { useCallback, useState } from "react";
 import { useFocusEffect } from "expo-router";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { Platform, Pressable, ScrollView, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { api } from "@/src/lib/api";
@@ -44,9 +44,10 @@ export default function Collections() {
   );
 
   const tabBottom = 58 + insets.bottom;
+  const topPadding = Math.max(insets.top, Platform.OS === "android" ? 38 : 16) + spacing.xs;
 
   return (
-    <View style={{ flex: 1, backgroundColor: c.surface, paddingTop: insets.top }}>
+    <View style={{ flex: 1, backgroundColor: c.surface, paddingTop: topPadding }}>
       <StatusBar style={mode === "dark" ? "light" : "dark"} />
       <View style={{ paddingHorizontal: spacing.lg, paddingVertical: spacing.md }}>
         <Text style={{ color: c.onSurface, fontFamily: fonts.medium, fontSize: fontSize["2xl"] }}>Collections</Text>

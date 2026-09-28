@@ -2,7 +2,7 @@ import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { MagnifyingGlass, X } from "phosphor-react-native";
 import React, { useEffect, useMemo, useState } from "react";
-import { Pressable, ScrollView, Text, TextInput, View } from "react-native";
+import { Platform, Pressable, ScrollView, Text, TextInput, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { PlatformBadge } from "@/src/components/PlatformBadge";
@@ -37,9 +37,10 @@ export default function SearchScreen() {
   }, [query, all]);
 
   const tabBottom = 58 + insets.bottom;
+  const topPadding = Math.max(insets.top, Platform.OS === "android" ? 38 : 16) + spacing.xs;
 
   return (
-    <View style={{ flex: 1, backgroundColor: c.surface, paddingTop: insets.top }}>
+    <View style={{ flex: 1, backgroundColor: c.surface, paddingTop: topPadding }}>
       <StatusBar style={mode === "dark" ? "light" : "dark"} />
 
       <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.md, paddingHorizontal: spacing.lg, paddingVertical: spacing.md }}>

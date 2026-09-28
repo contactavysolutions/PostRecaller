@@ -18,7 +18,20 @@
         "backgroundColor": "#000000"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.emergent.gleansave.ri5s7l"
+      "package": "com.emergent.gleansave.ri5s7l",
+      "intentFilters": [
+        {
+          "action": "SEND",
+          "category": [
+            "DEFAULT"
+          ],
+          "data": [
+            {
+              "mimeType": "text/plain"
+            }
+          ]
+        }
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -39,6 +52,13 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "199a7fac-d351-4122-9822-b0a4fb270259"
+      }
+    },
+    "owner": "contactavysolutions"
   }
 }
