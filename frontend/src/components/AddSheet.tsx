@@ -71,6 +71,7 @@ export function AddSheet() {
   const router = useRouter();
 
   const addSheetOpen = useVault((s) => s.addSheetOpen);
+  const initialUrl = useVault((s) => s.initialUrl);
   const closeAddSheet = useVault((s) => s.closeAddSheet);
   const triggerRefresh = useVault((s) => s.triggerRefresh);
   const refreshMe = useAuth((s) => s.refreshMe);
@@ -114,6 +115,15 @@ export function AddSheet() {
   useEffect(() => {
     if (!addSheetOpen) return;
     reset();
+
+    if (initialUrl) {
+      const clean = extractAndCleanUrl(initialUrl) || initialUrl;
+      setUrl(clean);
+      setActiveTab("single");
+      setStage("input");
+      return;
+    }
+
     Clipboard.getStringAsync()
       .then((v) => {
         if (!v) return;
@@ -136,7 +146,7 @@ export function AddSheet() {
       .catch(() => {
         /* clipboard permission not granted */
       });
-  }, [addSheetOpen, reset]);
+  }, [addSheetOpen, initialUrl, reset]);
 
   const onSave = useCallback(
     async (targetUrl: string) => {

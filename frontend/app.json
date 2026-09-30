@@ -15,7 +15,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#363C38"
+        "backgroundColor": "#151F1E"
       },
       "edgeToEdgeEnabled": true,
       "package": "com.emergent.gleansave.ri5s7l",
@@ -28,6 +28,9 @@
           "data": [
             {
               "mimeType": "text/plain"
+            },
+            {
+              "mimeType": "text/*"
             }
           ]
         }
@@ -40,6 +43,7 @@
     },
     "plugins": [
       "./plugins/withCleartextTraffic",
+      "./plugins/withShareIntent",
       "expo-router",
       [
         "expo-splash-screen",

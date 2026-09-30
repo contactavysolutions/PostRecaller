@@ -20,6 +20,7 @@ export interface QuickToastState {
 export function useQuickShareHandler() {
   const token = useAuth((s) => s.token);
   const triggerRefresh = useVault((s) => s.triggerRefresh);
+  const openAddSheet = useVault((s) => s.openAddSheet);
   const refreshMe = useAuth((s) => s.refreshMe);
 
   const [toast, setToast] = useState<QuickToastState>({
@@ -100,16 +101,16 @@ export function useQuickShareHandler() {
 
         if (target) {
           const cleaned = extractAndCleanUrl(target);
-          if (cleaned && cleaned !== lastProcessedUrl.current) {
+          if (cleaned) {
             lastProcessedUrl.current = cleaned;
-            saveUrl(cleaned, true);
+            openAddSheet(cleaned);
           }
         }
       } catch {
         /* ignore invalid linking payload */
       }
     },
-    [saveUrl]
+    [openAddSheet]
   );
 
   // Check clipboard whenever the app is active
@@ -179,7 +180,8 @@ export function useQuickShareHandler() {
     dismissToast,
     saveDetectedUrl: () => {
       if (toast.detectedUrl) {
-        saveUrl(toast.detectedUrl);
+        openAddSheet(toast.detectedUrl);
+        setToast((prev) => ({ ...prev, visible: false }));
       }
     },
   };
