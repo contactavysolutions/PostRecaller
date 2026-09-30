@@ -30,6 +30,7 @@ function AppContent() {
     <View style={{ flex: 1 }}>
       <Stack screenOptions={{ headerShown: false, animation: "slide_from_right" }}>
         <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="share" options={{ animation: "none" }} />
         <Stack.Screen name="auth" options={{ animation: "fade" }} />
         <Stack.Screen name="waitlist" options={{ animation: "fade" }} />
         <Stack.Screen name="forgot-password" />
@@ -37,6 +38,7 @@ function AppContent() {
         <Stack.Screen name="collection/[intent]" />
         <Stack.Screen name="legal/privacy" />
         <Stack.Screen name="legal/terms" />
+        <Stack.Screen name="+not-found" />
       </Stack>
       <View style={StyleSheet.absoluteFillObject} pointerEvents="box-none">
         <FloatingSaveToast
@@ -66,12 +68,18 @@ export default function RootLayout() {
     // Re-install after mount so our wrappers sit in front of LogBox's handlers.
     installExtensionErrorGuard();
     hydrate();
+
+    // Failsafe: hide native splash screen within 2.5 seconds no matter what
+    const timer = setTimeout(() => {
+      SplashScreen.hideAsync().catch(() => {});
+    }, 2500);
+    return () => clearTimeout(timer);
   }, [hydrate]);
 
   const ready = (iconsLoaded || iconsError) && (fontsLoaded || fontsError) && hydrated;
 
   useEffect(() => {
-    if (ready) SplashScreen.hideAsync();
+    if (ready) SplashScreen.hideAsync().catch(() => {});
   }, [ready]);
 
   if (!ready) return null;
