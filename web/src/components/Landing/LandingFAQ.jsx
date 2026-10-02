@@ -20,7 +20,7 @@ const FAQ_ITEMS = [
     answer:
       "You can export your saved posts directly from each app’s official data settings. In Instagram, go to Profile > Menu (☰) > Your Activity > Download your information, select 'Saved posts', and download the .zip file. In TikTok, go to Settings & privacy > Account > Download your data. Once you have the file, simply drop it into PostRecaller’s importer. Our parser automatically cleans tracking junk, generates AI summaries, and indexes your entire backlog in seconds.",
     guideLink: "/faq#export-instagram",
-    guideLabel: "View Instagram & TikTok Export Guide →",
+    guideLabel: "View Instagram & TikTok Export Guide",
   },
   {
     id: "import-browser",
@@ -29,7 +29,7 @@ const FAQ_ITEMS = [
     answer:
       "In Google Chrome, Edge, or Brave, press Ctrl+Shift+O (Cmd+Option+B on Mac), click the three dots (⋮) in the top-right corner, and select 'Export bookmarks'. In Safari, click File > Export > Bookmarks. This saves a clean .html file. Drop this file into PostRecaller, and all your browser links will be instantly cataloged with smart tags and searchable notes.",
     guideLink: "/faq#export-browsers",
-    guideLabel: "View Browser Bookmarks Guide →",
+    guideLabel: "View Browser Bookmarks Guide",
   },
   {
     id: "save-mobile",
@@ -38,7 +38,7 @@ const FAQ_ITEMS = [
     answer:
       "Whenever you see a post, Reel, or video you love, tap the Share icon (the paper airplane on Instagram, Share on Facebook/Reddit, or the arrow on TikTok). In your phone's share tray, tap 'PostRecaller'. Our app silently captures the link, cleans tracking parameters, extracts key takeaways in the background, and saves it to your private vault.",
     guideLink: "/faq#save-from-apps",
-    guideLabel: "View Mobile Sharing Guide →",
+    guideLabel: "View Mobile Sharing Guide",
   },
   {
     id: "deleted-posts",
@@ -55,7 +55,7 @@ const FAQ_ITEMS = [
     answer:
       "Yes! During our public beta launch, all Pro features—including unlimited saves, full social archive imports, unlimited AI takeaways, and smart auto-categorization—are 100% unlocked for free for all accounts created during beta. No credit card is required to sign up.",
     guideLink: "/register",
-    guideLabel: "Claim Free Beta Access →",
+    guideLabel: "Claim Free Beta Access",
   },
   {
     id: "export-data",
