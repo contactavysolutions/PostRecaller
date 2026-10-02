@@ -19,9 +19,9 @@ import {
 } from "@phosphor-icons/react";
 
 const DEMO_STEPS = [
-  { id: 1, title: "1. Paste Link", label: "Drop any link from Instagram, TikTok, or X" },
+  { id: 1, title: "1. Capture", label: "Drop any link from Instagram, TikTok, or X" },
   { id: 2, title: "2. AI Enrichment", label: "Instant summary, transcript & auto-tagging" },
-  { id: 3, title: "3. Semantic Search", label: "Search by flavor, topic, or half-remembered phrase" },
+  { id: 3, title: "3. Retrieve", label: "Search by flavor, topic, or half-remembered phrase" },
 ];
 
 const SEARCH_QUERY = "creamy mushroom soup";

@@ -723,8 +723,8 @@ function PhaseThreeRetrieve() {
 // -----------------------------------------------------------------------------
 const PHASES = [
   { id: 1, title: "1. Capture", label: "Share from feeds" },
-  { id: 2, title: "2. AI Enrich", label: "Tags & transcripts" },
-  { id: 3, title: "3. Semantic Search", label: "Find instantly" },
+  { id: 2, title: "2. AI Enrichment", label: "Tags & transcripts" },
+  { id: 3, title: "3. Retrieve", label: "Find instantly" },
 ];
 
 export function HeroMotionCenterpiece() {
