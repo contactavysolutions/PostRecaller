@@ -10,6 +10,14 @@ export function SiteFooter() {
         </p>
         <nav className="flex items-center gap-6" aria-label="Legal">
           <Link
+            to="/faq"
+            data-testid="footer-faq"
+            className="text-ds-base text-on-surface-secondary hover:text-on-surface transition-colors"
+            style={{ fontWeight: 500 }}
+          >
+            Guides &amp; FAQ
+          </Link>
+          <Link
             to="/privacy"
             data-testid="footer-privacy"
             className="text-ds-base text-on-surface-secondary hover:text-on-surface transition-colors"

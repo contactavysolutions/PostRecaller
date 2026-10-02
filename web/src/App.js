@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/lib/theme";
 import Landing from "@/pages/Landing";
 import Privacy from "@/pages/Privacy";
 import Terms from "@/pages/Terms";
+import FAQ from "@/pages/FAQ";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 import ForgotPassword from "@/pages/ForgotPassword";
@@ -22,6 +23,9 @@ function App() {
         <AnimatePresence mode="wait">
           <Routes>
             <Route path="/" element={<Landing />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/guides" element={<Navigate to="/faq" replace />} />
+            <Route path="/help" element={<Navigate to="/faq" replace />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/login" element={<Login />} />

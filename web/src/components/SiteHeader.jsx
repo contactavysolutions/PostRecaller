@@ -24,6 +24,14 @@ export function PublicHeader() {
         </Link>
         <div className="flex items-center gap-3 md:gap-5">
           <Link
+            to="/faq"
+            data-testid="header-faq"
+            className="text-on-surface-secondary hover:text-on-surface text-ds-base transition-colors"
+            style={{ fontWeight: 500 }}
+          >
+            Guides &amp; FAQ
+          </Link>
+          <Link
             to="/login"
             data-testid="header-login"
             className="text-on-surface-secondary hover:text-on-surface text-ds-base transition-colors"

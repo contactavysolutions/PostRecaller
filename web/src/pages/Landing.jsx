@@ -28,6 +28,7 @@ import { BookmarkImportShowcase } from "@/components/Landing/BookmarkImportShowc
 import { SuperpowerBento } from "@/components/Landing/SuperpowerBento";
 import { TestimonialsCarousel } from "@/components/Landing/TestimonialsCarousel";
 import { PricingSection } from "@/components/Landing/PricingSection";
+import { LandingFAQ } from "@/components/Landing/LandingFAQ";
 import { IS_WAITLIST_MODE } from "@/constants/config";
 import { api } from "@/lib/api";
 
@@ -121,6 +122,9 @@ export default function Landing() {
 
       {/* --------- PRICING & BETA OFFER --------- */}
       <PricingSection />
+
+      {/* --------- FREQUENTLY ASKED QUESTIONS --------- */}
+      <LandingFAQ />
 
       {/* --------- CLOSING CTA — full-bleed brand slab --------- */}
       <section className="container-page px-5 md:px-12 pt-28 md:pt-40">
