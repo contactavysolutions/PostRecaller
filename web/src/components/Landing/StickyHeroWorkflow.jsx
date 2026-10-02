@@ -16,16 +16,17 @@ import {
   TiktokLogo,
   XLogo,
   ChefHat,
+  LockSimple,
 } from "@phosphor-icons/react";
 import { WaitlistForm } from "@/components/WaitlistForm";
 import { IS_WAITLIST_MODE } from "@/constants/config";
 
 // -----------------------------------------------------------------------------
-// Visual for Step 1: Share to Capture
+// Visual for Step 1: Share to Capture (Continuous Motion Graphic into Aesthetic Vault)
 // -----------------------------------------------------------------------------
 function StepOneVisual() {
   return (
-    <div className="relative w-full h-[470px] rounded-[24px] bg-surface dark:bg-zinc-900 border border-ds-border/90 dark:border-white/10 p-5 sm:p-7 flex flex-col justify-between overflow-hidden shadow-tier-1">
+    <div className="relative w-full min-h-[480px] h-auto lg:h-[500px] rounded-[24px] bg-surface dark:bg-zinc-900 border border-ds-border/90 dark:border-white/10 p-4 sm:p-7 flex flex-col justify-between overflow-visible lg:overflow-hidden shadow-tier-1">
       {/* Subtle warm backdrop glow */}
       <div className="pointer-events-none absolute -top-12 -right-12 w-64 h-64 rounded-full bg-brand-secondary/8 blur-3xl -z-0" />
 
@@ -39,93 +40,218 @@ function StepOneVisual() {
           Drop any link from any app.
         </h3>
         <p className="text-on-surface-secondary text-ds-sm leading-relaxed max-w-[420px]">
-          Tap "Share" on Instagram, TikTok, X, or YouTube. PostRecaller captures the title, author, and source metadata instantly.
+          Tap "Share" on Instagram, TikTok, or X. Posts continuously stream straight into your private encrypted vault.
         </p>
       </div>
 
-      {/* Visual Centerpiece: Floating Cards into Vault */}
-      <div className="relative z-10 my-auto py-2">
-        {/* Floating Social Source Cards */}
-        <div className="grid grid-cols-3 gap-2.5 sm:gap-3.5">
-          {/* Instagram Reel */}
-          <div className="rounded-ds-md bg-surface dark:bg-zinc-800/90 border border-ds-border/80 dark:border-white/10 p-2.5 shadow-sm space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="w-5 h-5 rounded-md bg-gradient-to-tr from-[#833ab4] via-[#fd1d1d] to-[#fcb045] flex items-center justify-center text-white">
-                <InstagramLogo size={13} weight="bold" />
+      {/* Visual Centerpiece: Continuous Motion Graphic into Aesthetic Vault */}
+      <div className="relative z-10 my-auto py-2 w-full flex flex-col items-center">
+        {/* Source Hubs Row: Instagram, TikTok, X */}
+        <div className="grid grid-cols-3 gap-2 sm:gap-3 w-full max-w-[440px] relative z-20">
+          {/* Instagram Source Hub */}
+          <div className="rounded-ds-md bg-surface/90 dark:bg-zinc-800/90 border border-ds-border/80 dark:border-white/10 p-2 sm:p-2.5 shadow-sm flex items-center justify-between">
+            <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+              <span className="w-5 h-5 rounded-md bg-gradient-to-tr from-[#833ab4] via-[#fd1d1d] to-[#fcb045] flex items-center justify-center text-white shrink-0">
+                <InstagramLogo size={12} weight="bold" />
               </span>
-              <span className="text-[10px] font-mono text-on-surface-secondary">Reel</span>
+              <span className="text-[11px] font-medium text-on-surface truncate">Instagram</span>
             </div>
-            <div className="h-12 rounded bg-surface-secondary overflow-hidden relative">
-              <img
-                src="https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=240&q=80"
-                alt="Soup thumbnail"
-                className="w-full h-full object-cover opacity-90"
-              />
-              <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-                <Play size={10} weight="fill" className="text-white" />
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+          </div>
+
+          {/* TikTok Source Hub */}
+          <div className="rounded-ds-md bg-surface/90 dark:bg-zinc-800/90 border border-ds-border/80 dark:border-white/10 p-2 sm:p-2.5 shadow-sm flex items-center justify-between">
+            <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+              <span className="w-5 h-5 rounded-md bg-black border border-cyan-400/40 flex items-center justify-center text-white shrink-0">
+                <TiktokLogo size={12} weight="bold" />
+              </span>
+              <span className="text-[11px] font-medium text-on-surface truncate">TikTok</span>
+            </div>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+          </div>
+
+          {/* X Source Hub */}
+          <div className="rounded-ds-md bg-surface/90 dark:bg-zinc-800/90 border border-ds-border/80 dark:border-white/10 p-2 sm:p-2.5 shadow-sm flex items-center justify-between">
+            <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+              <span className="w-5 h-5 rounded-md bg-zinc-900 border border-white/20 flex items-center justify-center text-white shrink-0">
+                <XLogo size={12} weight="bold" />
+              </span>
+              <span className="text-[11px] font-medium text-on-surface truncate">X / Post</span>
+            </div>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+          </div>
+        </div>
+
+        {/* Dynamic Motion Conduits & Moving Incoming Posts Container */}
+        <div className="relative w-full max-w-[440px] h-[72px] sm:h-[82px] overflow-hidden">
+          {/* Fiber-optic conduit lines flowing down into the vault intake */}
+          <svg viewBox="0 0 360 80" className="w-full h-full overflow-visible" fill="none">
+            <defs>
+              <linearGradient id="vaultBeamLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#833ab4" stopOpacity="0.8" />
+                <stop offset="100%" stopColor="#10B981" stopOpacity="0.9" />
+              </linearGradient>
+              <linearGradient id="vaultBeamCenter" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.8" />
+                <stop offset="100%" stopColor="#10B981" stopOpacity="0.9" />
+              </linearGradient>
+              <linearGradient id="vaultBeamRight" x1="100%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stopColor="#71717a" stopOpacity="0.8" />
+                <stop offset="100%" stopColor="#10B981" stopOpacity="0.9" />
+              </linearGradient>
+            </defs>
+
+            {/* Background Conduit Guides */}
+            <path d="M 60 0 C 60 40, 180 35, 180 78" stroke="rgb(var(--brand))" strokeWidth="1.5" strokeDasharray="3 3" opacity="0.35" />
+            <path d="M 180 0 C 180 30, 180 45, 180 78" stroke="rgb(var(--brand-secondary))" strokeWidth="1.5" strokeDasharray="3 3" opacity="0.4" />
+            <path d="M 300 0 C 300 40, 180 35, 180 78" stroke="rgb(var(--brand))" strokeWidth="1.5" strokeDasharray="3 3" opacity="0.35" />
+
+            {/* Glowing animated flowing pulse beams */}
+            <path d="M 60 0 C 60 40, 180 35, 180 78" stroke="url(#vaultBeamLeft)" strokeWidth="2.5" strokeDasharray="8 16" className="animate-pulse" />
+            <path d="M 180 0 C 180 30, 180 45, 180 78" stroke="url(#vaultBeamCenter)" strokeWidth="2.5" strokeDasharray="8 16" className="animate-pulse" />
+            <path d="M 300 0 C 300 40, 180 35, 180 78" stroke="url(#vaultBeamRight)" strokeWidth="2.5" strokeDasharray="8 16" className="animate-pulse" />
+          </svg>
+
+          {/* Continuous Moving Post 1: Instagram Reel */}
+          <motion.div
+            className="absolute left-[10%] sm:left-[12%] top-0 flex items-center gap-1.5 px-2 py-1 rounded-md bg-surface dark:bg-zinc-800 border border-brand/40 shadow-sm pointer-events-none"
+            animate={{
+              y: [-6, 26, 56],
+              x: [0, 18, 52],
+              scale: [0.95, 1, 0.65],
+              opacity: [0, 1, 1, 0],
+            }}
+            transition={{
+              duration: 3.3,
+              repeat: Infinity,
+              delay: 0,
+              ease: "easeInOut",
+            }}
+          >
+            <span className="w-3.5 h-3.5 rounded bg-gradient-to-tr from-[#833ab4] to-[#fd1d1d] flex items-center justify-center text-white text-[8px]">
+              <InstagramLogo size={9} weight="bold" />
+            </span>
+            <span className="text-[10px] font-medium text-on-surface truncate max-w-[80px] sm:max-w-[100px]">
+              @culinary_arts
+            </span>
+          </motion.div>
+
+          {/* Continuous Moving Post 2: TikTok Hack */}
+          <motion.div
+            className="absolute left-1/2 -translate-x-1/2 top-0 flex items-center gap-1.5 px-2 py-1 rounded-md bg-surface dark:bg-zinc-800 border border-cyan-500/40 shadow-sm pointer-events-none"
+            animate={{
+              y: [-6, 28, 56],
+              scale: [0.95, 1, 0.65],
+              opacity: [0, 1, 1, 0],
+            }}
+            transition={{
+              duration: 3.3,
+              repeat: Infinity,
+              delay: 1.1,
+              ease: "easeInOut",
+            }}
+          >
+            <span className="w-3.5 h-3.5 rounded bg-black flex items-center justify-center text-cyan-400 text-[8px]">
+              <TiktokLogo size={9} weight="bold" />
+            </span>
+            <span className="text-[10px] font-medium text-on-surface truncate max-w-[80px] sm:max-w-[100px]">
+              @theepicchef
+            </span>
+          </motion.div>
+
+          {/* Continuous Moving Post 3: X Thread */}
+          <motion.div
+            className="absolute right-[10%] sm:right-[12%] top-0 flex items-center gap-1.5 px-2 py-1 rounded-md bg-surface dark:bg-zinc-800 border border-brand/40 shadow-sm pointer-events-none"
+            animate={{
+              y: [-6, 26, 56],
+              x: [0, -18, -52],
+              scale: [0.95, 1, 0.65],
+              opacity: [0, 1, 1, 0],
+            }}
+            transition={{
+              duration: 3.3,
+              repeat: Infinity,
+              delay: 2.2,
+              ease: "easeInOut",
+            }}
+          >
+            <span className="w-3.5 h-3.5 rounded bg-zinc-900 flex items-center justify-center text-white text-[8px]">
+              <XLogo size={9} weight="bold" />
+            </span>
+            <span className="text-[10px] font-medium text-on-surface truncate max-w-[80px] sm:max-w-[100px]">
+              @chefalex
+            </span>
+          </motion.div>
+        </div>
+
+        {/* Central Aesthetic Vault Safe */}
+        <div className="w-full max-w-[440px] rounded-2xl bg-gradient-to-b from-[#1c221e] via-[#141815] to-[#0d100e] border border-[#4A5D4E]/60 p-3 sm:p-4 shadow-[0_12px_36px_rgba(0,0,0,0.55),0_0_24px_rgba(74,93,78,0.25)] relative overflow-hidden">
+          {/* Subtle vault ambient glow */}
+          <div className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 w-44 h-16 bg-emerald-500/15 blur-xl rounded-full" />
+
+          {/* Corner metallic bolt accents */}
+          <div className="absolute top-2.5 left-2.5 w-1.5 h-1.5 rounded-full bg-zinc-600/70 border border-zinc-500/40 shadow-inner" />
+          <div className="absolute top-2.5 right-2.5 w-1.5 h-1.5 rounded-full bg-zinc-600/70 border border-zinc-500/40 shadow-inner" />
+          <div className="absolute bottom-2.5 left-2.5 w-1.5 h-1.5 rounded-full bg-zinc-600/70 border border-zinc-500/40 shadow-inner" />
+          <div className="absolute bottom-2.5 right-2.5 w-1.5 h-1.5 rounded-full bg-zinc-600/70 border border-zinc-500/40 shadow-inner" />
+
+          {/* Vault Top Readout */}
+          <div className="flex items-center justify-between border-b border-white/5 pb-2.5 mb-2.5 relative z-10">
+            <div className="flex items-center gap-2">
+              <span className="w-6 h-6 rounded-md bg-[#4A5D4E]/40 border border-[#4A5D4E] flex items-center justify-center text-emerald-400">
+                <ShieldCheck size={14} weight="fill" />
+              </span>
+              <div>
+                <p className="text-[11px] font-mono tracking-wider font-semibold text-zinc-100 uppercase leading-none">
+                  PostRecaller Vault
+                </p>
+                <p className="text-[9px] font-mono text-zinc-400 mt-0.5">
+                  Private Cloud Architecture
+                </p>
               </div>
             </div>
-            <p className="text-[11px] font-medium text-on-surface truncate">@culinary_arts</p>
+
+            <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[10px] font-mono text-emerald-400">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+              <span>Ingestion Active</span>
+            </div>
           </div>
 
-          {/* TikTok Hack */}
-          <div className="rounded-ds-md bg-surface dark:bg-zinc-800/90 border border-ds-border/80 dark:border-white/10 p-2.5 shadow-sm space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="w-5 h-5 rounded-md bg-black flex items-center justify-center text-white">
-                <TiktokLogo size={13} weight="bold" />
-              </span>
-              <span className="text-[10px] font-mono text-on-surface-secondary">TikTok</span>
-            </div>
-            <div className="h-12 rounded bg-surface-secondary p-1.5 flex flex-col justify-end text-[10px] text-on-surface-secondary font-medium leading-tight">
-              <span className="text-brand font-semibold text-[9px] uppercase font-mono">15m recipe</span>
-              <span className="truncate">Velvety mushroom soup</span>
-            </div>
-            <p className="text-[11px] font-medium text-on-surface truncate">@theepicchef</p>
-          </div>
-
-          {/* X Thread */}
-          <div className="rounded-ds-md bg-surface dark:bg-zinc-800/90 border border-ds-border/80 dark:border-white/10 p-2.5 shadow-sm space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="w-5 h-5 rounded-md bg-zinc-900 flex items-center justify-center text-white">
-                <XLogo size={13} weight="bold" />
-              </span>
-              <span className="text-[10px] font-mono text-on-surface-secondary">Thread</span>
-            </div>
-            <div className="h-12 rounded bg-surface-secondary p-1.5 flex flex-col justify-center text-[10px] text-on-surface-secondary leading-snug">
-              <span>"The secret to restaurant soup..."</span>
-              <span className="text-[9px] text-brand font-mono mt-0.5">🧵 6 posts</span>
-            </div>
-            <p className="text-[11px] font-medium text-on-surface truncate">@chefalex</p>
-          </div>
-        </div>
-
-        {/* Dynamic Curved SVG Conduit Cables */}
-        <div className="my-1 flex justify-center">
-          <svg viewBox="0 0 340 50" className="w-full h-10 overflow-visible" fill="none">
-            <path d="M 60 0 C 60 25, 170 15, 170 48" stroke="rgb(var(--brand))" strokeWidth="1.8" strokeDasharray="4 4" opacity="0.6" />
-            <path d="M 170 0 C 170 20, 170 30, 170 48" stroke="rgb(var(--brand-secondary))" strokeWidth="2" opacity="0.8" />
-            <path d="M 280 0 C 280 25, 170 15, 170 48" stroke="rgb(var(--brand))" strokeWidth="1.8" strokeDasharray="4 4" opacity="0.6" />
-          </svg>
-        </div>
-
-        {/* Central Intake Vault Target */}
-        <div className="rounded-ds-md bg-surface dark:bg-zinc-800 border border-brand/40 p-3 shadow-sm flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <span className="w-8 h-8 rounded-md bg-brand text-on-brand flex items-center justify-center">
-              <Sparkle size={16} weight="fill" />
-            </span>
-            <div>
-              <p className="text-ds-sm font-semibold text-on-surface leading-tight">
-                PostRecaller Private Vault
+          {/* Vault Safe Mechanism & Intake Aperture */}
+          <div className="flex items-center justify-between gap-3 relative z-10 py-1">
+            {/* Left: Interactive Ingestion Metrics */}
+            <div className="space-y-1.5">
+              <div className="flex items-center gap-1.5 text-[11px] text-zinc-300 font-medium">
+                <span className="text-emerald-400 font-mono font-bold">⚡ 0.38s</span>
+                <span>Sub-Second Intake</span>
+              </div>
+              <p className="text-[10px] text-zinc-400 leading-snug">
+                Cleans tracking parameters &amp; extracts canonical post data automatically.
               </p>
-              <p className="text-[11px] font-mono text-on-surface-secondary">
-                URL canonicalized &amp; queued for enrichment
-              </p>
+              <div className="flex items-center gap-1 text-[9px] font-mono text-[#7ea085]">
+                <span>✓ 256-Bit Encrypted</span>
+                <span className="text-zinc-600">•</span>
+                <span>Zero Cookies</span>
+              </div>
+            </div>
+
+            {/* Right: Rotating Vault Lock Dial / Intake Aperture */}
+            <div className="relative shrink-0 flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16">
+              {/* Outer Rotating Dial */}
+              <div className="absolute inset-0 rounded-full border-2 border-dashed border-[#4A5D4E]/70 animate-[spin_24s_linear_infinite]" />
+              {/* Inner Pulsing Safe Portal */}
+              <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-[#27352c] to-[#0c100d] border border-emerald-500/40 flex items-center justify-center shadow-[inset_0_2px_8px_rgba(0,0,0,0.9)] relative">
+                <motion.div
+                  animate={{ scale: [0.88, 1.08, 0.88] }}
+                  transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <LockSimple size={18} weight="fill" className="text-emerald-400 drop-shadow-[0_0_8px_rgba(16,185,129,0.7)]" />
+                </motion.div>
+                {/* Continuous Intake Pulse Wave */}
+                <div className="absolute inset-0 rounded-full bg-emerald-400/20 animate-ping pointer-events-none" />
+              </div>
             </div>
           </div>
-          <span className="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 font-semibold px-2 py-0.5 rounded bg-emerald-500/10">
-            0.4s Ingestion
-          </span>
         </div>
       </div>
 
@@ -143,7 +269,7 @@ function StepOneVisual() {
 // -----------------------------------------------------------------------------
 function StepTwoVisual() {
   return (
-    <div className="relative w-full h-[470px] rounded-[24px] bg-surface dark:bg-zinc-900 border border-ds-border/90 dark:border-white/10 p-5 sm:p-7 flex flex-col justify-between overflow-hidden shadow-tier-1">
+    <div className="relative w-full min-h-[480px] h-auto lg:h-[500px] rounded-[24px] bg-surface dark:bg-zinc-900 border border-ds-border/90 dark:border-white/10 p-4 sm:p-7 flex flex-col justify-between overflow-visible lg:overflow-hidden shadow-tier-1">
       {/* Subtle sage backdrop glow */}
       <div className="pointer-events-none absolute -bottom-10 -left-10 w-64 h-64 rounded-full bg-brand/10 blur-3xl -z-0" />
 
@@ -164,7 +290,7 @@ function StepTwoVisual() {
       {/* Visual Centerpiece: Extraction Card with Summary & Tags */}
       <div className="relative z-10 my-auto py-2 space-y-3">
         {/* AI Summary & Takeaways Panel */}
-        <div className="rounded-ds-md bg-surface-secondary/70 dark:bg-zinc-800/80 border border-ds-border p-3.5 space-y-2.5 shadow-sm">
+        <div className="rounded-ds-md bg-surface-secondary/70 dark:bg-zinc-800/80 border border-ds-border p-3 sm:p-3.5 space-y-2 sm:space-y-2.5 shadow-sm">
           <div className="flex items-center justify-between border-b border-ds-border/60 pb-2">
             <div className="flex items-center gap-2">
               <Sparkle size={16} weight="fill" className="text-brand" />
@@ -198,8 +324,8 @@ function StepTwoVisual() {
         </div>
 
         {/* Dynamic Tag Extraction Pill Stack */}
-        <div className="flex flex-wrap items-center gap-2 pt-1">
-          <span className="text-[11px] font-mono text-on-surface-secondary uppercase tracking-wider mr-1">
+        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 pt-1">
+          <span className="text-[10px] sm:text-[11px] font-mono text-on-surface-secondary uppercase tracking-wider mr-1">
             Generated Tags:
           </span>
           {[
@@ -210,9 +336,9 @@ function StepTwoVisual() {
           ].map((tag) => (
             <span
               key={tag.name}
-              className={`px-2.5 py-1 rounded-ds-pill text-[12px] font-medium border flex items-center gap-1 ${tag.bg}`}
+              className={`px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-ds-pill text-[11px] sm:text-[12px] font-medium border flex items-center gap-1 ${tag.bg}`}
             >
-              <Tag size={12} weight="bold" />
+              <Tag size={11} weight="bold" />
               {tag.name}
             </span>
           ))}
@@ -235,7 +361,7 @@ function StepThreeVisual() {
   const [typed, setTyped] = useState("creamy mushroom soup");
 
   return (
-    <div className="relative w-full h-[470px] rounded-[24px] bg-surface dark:bg-zinc-900 border border-ds-border/90 dark:border-white/10 p-5 sm:p-7 flex flex-col justify-between overflow-hidden shadow-tier-1">
+    <div className="relative w-full min-h-[480px] h-auto lg:h-[500px] rounded-[24px] bg-surface dark:bg-zinc-900 border border-ds-border/90 dark:border-white/10 p-4 sm:p-7 flex flex-col justify-between overflow-visible lg:overflow-hidden shadow-tier-1">
       {/* Subtle brand backdrop glow */}
       <div className="pointer-events-none absolute -top-10 -left-10 w-64 h-64 rounded-full bg-brand-secondary/10 blur-3xl -z-0" />
 
@@ -254,27 +380,27 @@ function StepThreeVisual() {
       </div>
 
       {/* Visual Centerpiece: Search Input + Result Card */}
-      <div className="relative z-10 my-auto py-2 space-y-3">
+      <div className="relative z-10 my-auto py-2 space-y-2.5 sm:space-y-3">
         {/* Search Bar with live typed query */}
-        <div className="w-full px-4 py-2.5 rounded-ds-md bg-surface dark:bg-zinc-800 border border-brand/50 shadow-sm flex items-center justify-between">
-          <div className="flex items-center gap-2.5 text-on-surface text-ds-sm font-medium">
-            <MagnifyingGlass size={16} weight="bold" className="text-brand" />
-            <span>{typed}</span>
-            <span className="w-1.5 h-4 bg-brand animate-pulse inline-block" />
+        <div className="w-full px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-ds-md bg-surface dark:bg-zinc-800 border border-brand/50 shadow-sm flex items-center justify-between">
+          <div className="flex items-center gap-2 sm:gap-2.5 text-on-surface text-ds-sm font-medium">
+            <MagnifyingGlass size={16} weight="bold" className="text-brand shrink-0" />
+            <span className="truncate">{typed}</span>
+            <span className="w-1.5 h-4 bg-brand animate-pulse inline-block shrink-0" />
           </div>
-          <span className="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 font-semibold px-2 py-0.5 rounded bg-emerald-500/10">
+          <span className="text-[10px] sm:text-[11px] font-mono text-emerald-600 dark:text-emerald-400 font-semibold px-2 py-0.5 rounded bg-emerald-500/10 shrink-0">
             0.18s lookup
           </span>
         </div>
 
         {/* Surfaced Result Card */}
-        <div className="rounded-ds-md bg-surface dark:bg-zinc-800 border border-brand/30 p-3.5 shadow-md space-y-2.5">
+        <div className="rounded-ds-md bg-surface dark:bg-zinc-800 border border-brand/30 p-3 sm:p-3.5 shadow-md space-y-2 sm:space-y-2.5">
           <div className="flex items-center justify-between border-b border-ds-border/60 pb-2">
             <div className="flex items-center gap-2">
               <img
                 src="https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=100&q=80"
                 alt="Avatar"
-                className="w-7 h-7 rounded-full object-cover"
+                className="w-6 h-6 sm:w-7 sm:h-7 rounded-full object-cover"
               />
               <div>
                 <p className="text-ds-sm font-semibold text-on-surface leading-tight flex items-center gap-1">
@@ -300,12 +426,12 @@ function StepThreeVisual() {
           </div>
 
           <div className="flex items-center justify-between pt-1">
-            <div className="flex items-center gap-1.5">
-              <span className="px-2 py-0.5 rounded bg-brand-tertiary text-brand text-[10px] font-medium">#recipe</span>
-              <span className="px-2 py-0.5 rounded bg-brand-tertiary text-brand text-[10px] font-medium">#mushrooms</span>
-              <span className="px-2 py-0.5 rounded bg-brand-tertiary text-brand text-[10px] font-medium">#healthy</span>
+            <div className="flex items-center gap-1 sm:gap-1.5">
+              <span className="px-1.5 sm:px-2 py-0.5 rounded bg-brand-tertiary text-brand text-[10px] font-medium">#recipe</span>
+              <span className="px-1.5 sm:px-2 py-0.5 rounded bg-brand-tertiary text-brand text-[10px] font-medium">#mushrooms</span>
+              <span className="px-1.5 sm:px-2 py-0.5 rounded bg-brand-tertiary text-brand text-[10px] font-medium">#healthy</span>
             </div>
-            <button className="text-[12px] font-medium text-brand hover:underline flex items-center gap-1">
+            <button className="text-[11px] sm:text-[12px] font-medium text-brand hover:underline flex items-center gap-1">
               <span>Open Link</span>
               <ArrowRight size={12} weight="bold" />
             </button>
@@ -337,9 +463,13 @@ export function StickyHeroWorkflow({ socialProof, onWaitlistCount }) {
     offset: ["start start", "end end"],
   });
 
-  // Track active step based on scroll threshold
+  // Track active step based on scroll threshold (ONLY on desktop >= 1024px)
   useEffect(() => {
     const unsubscribe = scrollYProgress.on("change", (latest) => {
+      // Do not hijack scroll on mobile/tablet screens!
+      if (typeof window !== "undefined" && window.innerWidth < 1024) {
+        return;
+      }
       if (latest < 0.35) {
         setActiveStep(1);
       } else if (latest < 0.70) {
@@ -463,7 +593,7 @@ export function StickyHeroWorkflow({ socialProof, onWaitlistCount }) {
             </div>
 
             {/* ---------------- Right Column: Smooth Step Morph ---------------- */}
-            <div className="relative w-full max-w-[580px] min-h-[470px]">
+            <div className="relative w-full max-w-[580px] min-h-[480px]">
               <AnimatePresence mode="wait">
                 {activeStep === 1 && (
                   <motion.div
@@ -507,7 +637,7 @@ export function StickyHeroWorkflow({ socialProof, onWaitlistCount }) {
       {/* ========================================================================= */}
       {/* MOBILE / TABLET VIEW: No scroll hijacking; clean interactive tabbed deck  */}
       {/* ========================================================================= */}
-      <div className="block lg:hidden container-page px-5 pt-8 pb-12 space-y-10">
+      <div className="block lg:hidden container-page px-4 sm:px-5 pt-8 pb-12 space-y-8">
         {/* Left Column Copy (Normal Flow on Mobile) */}
         <div className="flex flex-col gap-6 max-w-[560px]">
           <div className="flex items-center gap-3">
@@ -517,7 +647,7 @@ export function StickyHeroWorkflow({ socialProof, onWaitlistCount }) {
             </span>
           </div>
 
-          <h1 className="text-[42px] sm:text-[52px] leading-[1.02] tracking-[-0.035em] text-on-surface font-medium">
+          <h1 className="text-[40px] sm:text-[52px] leading-[1.02] tracking-[-0.035em] text-on-surface font-medium">
             A quiet vault
             <br />
             for a{" "}
@@ -585,7 +715,7 @@ export function StickyHeroWorkflow({ socialProof, onWaitlistCount }) {
                 onClick={() => setActiveStep(step.id)}
                 className={`py-2 px-2 rounded-ds-sm text-center font-medium text-ds-sm transition-all border ${
                   activeStep === step.id
-                    ? "bg-brand text-on-brand border-brand shadow-sm"
+                    ? "bg-[#4A5D4E] text-white border-[#4A5D4E] shadow-sm font-semibold"
                     : "bg-surface-secondary border-transparent text-on-surface-secondary hover:text-on-surface"
                 }`}
               >
@@ -594,11 +724,43 @@ export function StickyHeroWorkflow({ socialProof, onWaitlistCount }) {
             ))}
           </div>
 
-          {/* Active Card Body */}
-          <div className="min-h-[460px]">
-            {activeStep === 1 && <StepOneVisual />}
-            {activeStep === 2 && <StepTwoVisual />}
-            {activeStep === 3 && <StepThreeVisual />}
+          {/* Active Card Body - with auto height and zero clipping */}
+          <div className="w-full min-h-[480px]">
+            <AnimatePresence mode="wait">
+              {activeStep === 1 && (
+                <motion.div
+                  key="mobile-step-1"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <StepOneVisual />
+                </motion.div>
+              )}
+              {activeStep === 2 && (
+                <motion.div
+                  key="mobile-step-2"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <StepTwoVisual />
+                </motion.div>
+              )}
+              {activeStep === 3 && (
+                <motion.div
+                  key="mobile-step-3"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <StepThreeVisual />
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </div>
