@@ -8,8 +8,10 @@ import time
 import json
 from datetime import datetime
 
-# Backend URL from frontend/.env
-BASE_URL = "https://post-memory-web.preview.emergentagent.com/api"
+import os
+
+# Backend URL (defaults to production custom domain https://postrecaller.com/api)
+BASE_URL = os.environ.get("BACKEND_URL", "https://postrecaller.com/api")
 
 # Test data
 timestamp = int(time.time())

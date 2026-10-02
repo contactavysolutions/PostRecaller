@@ -1,70 +1,52 @@
-# Getting Started with Create React App
+# PostRecaller — Web Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The responsive web client for PostRecaller, accessible at [https://postrecaller.com](https://postrecaller.com). Built with **React 19**, **TailwindCSS**, **Radix UI**, and **Craco**.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- **Public Landing & Waitlist (`/`)**: High-converting hero presentation, feature showcase, live waitlist counter, and instant invite redemption.
+- **Authentication**: JWT token management stored in `localStorage`, 6-digit email password reset flow, and invite verification.
+- **The Vault (`/vault`)**:
+  - Filterable by collection buckets: *Read Later*, *Try Recipe*, *Watch*, *Shop*, *Learn*.
+  - Full-text instant search across titles, summaries, and tags.
+  - Multi-platform badge identification (Instagram, TikTok, YouTube, Reddit, X, Web).
+  - Manual link adder with real-time AI enrichment status.
+  - Drag-and-drop Universal Archive & Netscape Bookmark Importer modal.
+- **Admin Analytics Dashboard (`/admin`)**:
+  - Live charts powered by Recharts (DAU, Saves/day, AI Token Spend, Storage).
+  - User management table with quick suspend/restore/delete actions.
+  - Waitlist manager with 1-click invite email trigger via Resend.
+  - Email campaign composer with delivery tracking.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Design System & Typography
 
-### `npm test`
+- **Fonts**: Satoshi (via Fontshare) primary body with Plus Jakarta Sans fallback.
+- **Palette**: Harmonious deep obsidian and sage green tokens (`#0f1110`, `#1a201c`, `#4A5D4E`, `#D4AF37`).
+- **Components**: Built on unstyled accessible Radix UI primitives (`@radix-ui/react-dialog`, `@radix-ui/react-dropdown-menu`, etc.) and styled with TailwindCSS utility classes.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## Development & Build
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+# Install dependencies with peer resolution flag
+npm install --legacy-peer-deps
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# Start development server on port 3000
+npm start
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# Build production bundle to build/
+npm run build
+```
 
-### `npm run eject`
+---
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## API Configuration
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+The web application communicates with the backend via [`src/lib/api.js`](file:///c:/Users/sandy/Antigravity%20Projects/PostRecaller/web/src/lib/api.js):
+- In production on Vercel, requests use relative `/api` paths directly to the same host (zero CORS overhead).
+- In local development, set `REACT_APP_BACKEND_URL=http://localhost:8000` to point to a local FastAPI server.
