@@ -266,83 +266,261 @@ function StepOneVisual() {
 
 // -----------------------------------------------------------------------------
 // Visual for Step 2: AI Enriches with Tags & Transcripts
+// (Interactive Switcher: Option A Neural Core vs Option B Laser Scanner)
 // -----------------------------------------------------------------------------
 function StepTwoVisual() {
+  const [optionMode, setOptionMode] = useState("A"); // "A" = Neural Core, "B" = Laser Scanner
+  const [phase, setPhase] = useState(0); // 0: churning/scanning, 1: revealing summary, 2: stamping tags, 3: completed hold
+
+  // Cycle animation loop
+  useEffect(() => {
+    let t1, t2, t3, t4;
+    const runCycle = () => {
+      setPhase(0);
+      t1 = setTimeout(() => setPhase(1), 1600);
+      t2 = setTimeout(() => setPhase(2), 2600);
+      t3 = setTimeout(() => setPhase(3), 4200);
+      t4 = setTimeout(runCycle, 6400);
+    };
+    runCycle();
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+      clearTimeout(t4);
+    };
+  }, [optionMode]);
+
   return (
     <div className="relative w-full min-h-[480px] h-auto lg:h-[500px] rounded-[24px] bg-surface dark:bg-zinc-900 border border-ds-border/90 dark:border-white/10 p-4 sm:p-7 flex flex-col justify-between overflow-visible lg:overflow-hidden shadow-tier-1">
       {/* Subtle sage backdrop glow */}
       <div className="pointer-events-none absolute -bottom-10 -left-10 w-64 h-64 rounded-full bg-brand/10 blur-3xl -z-0" />
 
-      {/* Header Badge & Title */}
-      <div className="relative z-10 space-y-1">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-ds-pill bg-brand-tertiary text-brand text-[12px] font-semibold tracking-wide uppercase">
-          <Sparkle size={14} weight="bold" />
-          <span>Step 02 · AI Key Takeaways</span>
+      {/* Header Badge, Title & Interactive Option Switcher */}
+      <div className="relative z-10 space-y-2">
+        <div className="flex items-center justify-between flex-wrap gap-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-ds-pill bg-brand-tertiary text-brand text-[12px] font-semibold tracking-wide uppercase">
+            <Sparkle size={14} weight="bold" />
+            <span>Step 02 · AI Key Takeaways</span>
+          </div>
+
+          {/* Interactive Option A / Option B Switcher */}
+          <div className="flex items-center gap-1 p-0.5 rounded-full bg-surface-secondary/90 border border-ds-border text-[11px] font-mono">
+            <button
+              onClick={() => setOptionMode("A")}
+              className={`px-2.5 py-0.5 rounded-full transition-all font-medium ${
+                optionMode === "A"
+                  ? "bg-[#4A5D4E] text-white shadow-sm font-semibold"
+                  : "text-on-surface-secondary hover:text-on-surface"
+              }`}
+            >
+              Option A: Neural Core
+            </button>
+            <button
+              onClick={() => setOptionMode("B")}
+              className={`px-2.5 py-0.5 rounded-full transition-all font-medium ${
+                optionMode === "B"
+                  ? "bg-[#4A5D4E] text-white shadow-sm font-semibold"
+                  : "text-on-surface-secondary hover:text-on-surface"
+              }`}
+            >
+              Option B: Laser Scanner
+            </button>
+          </div>
         </div>
+
         <h3 className="text-ds-xl sm:text-[22px] font-medium text-on-surface tracking-tight">
           AI reads, summarizes, and auto-tags.
         </h3>
         <p className="text-on-surface-secondary text-ds-sm leading-relaxed max-w-[420px]">
-          AI distills chaotic posts, Reddit threads, and article links into clear executive takeaways, while taxonomy models assign clean tags.
+          AI distills chaotic posts, audio tracks, and recipes into clear executive takeaways, while taxonomy models assign clean tags.
         </p>
       </div>
 
       {/* Visual Centerpiece: Extraction Card with Summary & Tags */}
-      <div className="relative z-10 my-auto py-2 space-y-3">
-        {/* AI Summary & Takeaways Panel */}
-        <div className="rounded-ds-md bg-surface-secondary/70 dark:bg-zinc-800/80 border border-ds-border p-3 sm:p-3.5 space-y-2 sm:space-y-2.5 shadow-sm">
-          <div className="flex items-center justify-between border-b border-ds-border/60 pb-2">
-            <div className="flex items-center gap-2">
-              <Sparkle size={16} weight="fill" className="text-brand" />
-              <span className="text-ds-sm font-semibold text-on-surface">AI Executive Summary</span>
-            </div>
-            <span className="text-[11px] font-mono text-brand font-semibold px-2 py-0.5 rounded bg-brand-tertiary">
-              0.8s analysis
-            </span>
-          </div>
+      <div className="relative z-10 my-auto py-2">
+        {/* OPTION A: Neural Core & Tag Stamping Engine */}
+        {optionMode === "A" && (
+          <div className="space-y-2.5 sm:space-y-3">
+            {/* AI Neural Core Bar */}
+            <div className="rounded-ds-md bg-gradient-to-r from-zinc-900 via-zinc-950 to-zinc-900 border border-[#4A5D4E]/60 p-2.5 sm:p-3 shadow-md flex items-center justify-between relative overflow-hidden">
+              <div className="flex items-center gap-2.5 relative z-10">
+                {/* Rotating AI Aperture Core */}
+                <div className="relative w-8 h-8 rounded-full border border-emerald-500/40 flex items-center justify-center bg-emerald-950/40">
+                  <div className="absolute inset-0 rounded-full border border-dashed border-emerald-400/60 animate-[spin_8s_linear_infinite]" />
+                  <motion.div
+                    animate={{ scale: [0.9, 1.2, 0.9], rotate: [0, 180, 360] }}
+                    transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                  >
+                    <Sparkle size={15} weight="fill" className="text-emerald-400 drop-shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
+                  </motion.div>
+                </div>
 
-          {/* Bulleted Key Takeaways */}
-          <div className="p-2.5 rounded bg-surface dark:bg-black/30 text-[12px] text-on-surface leading-relaxed border border-ds-border/40 space-y-1.5">
-            <div className="flex items-start gap-2">
-              <span className="text-brand font-bold">•</span>
-              <span>15-minute quick skillet recipe using fresh cremini mushrooms &amp; shallots.</span>
-            </div>
-            <div className="flex items-start gap-2">
-              <span className="text-brand font-bold">•</span>
-              <span>Deglaze with dry white wine and blend with coconut cream for a silky finish.</span>
-            </div>
-          </div>
+                <div>
+                  <p className="text-[11px] font-mono font-semibold text-zinc-100 flex items-center gap-1.5">
+                    <span>Neural Enrichment Core</span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  </p>
+                  <p className="text-[10px] font-mono text-zinc-400">
+                    {phase === 0 && "⚡ Churning audio transcript & recipe..."}
+                    {phase === 1 && "✨ Synthesizing 2 key executive takeaways..."}
+                    {phase >= 2 && "🏷️ Taxonomy model: 4 tags assigned"}
+                  </p>
+                </div>
+              </div>
 
-          {/* Intent Classification Strip */}
-          <div className="flex items-center justify-between px-2.5 py-1.5 rounded bg-brand/5 border border-brand/20 text-[11px]">
-            <span className="text-on-surface-secondary font-mono uppercase tracking-wider text-[10px]">Detected Intent</span>
-            <span className="text-brand font-semibold flex items-center gap-1.5">
-              <ChefHat size={13} weight="bold" />
-              Try Recipe
-            </span>
-          </div>
-        </div>
+              <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 font-semibold relative z-10">
+                0.8s analysis
+              </span>
+            </div>
 
-        {/* Dynamic Tag Extraction Pill Stack */}
-        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 pt-1">
-          <span className="text-[10px] sm:text-[11px] font-mono text-on-surface-secondary uppercase tracking-wider mr-1">
-            Generated Tags:
-          </span>
-          {[
-            { name: "#recipe", bg: "bg-blue-500/10 text-blue-700 dark:text-blue-300 border-blue-500/20" },
-            { name: "#mushrooms", bg: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/20" },
-            { name: "#quickdinner", bg: "bg-amber-500/10 text-amber-700 dark:text-amber-300 border-amber-500/20" },
-            { name: "#culinary", bg: "bg-rose-500/10 text-rose-700 dark:text-rose-300 border-rose-500/20" },
-          ].map((tag) => (
-            <span
-              key={tag.name}
-              className={`px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-ds-pill text-[11px] sm:text-[12px] font-medium border flex items-center gap-1 ${tag.bg}`}
+            {/* AI Executive Summary Card */}
+            <motion.div
+              className="rounded-ds-md bg-surface-secondary/70 dark:bg-zinc-800/80 border border-ds-border p-3 sm:p-3.5 space-y-2 sm:space-y-2.5 shadow-sm"
+              initial={{ opacity: 0.6, y: 4 }}
+              animate={{ opacity: phase >= 1 ? 1 : 0.6, y: phase >= 1 ? 0 : 4 }}
+              transition={{ duration: 0.35 }}
             >
-              <Tag size={11} weight="bold" />
-              {tag.name}
-            </span>
-          ))}
-        </div>
+              <div className="flex items-center justify-between border-b border-ds-border/60 pb-1.5">
+                <div className="flex items-center gap-2">
+                  <Sparkle size={14} weight="fill" className="text-brand" />
+                  <span className="text-ds-sm font-semibold text-on-surface">AI Executive Summary</span>
+                </div>
+                <span className="text-[10px] font-mono text-brand font-semibold px-1.5 py-0.5 rounded bg-brand-tertiary">
+                  Verified Insights
+                </span>
+              </div>
+
+              {/* Bulleted Key Takeaways */}
+              <div className="p-2 sm:p-2.5 rounded bg-surface dark:bg-black/30 text-[11px] sm:text-[12px] text-on-surface leading-relaxed border border-ds-border/40 space-y-1.5 relative overflow-hidden">
+                {phase === 0 && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-emerald-400/10 to-transparent animate-[shimmer_1.5s_infinite] -translate-x-full pointer-events-none" />
+                )}
+                <div className="flex items-start gap-2">
+                  <span className="text-brand font-bold">•</span>
+                  <span>15-minute quick skillet recipe using fresh cremini mushrooms &amp; shallots.</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <span className="text-brand font-bold">•</span>
+                  <span>Deglaze with dry white wine and blend with coconut cream for a silky finish.</span>
+                </div>
+              </div>
+
+              {/* Intent Classification Strip */}
+              <div className="flex items-center justify-between px-2.5 py-1 rounded bg-brand/5 border border-brand/20 text-[11px]">
+                <span className="text-on-surface-secondary font-mono uppercase tracking-wider text-[9px] sm:text-[10px]">Detected Intent</span>
+                <span className="text-brand font-semibold flex items-center gap-1.5 text-[11px]">
+                  <ChefHat size={13} weight="bold" />
+                  Try Recipe
+                </span>
+              </div>
+            </motion.div>
+
+            {/* Dynamic Tag Stamping Pill Stack */}
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 pt-0.5">
+              <span className="text-[10px] sm:text-[11px] font-mono text-on-surface-secondary uppercase tracking-wider mr-1">
+                Generated Tags:
+              </span>
+              {[
+                { name: "#recipe", bg: "bg-blue-500/10 text-blue-700 dark:text-blue-300 border-blue-500/20", delay: 0 },
+                { name: "#mushrooms", bg: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/20", delay: 0.15 },
+                { name: "#quickdinner", bg: "bg-amber-500/10 text-amber-700 dark:text-amber-300 border-amber-500/20", delay: 0.3 },
+                { name: "#culinary", bg: "bg-rose-500/10 text-rose-700 dark:text-rose-300 border-rose-500/20", delay: 0.45 },
+              ].map((tag) => (
+                <motion.span
+                  key={tag.name}
+                  className={`px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-ds-pill text-[11px] sm:text-[12px] font-medium border flex items-center gap-1 ${tag.bg}`}
+                  initial={{ scale: 0.8, opacity: 0.4 }}
+                  animate={{
+                    scale: phase >= 2 ? [0.8, 1.15, 1.0] : 0.85,
+                    opacity: phase >= 2 ? 1 : 0.4,
+                  }}
+                  transition={{ duration: 0.3, delay: tag.delay }}
+                >
+                  <Tag size={11} weight="bold" />
+                  {tag.name}
+                </motion.span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* OPTION B: Holographic Laser Dissector */}
+        {optionMode === "B" && (
+          <div className="space-y-2.5 sm:space-y-3">
+            {/* Top Raw Social Item with sweeping laser beam */}
+            <div className="relative rounded-ds-md bg-zinc-900 border border-ds-border p-3 overflow-hidden shadow-sm">
+              {/* Sweeping Emerald Laser Beam */}
+              <motion.div
+                className="absolute left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-emerald-400 to-transparent shadow-[0_0_12px_#10B981] z-20 pointer-events-none"
+                animate={{ top: ["0%", "100%", "0%"] }}
+                transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+              />
+
+              <div className="flex items-center justify-between border-b border-white/10 pb-2 mb-2">
+                <div className="flex items-center gap-2">
+                  <span className="w-5 h-5 rounded bg-gradient-to-tr from-[#833ab4] via-[#fd1d1d] to-[#fcb045] flex items-center justify-center text-white text-[10px]">
+                    <InstagramLogo size={12} weight="bold" />
+                  </span>
+                  <span className="text-[11px] font-mono text-zinc-300">Raw Post Intake: @theepicchef</span>
+                </div>
+                {/* Audio Equalizer Waveform indicator */}
+                <div className="flex items-center gap-0.5">
+                  <span className="w-1 h-3 bg-emerald-400 animate-pulse rounded-full" />
+                  <span className="w-1 h-4 bg-emerald-400 animate-pulse delay-75 rounded-full" />
+                  <span className="w-1 h-2 bg-emerald-400 animate-pulse delay-150 rounded-full" />
+                  <span className="w-1 h-3.5 bg-emerald-400 animate-pulse delay-100 rounded-full" />
+                </div>
+              </div>
+
+              <div className="text-[11px] text-zinc-300 space-y-1">
+                <p className="font-semibold text-white">Creamy Mushroom &amp; Spinach Soup (Reel · 0:48)</p>
+                <p className="text-zinc-400 text-[10px]">
+                  Audio Transcript: "15-minute quick skillet recipe using fresh cremini mushrooms... deglaze with dry white wine..."
+                </p>
+              </div>
+            </div>
+
+            {/* Laser Extracted Structured Takeaways */}
+            <div className="rounded-ds-md bg-surface-secondary/80 dark:bg-zinc-800/80 border border-emerald-500/30 p-3 space-y-2 shadow-sm">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-mono font-semibold text-emerald-400 flex items-center gap-1.5">
+                  <Sparkle size={13} weight="fill" />
+                  Synthesized Extraction Output
+                </span>
+                <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400">
+                  X-Ray Completed
+                </span>
+              </div>
+
+              <div className="p-2 rounded bg-surface dark:bg-black/30 text-[11px] text-on-surface leading-relaxed border border-ds-border/40 space-y-1">
+                <p>• 15-minute skillet dinner using cremini mushrooms &amp; shallots.</p>
+                <p>• Deglaze with dry white wine and blend with coconut cream.</p>
+              </div>
+            </div>
+
+            {/* Extracted Tags */}
+            <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+              <span className="text-[10px] font-mono text-on-surface-secondary uppercase tracking-wider mr-1">
+                Extracted Tags:
+              </span>
+              {[
+                { name: "#recipe", bg: "bg-blue-500/10 text-blue-700 dark:text-blue-300 border-blue-500/20" },
+                { name: "#mushrooms", bg: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/20" },
+                { name: "#quickdinner", bg: "bg-amber-500/10 text-amber-700 dark:text-amber-300 border-amber-500/20" },
+                { name: "#culinary", bg: "bg-rose-500/10 text-rose-700 dark:text-rose-300 border-rose-500/20" },
+              ].map((tag) => (
+                <span
+                  key={tag.name}
+                  className={`px-2 py-0.5 rounded-ds-pill text-[11px] font-medium border flex items-center gap-1 ${tag.bg}`}
+                >
+                  <Tag size={11} weight="bold" />
+                  {tag.name}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Footer reassurance */}
@@ -356,9 +534,49 @@ function StepTwoVisual() {
 
 // -----------------------------------------------------------------------------
 // Visual for Step 3: Find Instantly with Semantic Search
+// (Living Reactive Keystroke Simulation Engine)
 // -----------------------------------------------------------------------------
 function StepThreeVisual() {
-  const [typed, setTyped] = useState("creamy mushroom soup");
+  const fullQuery = "creamy mushroom soup";
+  const [typedText, setTypedText] = useState("");
+  const [isTyping, setIsTyping] = useState(true);
+  const [showResult, setShowResult] = useState(false);
+
+  useEffect(() => {
+    let timeoutId;
+    let charIndex = 0;
+    let isDeleting = false;
+
+    const tick = () => {
+      if (!isDeleting) {
+        if (charIndex <= fullQuery.length) {
+          setTypedText(fullQuery.slice(0, charIndex));
+          charIndex++;
+          setIsTyping(true);
+          setShowResult(charIndex > 8);
+
+          const delay = charIndex > 0 && fullQuery[charIndex - 1] === " " ? 220 : 85 + Math.random() * 45;
+          timeoutId = setTimeout(tick, delay);
+        } else {
+          setIsTyping(false);
+          setShowResult(true);
+          timeoutId = setTimeout(() => {
+            isDeleting = true;
+            tick();
+          }, 3600);
+        }
+      } else {
+        charIndex = 0;
+        isDeleting = false;
+        setShowResult(false);
+        setTypedText("");
+        timeoutId = setTimeout(tick, 600);
+      }
+    };
+
+    tick();
+    return () => clearTimeout(timeoutId);
+  }, []);
 
   return (
     <div className="relative w-full min-h-[480px] h-auto lg:h-[500px] rounded-[24px] bg-surface dark:bg-zinc-900 border border-ds-border/90 dark:border-white/10 p-4 sm:p-7 flex flex-col justify-between overflow-visible lg:overflow-hidden shadow-tier-1">
@@ -379,63 +597,111 @@ function StepThreeVisual() {
         </p>
       </div>
 
-      {/* Visual Centerpiece: Search Input + Result Card */}
+      {/* Visual Centerpiece: Living Reactive Search Bar + Result Card */}
       <div className="relative z-10 my-auto py-2 space-y-2.5 sm:space-y-3">
-        {/* Search Bar with live typed query */}
-        <div className="w-full px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-ds-md bg-surface dark:bg-zinc-800 border border-brand/50 shadow-sm flex items-center justify-between">
-          <div className="flex items-center gap-2 sm:gap-2.5 text-on-surface text-ds-sm font-medium">
+        {/* Living Reactive Search Bar */}
+        <div
+          className={`w-full px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-ds-md bg-surface dark:bg-zinc-800 border transition-all duration-300 shadow-sm flex items-center justify-between ${
+            isTyping
+              ? "border-[#4A5D4E] shadow-[0_0_16px_rgba(74,93,78,0.3)] ring-1 ring-[#4A5D4E]/50"
+              : "border-brand/50"
+          }`}
+        >
+          <div className="flex items-center gap-2 sm:gap-2.5 text-on-surface text-ds-sm font-medium min-w-0">
             <MagnifyingGlass size={16} weight="bold" className="text-brand shrink-0" />
-            <span className="truncate">{typed}</span>
-            <span className="w-1.5 h-4 bg-brand animate-pulse inline-block shrink-0" />
-          </div>
-          <span className="text-[10px] sm:text-[11px] font-mono text-emerald-600 dark:text-emerald-400 font-semibold px-2 py-0.5 rounded bg-emerald-500/10 shrink-0">
-            0.18s lookup
-          </span>
-        </div>
-
-        {/* Surfaced Result Card */}
-        <div className="rounded-ds-md bg-surface dark:bg-zinc-800 border border-brand/30 p-3 sm:p-3.5 shadow-md space-y-2 sm:space-y-2.5">
-          <div className="flex items-center justify-between border-b border-ds-border/60 pb-2">
-            <div className="flex items-center gap-2">
-              <img
-                src="https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=100&q=80"
-                alt="Avatar"
-                className="w-6 h-6 sm:w-7 sm:h-7 rounded-full object-cover"
-              />
-              <div>
-                <p className="text-ds-sm font-semibold text-on-surface leading-tight flex items-center gap-1">
-                  <span>@theepicchef</span>
-                  <CheckCircle size={13} weight="fill" className="text-brand" />
-                </p>
-                <p className="text-[10px] text-on-surface-secondary font-mono">Instagram Reel · 0:48</p>
-              </div>
-            </div>
-            <span className="text-[11px] font-mono text-brand font-semibold px-2 py-0.5 rounded bg-brand-tertiary">
-              Top Match
+            <span className="truncate">
+              {typedText}
+              <span className="w-1.5 h-4 bg-brand animate-pulse inline-block align-middle ml-0.5" />
             </span>
           </div>
 
-          <h4 className="text-ds-base font-semibold text-on-surface leading-snug">
-            Creamy Mushroom &amp; Spinach Soup Recipe
-          </h4>
-
-          {/* AI Summary Box */}
-          <div className="p-2 rounded bg-surface-secondary/80 dark:bg-black/30 border border-ds-border/40 text-[11px] text-on-surface-secondary leading-relaxed">
-            <span className="font-semibold text-brand mr-1">💡 AI Summary:</span>
-            "15-minute quick dinner recipe using blended coconut milk, sautéed oyster mushrooms, and cracked black pepper."
+          <div className="shrink-0 flex items-center gap-1.5">
+            {isTyping ? (
+              <span className="text-[10px] font-mono text-zinc-400 bg-surface-secondary px-2 py-0.5 rounded animate-pulse">
+                vector lookup...
+              </span>
+            ) : (
+              <span className="text-[10px] sm:text-[11px] font-mono text-emerald-600 dark:text-emerald-400 font-semibold px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20">
+                ⚡ 0.18s lookup
+              </span>
+            )}
           </div>
+        </div>
 
-          <div className="flex items-center justify-between pt-1">
-            <div className="flex items-center gap-1 sm:gap-1.5">
-              <span className="px-1.5 sm:px-2 py-0.5 rounded bg-brand-tertiary text-brand text-[10px] font-medium">#recipe</span>
-              <span className="px-1.5 sm:px-2 py-0.5 rounded bg-brand-tertiary text-brand text-[10px] font-medium">#mushrooms</span>
-              <span className="px-1.5 sm:px-2 py-0.5 rounded bg-brand-tertiary text-brand text-[10px] font-medium">#healthy</span>
-            </div>
-            <button className="text-[11px] sm:text-[12px] font-medium text-brand hover:underline flex items-center gap-1">
-              <span>Open Link</span>
-              <ArrowRight size={12} weight="bold" />
-            </button>
-          </div>
+        {/* Emergent Result Card with Keyword Matches Highlighted */}
+        <div className="min-h-[200px]">
+          <AnimatePresence mode="wait">
+            {showResult && (
+              <motion.div
+                key="search-result"
+                initial={{ opacity: 0, y: 14, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -8, scale: 0.98 }}
+                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                className="rounded-ds-md bg-surface dark:bg-zinc-800 border border-[#4A5D4E]/40 p-3 sm:p-3.5 shadow-md space-y-2 sm:space-y-2.5 relative overflow-hidden"
+              >
+                {/* Result Header */}
+                <div className="flex items-center justify-between border-b border-ds-border/60 pb-2">
+                  <div className="flex items-center gap-2">
+                    <img
+                      src="https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=100&q=80"
+                      alt="Avatar"
+                      className="w-6 h-6 sm:w-7 sm:h-7 rounded-full object-cover"
+                    />
+                    <div>
+                      <p className="text-ds-sm font-semibold text-on-surface leading-tight flex items-center gap-1">
+                        <span>@theepicchef</span>
+                        <CheckCircle size={13} weight="fill" className="text-brand" />
+                      </p>
+                      <p className="text-[10px] text-on-surface-secondary font-mono">Instagram Reel · 0:48</p>
+                    </div>
+                  </div>
+
+                  <span className="text-[10px] sm:text-[11px] font-mono text-emerald-400 font-semibold px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                    Top Match · 99.4%
+                  </span>
+                </div>
+
+                {/* Title with highlighted match */}
+                <h4 className="text-ds-base font-semibold text-on-surface leading-snug">
+                  <span className="bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 px-1 rounded font-bold">
+                    Creamy Mushroom
+                  </span>{" "}
+                  &amp; Spinach Soup Recipe
+                </h4>
+
+                {/* AI Summary Box */}
+                <div className="p-2 rounded bg-surface-secondary/80 dark:bg-black/30 border border-ds-border/40 text-[11px] text-on-surface-secondary leading-relaxed">
+                  <span className="font-semibold text-brand mr-1">💡 AI Summary:</span>
+                  "15-minute quick dinner recipe using blended coconut milk, sautéed oyster{" "}
+                  <span className="bg-emerald-500/15 text-emerald-600 dark:text-emerald-300 px-0.5 rounded font-medium">
+                    mushrooms
+                  </span>
+                  , and cracked black pepper."
+                </div>
+
+                {/* Tags & Action */}
+                <div className="flex items-center justify-between pt-1">
+                  <div className="flex items-center gap-1 sm:gap-1.5">
+                    <span className="px-1.5 sm:px-2 py-0.5 rounded bg-brand-tertiary text-brand text-[10px] font-medium">
+                      #recipe
+                    </span>
+                    <span className="px-1.5 sm:px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 text-[10px] font-semibold border border-emerald-500/30">
+                      #mushrooms
+                    </span>
+                    <span className="px-1.5 sm:px-2 py-0.5 rounded bg-brand-tertiary text-brand text-[10px] font-medium">
+                      #healthy
+                    </span>
+                  </div>
+                  <button className="text-[11px] sm:text-[12px] font-medium text-brand hover:underline flex items-center gap-1">
+                    <span>Open Link</span>
+                    <ArrowRight size={12} weight="bold" />
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
 
