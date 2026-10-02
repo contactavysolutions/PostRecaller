@@ -4,11 +4,11 @@ import { Platform } from "react-native";
 import { storage } from "@/src/utils/storage";
 
 function getBackendUrl(): string {
-  if (Platform.OS === "web") {
-    return process.env.EXPO_PUBLIC_BACKEND_URL || "http://localhost:8000";
-  }
   if (process.env.EXPO_PUBLIC_BACKEND_URL && !process.env.EXPO_PUBLIC_BACKEND_URL.includes("localhost")) {
     return process.env.EXPO_PUBLIC_BACKEND_URL;
+  }
+  if (Platform.OS === "web") {
+    return process.env.EXPO_PUBLIC_BACKEND_URL || "https://postrecaller.com";
   }
   // Try deriving local IP from Expo host (works for physical devices via Expo Go)
   const hostUri = Constants.expoConfig?.hostUri || (Constants as any).manifest2?.extra?.expoGo?.developer?.manifest?.debuggerHost;
@@ -18,7 +18,7 @@ function getBackendUrl(): string {
       return `http://${ip}:8000`;
     }
   }
-  return "http://192.168.68.61:8000";
+  return "https://postrecaller.com";
 }
 
 const backendBase = getBackendUrl();
