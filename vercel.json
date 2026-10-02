@@ -1,24 +1,32 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "cd web && npm install && npm run build",
-  "outputDirectory": "web/build",
-  "functions": {
-    "api/index.py": {
-      "maxDuration": 60
+  "services": {
+    "web": {
+      "root": "web"
+    },
+    "backend": {
+      "root": "backend",
+      "entrypoint": "server:app"
     }
   },
   "rewrites": [
     {
       "source": "/api",
-      "destination": "/api/index.py"
+      "destination": {
+        "service": "backend"
+      }
     },
     {
       "source": "/api/(.*)",
-      "destination": "/api/index.py"
+      "destination": {
+        "service": "backend"
+      }
     },
     {
       "source": "/(.*)",
-      "destination": "/index.html"
+      "destination": {
+        "service": "web"
+      }
     }
   ]
 }
