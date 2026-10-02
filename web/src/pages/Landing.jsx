@@ -11,7 +11,13 @@ import {
   RedditLogo,
   FacebookLogo,
   PinterestLogo,
+  LinkedinLogo,
+  ThreadsLogo,
+  MediumLogo,
+  GithubLogo,
+  SpotifyLogo,
   Article,
+  Globe,
 } from "@phosphor-icons/react";
 
 import { SiteHeader } from "@/components/SiteHeader";
@@ -19,68 +25,53 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { WaitlistForm } from "@/components/WaitlistForm";
 import { StickyHeroWorkflow } from "@/components/Landing/StickyHeroWorkflow";
 import { FeaturesCarousel } from "@/components/Landing/FeaturesCarousel";
+import { TestimonialsCarousel } from "@/components/Landing/TestimonialsCarousel";
 import { IS_WAITLIST_MODE } from "@/constants/config";
 import { api } from "@/lib/api";
 
 // -----------------------------------------------------------------------------
-// Interactive platform strip — with subtle tactile hover
+// Interactive platform strip — expanded universal intake ecosystem
 // -----------------------------------------------------------------------------
 const PLATFORMS = [
   { name: "Instagram", Icon: InstagramLogo },
   { name: "TikTok", Icon: TiktokLogo },
   { name: "YouTube", Icon: YoutubeLogo },
-  { name: "X", Icon: XLogo },
+  { name: "X (Twitter)", Icon: XLogo },
   { name: "Reddit", Icon: RedditLogo },
-  { name: "Facebook", Icon: FacebookLogo },
+  { name: "LinkedIn", Icon: LinkedinLogo },
+  { name: "Threads", Icon: ThreadsLogo },
   { name: "Pinterest", Icon: PinterestLogo },
-  { name: "Articles", Icon: Article },
+  { name: "Facebook", Icon: FacebookLogo },
+  { name: "Medium & Substack", Icon: MediumLogo },
+  { name: "GitHub", Icon: GithubLogo },
+  { name: "Spotify", Icon: SpotifyLogo },
+  { name: "Articles & News", Icon: Article },
 ];
 
 function PlatformStrip() {
   return (
     <div className="mt-8 md:mt-14 border-y border-ds-border/70 py-5 md:py-6 bg-surface/40 backdrop-blur-sm">
-      <div className="flex items-center gap-3 md:gap-6 flex-wrap justify-between max-w-[1020px] mx-auto px-5 text-on-surface-secondary text-ds-sm md:text-ds-base">
-        <span className="text-on-surface-secondary/70 uppercase tracking-[0.18em] text-[10.5px] md:text-[11px] font-semibold">
+      <div className="flex flex-col md:flex-row items-center gap-3 md:gap-5 justify-between max-w-[1180px] mx-auto px-5 text-on-surface-secondary text-ds-sm md:text-ds-base">
+        <span className="text-on-surface-secondary/80 uppercase tracking-[0.18em] text-[10.5px] md:text-[11px] font-semibold whitespace-nowrap">
           Instant intake from
         </span>
-        {PLATFORMS.map(({ name, Icon }) => (
-          <div
-            key={name}
-            className="group flex items-center gap-2 px-3 py-1.5 rounded-ds-pill border border-transparent hover:border-brand/30 hover:bg-surface-secondary/80 transition-all duration-200 cursor-default hover:scale-[1.04]"
-          >
-            <Icon size={18} weight="regular" className="text-brand-secondary transition-transform duration-200 group-hover:scale-110" />
-            <span className="group-hover:text-on-surface font-medium text-ds-sm transition-colors">{name}</span>
+        <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap justify-center md:justify-end">
+          {PLATFORMS.map(({ name, Icon }) => (
+            <div
+              key={name}
+              className="group flex items-center gap-1.5 px-2.5 py-1 rounded-ds-pill border border-transparent hover:border-brand/30 hover:bg-surface-secondary/80 transition-all duration-200 cursor-default hover:scale-[1.03]"
+            >
+              <Icon size={16} weight="regular" className="text-brand-secondary transition-transform duration-200 group-hover:scale-110" />
+              <span className="group-hover:text-on-surface font-medium text-[12px] sm:text-ds-sm transition-colors">{name}</span>
+            </div>
+          ))}
+          <div className="flex items-center gap-1.5 px-3 py-1 rounded-ds-pill bg-brand-tertiary text-brand font-semibold text-[12px] sm:text-ds-sm border border-brand/30 shadow-xs">
+            <Globe size={15} weight="bold" />
+            <span>+ Any Web Link</span>
           </div>
-        ))}
+        </div>
       </div>
     </div>
-  );
-}
-
-// -----------------------------------------------------------------------------
-// Testimonial pull-quote
-// -----------------------------------------------------------------------------
-function PullQuote() {
-  return (
-    <section className="container-page px-5 md:px-12 pt-28 md:pt-36">
-      <motion.blockquote
-        initial={{ opacity: 0, y: 16, filter: "blur(4px)" }}
-        whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
-        className="max-w-[840px] mx-auto text-center"
-      >
-        <span className="text-brand-secondary text-[64px] md:text-[96px] leading-none block mb-2 select-none font-serif" aria-hidden>“</span>
-        <p className="text-[26px] md:text-[38px] leading-[1.18] tracking-[-0.02em] text-on-surface font-medium">
-          The links I saved five months ago are finally worth something —
-          <br className="hidden md:block" />
-          they come back to me exactly when I need them.
-        </p>
-        <footer className="mt-6 text-on-surface-secondary text-ds-base font-medium">
-          — an early PostRecaller member
-        </footer>
-      </motion.blockquote>
-    </section>
   );
 }
 
@@ -120,8 +111,8 @@ export default function Landing() {
       {/* --------- EDITORIAL CAROUSEL: 4 CORE AI FEATURES --------- */}
       <FeaturesCarousel />
 
-      {/* --------- TESTIMONIAL PULLQUOTE --------- */}
-      <PullQuote />
+      {/* --------- TESTIMONIALS CAROUSEL --------- */}
+      <TestimonialsCarousel />
 
       {/* --------- CLOSING CTA — full-bleed brand slab --------- */}
       <section className="container-page px-5 md:px-12 pt-28 md:pt-40">
