@@ -24,8 +24,10 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { WaitlistForm } from "@/components/WaitlistForm";
 import { StickyHeroWorkflow } from "@/components/Landing/StickyHeroWorkflow";
-import { FeaturesCarousel } from "@/components/Landing/FeaturesCarousel";
+import { BookmarkImportShowcase } from "@/components/Landing/BookmarkImportShowcase";
+import { SuperpowerBento } from "@/components/Landing/SuperpowerBento";
 import { TestimonialsCarousel } from "@/components/Landing/TestimonialsCarousel";
+import { PricingSection } from "@/components/Landing/PricingSection";
 import { IS_WAITLIST_MODE } from "@/constants/config";
 import { api } from "@/lib/api";
 
@@ -108,11 +110,17 @@ export default function Landing() {
       {/* --------- PLATFORM INTAKE STRIP --------- */}
       <PlatformStrip />
 
-      {/* --------- EDITORIAL CAROUSEL: 4 CORE AI FEATURES --------- */}
-      <FeaturesCarousel />
+      {/* --------- UNIVERSAL BOOKMARKS & ARCHIVE IMPORT --------- */}
+      <BookmarkImportShowcase />
+
+      {/* --------- EVERYDAY SUPERPOWERS BENTO --------- */}
+      <SuperpowerBento />
 
       {/* --------- TESTIMONIALS CAROUSEL --------- */}
       <TestimonialsCarousel />
+
+      {/* --------- PRICING & BETA OFFER --------- */}
+      <PricingSection />
 
       {/* --------- CLOSING CTA — full-bleed brand slab --------- */}
       <section className="container-page px-5 md:px-12 pt-28 md:pt-40">
