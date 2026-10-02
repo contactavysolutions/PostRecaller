@@ -38,6 +38,8 @@ app.include_router(waitlist_router)
 app.include_router(admin_router)
 
 
+@app.get("/")
+@app.get("/api")
 @app.get("/api/")
 async def root():
     return {"service": "postrecaller", "status": "ok"}
@@ -46,19 +48,22 @@ async def root():
 @app.on_event("startup")
 async def startup():
     # Indexes at startup.
-    await db.users.create_index([("email", ASCENDING)], unique=True)
-    await db.users.create_index([("created_at", DESCENDING)])
-    await db.items.create_index([("user_id", ASCENDING), ("created_at", DESCENDING)])
-    await db.items.create_index([("slug", ASCENDING)], unique=True, sparse=True)
-    await db.ai_usage.create_index([("created_at", DESCENDING)])
-    await db.waitlist.create_index([("email", ASCENDING)], unique=True)
-    await db.waitlist.create_index([("created_at", ASCENDING)])
-    await db.invites.create_index([("token_hash", ASCENDING)], unique=True)
-    await db.invites.create_index([("email", ASCENDING)])
-    await db.invites.create_index([("expires_at", ASCENDING)])
-    await db.debug_logs.create_index([("created_at", ASCENDING)], expireAfterSeconds=604800)
-    await seed_admins()
-    logger.info("PostRecaller startup complete")
+    try:
+        await db.users.create_index([("email", ASCENDING)], unique=True)
+        await db.users.create_index([("created_at", DESCENDING)])
+        await db.items.create_index([("user_id", ASCENDING), ("created_at", DESCENDING)])
+        await db.items.create_index([("slug", ASCENDING)], unique=True, sparse=True)
+        await db.ai_usage.create_index([("created_at", DESCENDING)])
+        await db.waitlist.create_index([("email", ASCENDING)], unique=True)
+        await db.waitlist.create_index([("created_at", ASCENDING)])
+        await db.invites.create_index([("token_hash", ASCENDING)], unique=True)
+        await db.invites.create_index([("email", ASCENDING)])
+        await db.invites.create_index([("expires_at", ASCENDING)])
+        await db.debug_logs.create_index([("created_at", ASCENDING)], expireAfterSeconds=604800)
+        await seed_admins()
+        logger.info("PostRecaller startup complete")
+    except Exception as e:
+        logger.warning(f"PostRecaller startup index warning (non-fatal): {e}")
 
 
 @app.on_event("shutdown")
