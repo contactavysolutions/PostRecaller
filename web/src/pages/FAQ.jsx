@@ -41,33 +41,38 @@ const VISUAL_GUIDES = [
     iconColor: "text-pink-500",
     time: "2 min export",
     image: "/guides/instagram_export_guide.jpg",
-    imageAlt: "Instagram Settings to Download Your Information visual tutorial",
+    imageAlt: "Instagram Accounts Center to Export Your Information visual tutorial",
     summary:
-      "Instagram allows you to download an official archive of all your saved posts, saved Reels, and saved audio. Here is how to request your data in 3 simple steps.",
+      "Meta has centralized all data export into the Meta Accounts Center. You can download an official archive of all your saved posts, saved Reels, and collections in a few taps.",
     steps: [
       {
         num: 1,
-        title: "Open Your Activity in Instagram Settings",
-        desc: "Open the Instagram app on iPhone or Android, tap your profile picture in the bottom right, tap the three-line hamburger menu (☰) in the top right, and select 'Your activity'.",
+        title: "Open Meta Accounts Center",
+        desc: "In the Instagram app, tap your Profile picture (bottom right) → tap the three-line menu (☰) in the top right → tap 'Accounts Center' (located right at the top of the menu). Note: Meta permanently moved data export out of 'Your activity' into Accounts Center. (You can also visit accountscenter.instagram.com on any browser).",
       },
       {
         num: 2,
-        title: "Tap 'Download your information'",
-        desc: "Scroll down to the bottom of the Your Activity screen and tap 'Download your information'. On the Meta Accounts Center screen, choose 'Download or transfer information'.",
+        title: "Tap 'Your information and permissions'",
+        desc: "Under the 'Account settings' section inside Accounts Center, tap 'Your information and permissions', then tap 'Export your information' (or 'Download your information').",
       },
       {
         num: 3,
         title: "Select 'Saved posts' & choose JSON format",
-        desc: "Select 'Some of your information' > check 'Saved posts' (or Saved collections). Under format, select 'JSON' and date range 'All time'. Tap 'Submit request'.",
+        desc: "Tap 'Create export' (or 'Download or transfer information') → select your Instagram profile → choose 'Some of your information' → scroll down and check 'Saved posts' (and/or 'Saved collections').",
       },
       {
         num: 4,
+        title: "Set format to JSON & start export",
+        desc: "Under Format, select 'JSON' (JSON is structured and fast for PostRecaller to parse) and set Date range to 'All time' → tap 'Start export'. Meta will notify you by email and in-app once your .zip file is ready in the 'Available downloads' tab.",
+      },
+      {
+        num: 5,
         title: "Drop the .zip file into PostRecaller",
-        desc: "Meta will email you a link to download your .zip archive (usually ready in a few minutes). Simply drag and drop the .zip file directly into PostRecaller's Importer. We will automatically catalog, summarize, and index every saved post!",
+        desc: "Download the .zip archive and simply drag it into PostRecaller's Importer. PostRecaller instantly extracts every saved Reel and post, removes tracking bloat, and creates searchable AI summaries!",
       },
     ],
     proTip:
-      "PostRecaller cleans out all tracking query codes (like ?igsh=...) and saves permanent AI summaries so your knowledge is safe even if a creator deletes their post later.",
+      "Meta's official export gives you every bookmark and collection you've ever created. PostRecaller saves permanent summaries so you never lose key takeaways even if a creator deletes their video later.",
   },
   {
     id: "export-tiktok",
@@ -80,36 +85,36 @@ const VISUAL_GUIDES = [
     image: "/guides/tiktok_export_guide.jpg",
     imageAlt: "TikTok Settings and Privacy Download Your Data visual tutorial",
     summary:
-      "TikTok provides a complete export of your FavoriteVideoList and saved bookmarks via their official privacy tools.",
+      "TikTok allows you to export your complete FavoriteVideoList and saved bookmarks via their official in-app privacy tools.",
     steps: [
       {
         num: 1,
-        title: "Open Settings & Privacy in TikTok",
-        desc: "Go to your Profile tab in the TikTok mobile app, tap the 3-line hamburger menu (☰) in the top-right corner, and select 'Settings and privacy'.",
+        title: "Open Settings and privacy in TikTok",
+        desc: "Open TikTok, tap 'Profile' in the bottom-right corner → tap the 3-line menu (☰) in the top-right corner → select 'Settings and privacy'.",
       },
       {
         num: 2,
         title: "Navigate to Account > Download your data",
-        desc: "Tap 'Account' at the top of the settings list, then tap 'Download your data'.",
+        desc: "Tap 'Account' (at the very top of the settings list) → tap 'Download your data'.",
       },
       {
         num: 3,
-        title: "Select 'JSON' format & submit request",
-        desc: "Under 'Select file format', choose 'JSON' (JSON is structured and easy for PostRecaller to parse instantly). Tap 'Request data'.",
+        title: "Select 'JSON' format & tap 'Request data'",
+        desc: "Under 'Select file format', choose 'JSON' (JSON format allows PostRecaller to parse video links and timestamps cleanly) → tap the 'Request data' button.",
       },
       {
         num: 4,
-        title: "Import your TikTok archive into PostRecaller",
-        desc: "Once TikTok prepares your file (viewable under the 'Download data' tab), download the file and drag it into PostRecaller. All your favorite videos will be parsed into clear, searchable knowledge cards with full transcripts.",
+        title: "Download archive and drop into PostRecaller",
+        desc: "When TikTok completes preparing your archive (viewable under the 'Download data' tab on that same screen, typically takes between 10 minutes to a few hours), download the file and drag it into PostRecaller to catalog your favorite videos.",
       },
     ],
     proTip:
-      "No TikTok account password is ever needed. The export file uses official TikTok data standards and remains completely private to you.",
+      "You never need to provide your TikTok password to any third-party tool. The exported file uses TikTok's official data standard and remains 100% private to you.",
   },
   {
     id: "save-from-apps",
     category: "mobile",
-    title: "How to save posts from Instagram, Facebook, Reddit & TikTok on your phone",
+    title: "How to save posts from Instagram, Facebook, Reddit, TikTok & X on your phone",
     badge: "Mobile Share Sheet",
     icon: DeviceMobile,
     iconColor: "text-emerald-500",
@@ -117,31 +122,31 @@ const VISUAL_GUIDES = [
     image: "/guides/mobile_share_guide.jpg",
     imageAlt: "Mobile Share Sheet tutorial highlighting PostRecaller and Copy Link",
     summary:
-      "You don't need to manually type or copy-paste complicated URLs. Save any video, thread, or article directly from your phone's native Share Sheet.",
+      "Save any video, reel, recipe, discussion, or article in 1 tap directly from your phone's native Share Sheet without copying and pasting manually.",
     steps: [
       {
         num: 1,
         title: "Tap the Share icon in any app",
-        desc: "When viewing any post, Reel, or thread in Instagram, Facebook, Reddit, TikTok, X, or YouTube, tap the Share icon (the paper airplane, curved arrow, or share button).",
+        desc: "When viewing any content you want to remember: on Instagram tap the paper airplane icon; on TikTok tap the share arrow; on Reddit or Facebook tap 'Share'; on X tap the share tray icon.",
       },
       {
         num: 2,
-        title: "Choose 'PostRecaller' from your Share Tray",
-        desc: "In your phone's share options (iOS or Android), tap the PostRecaller icon. If you don't see it immediately, tap 'More' and add PostRecaller to your favorites.",
+        title: "Tap 'PostRecaller' in your Share Tray",
+        desc: "In your phone's native share options (iOS or Android), tap the PostRecaller icon. If not visible in the top row, scroll right and tap 'More' to pin PostRecaller to your favorites.",
       },
       {
         num: 3,
         title: "Alternative: Tap 'Copy Link'",
-        desc: "If you prefer, tap 'Copy Link'. When you switch over to the PostRecaller app or web app, it will auto-detect the copied link and ask: 'Save this post to vault?' with one tap.",
+        desc: "If you prefer, tap 'Copy Link' in any app. The next time you open PostRecaller, it will automatically detect the clipboard link and show a 1-tap 'Save to vault' banner.",
       },
       {
         num: 4,
-        title: "AI takes care of the rest",
-        desc: "PostRecaller saves the link, parses the contents, extracts key takeaways, and assigns relevant tags in the background. You're done!",
+        title: "AI silently organizes everything in the background",
+        desc: "PostRecaller cleans out tracking junk (?igsh=..., ?utm_source=...), extracts key takeaways and transcripts, and tags it automatically. You never need to manually file folders again.",
       },
     ],
     proTip:
-      "Platform specifics: In Reddit, tap the Share button under any discussion to preserve the top community answers. In Facebook, tap the 3 dots (...) > Copy Link or Share to PostRecaller.",
+      "Reddit discussions & top answers: When saving Reddit posts via the share sheet, PostRecaller captures the original post plus the top-voted solutions and comments.",
   },
   {
     id: "export-browsers",
@@ -154,31 +159,105 @@ const VISUAL_GUIDES = [
     image: "/guides/browser_export_guide.jpg",
     imageAlt: "Chrome Bookmarks Manager Export Bookmarks HTML visual tutorial",
     summary:
-      "Easily rescue hundreds of forgotten browser bookmarks and convert them into organized, AI-searchable cards.",
+      "Rescue years of forgotten browser bookmarks and convert them into an organized, AI-searchable personal library in seconds.",
     steps: [
       {
         num: 1,
-        title: "Open Bookmarks Manager",
-        desc: "In Google Chrome, Microsoft Edge, or Brave: press Ctrl+Shift+O (Cmd+Option+B on Mac) or click the three dots (⋮) > Bookmarks and lists > Bookmark manager.",
+        title: "Open your browser's Bookmark Manager",
+        desc: "In Google Chrome, Microsoft Edge, or Brave: press Ctrl+Shift+O on Windows (or Cmd+Option+B on Mac). Alternatively, click the three dots (⋮) in the top-right corner > 'Bookmarks and lists' > 'Bookmark manager'.",
       },
       {
         num: 2,
         title: "Click the 3 dots (⋮) and choose 'Export bookmarks'",
-        desc: "In the top-right corner of the Bookmark manager, click the three vertical dots (⋮) and select 'Export bookmarks'. This saves a bookmarks_...html file to your computer.",
+        desc: "Inside Bookmark manager, click the three vertical dots (⋮) in the top-right search header and select 'Export bookmarks'. This saves a bookmarks_...html file to your computer.",
       },
       {
         num: 3,
         title: "For Safari & Firefox users",
-        desc: "Safari: Click File in the top Mac menu bar > Export > Bookmarks. Firefox: Press Ctrl+Shift+O (Cmd+Shift+O on Mac) > click 'Import and Backup' > select 'Export Bookmarks to HTML'.",
+        desc: "Safari: Click 'File' in the top Mac menu bar > 'Export' > 'Bookmarks'. Firefox: Press Ctrl+Shift+O (Cmd+Shift+O on Mac) > click 'Import and Backup' > 'Export Bookmarks to HTML'.",
       },
       {
         num: 4,
         title: "Upload the .html file to PostRecaller",
-        desc: "Drag the saved .html file into PostRecaller's Importer. PostRecaller will automatically preserve your folder structures, clean out 404 links, and add intelligent AI categorization.",
+        desc: "Drag the exported .html file into PostRecaller's Importer. PostRecaller reads the links, removes dead 404 URLs, preserves your folders, and adds intelligent AI categorization.",
       },
     ],
     proTip:
-      "Even if you have 2,000+ unorganized links scattered across nested folders, PostRecaller's batch parser indexes them in seconds without freezing your computer.",
+      "Have over 1,000+ unorganized links? PostRecaller's batch parser handles thousands of bookmarks in parallel, indexing and deduplicating your entire backlog in seconds.",
+  },
+  {
+    id: "export-facebook",
+    category: "social",
+    title: "How to export your saved items & collections from Facebook",
+    badge: "Facebook",
+    icon: FacebookLogo,
+    iconColor: "text-blue-600",
+    time: "2 min export",
+    image: "/guides/instagram_export_guide.jpg",
+    imageAlt: "Meta Accounts Center Facebook Data Export tutorial",
+    summary:
+      "Because Facebook uses the Meta Accounts Center, exporting your saved posts, reels, articles, and marketplace links follows the exact same official pathway.",
+    steps: [
+      {
+        num: 1,
+        title: "Open Facebook Settings",
+        desc: "On mobile or web, tap your Profile picture / Menu (☰) → tap the Settings gear icon → tap 'Accounts Center' at the top of the screen. (Or navigate to accountscenter.facebook.com directly).",
+      },
+      {
+        num: 2,
+        title: "Navigate to Your Information and Permissions",
+        desc: "In Accounts Center, tap 'Your information and permissions' → tap 'Export your information' (or 'Download your information').",
+      },
+      {
+        num: 3,
+        title: "Choose Facebook Profile & Select 'Saved items'",
+        desc: "Tap 'Download or transfer information' → select your Facebook account → choose 'Some of your information' → scroll and check 'Saved items'.",
+      },
+      {
+        num: 4,
+        title: "Select JSON format & Submit",
+        desc: "Choose format 'JSON' and date range 'All time' → tap 'Start export'. Once Meta finishes preparing your .zip file, download it and drag it into PostRecaller.",
+      },
+    ],
+    proTip:
+      "PostRecaller cleans out tracking query strings and extracts full summaries from Facebook posts, shared news links, and Reels so you never lose the key information.",
+  },
+  {
+    id: "export-reddit",
+    category: "social",
+    title: "How to save posts from Reddit & export your saved history",
+    badge: "Reddit",
+    icon: RedditLogo,
+    iconColor: "text-orange-500",
+    time: "1 tap / 3 min export",
+    image: "/guides/mobile_share_guide.jpg",
+    imageAlt: "Reddit Share to PostRecaller and data export visual tutorial",
+    summary:
+      "You can save Reddit posts with one tap using the mobile share sheet, or request your complete saved post history directly from Reddit.",
+    steps: [
+      {
+        num: 1,
+        title: "Method A (Instant 1-Tap): Tap Share > PostRecaller",
+        desc: "Under any Reddit discussion, question, or tutorial, tap the 'Share' icon → tap 'PostRecaller'. PostRecaller extracts the discussion, top community answers, and key takeaway points.",
+      },
+      {
+        num: 2,
+        title: "Method B (Full History): Request Reddit Data Export",
+        desc: "In any web browser, visit reddit.com/settings/data-request. Log into your account and select 'I want to request my Reddit data' → choose your full account history.",
+      },
+      {
+        num: 3,
+        title: "Receive saved_posts.csv file",
+        desc: "Reddit will process your request and email you a download link to a ZIP archive containing 'saved_posts.csv' (all the URLs you have ever saved on Reddit).",
+      },
+      {
+        num: 4,
+        title: "Drop saved_posts.csv into PostRecaller",
+        desc: "Drag the CSV file into PostRecaller. Our parser automatically fetches each Reddit thread, summarizes the answers, and organizes your years of Reddit saves into clean, searchable notes.",
+      },
+    ],
+    proTip:
+      "Reddit's native interface caps your saved post view at ~1,000 items. Requesting your official data file via reddit.com/settings/data-request allows PostRecaller to rescue older saves that Reddit no longer shows in your feed!",
   },
 ];
 

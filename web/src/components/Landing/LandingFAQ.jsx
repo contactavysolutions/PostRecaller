@@ -18,7 +18,7 @@ const FAQ_ITEMS = [
     icon: UploadSimple,
     question: "How do I import my existing saves from Instagram, TikTok, or X?",
     answer:
-      "You can export your saved posts directly from each app’s official data settings. In Instagram, go to Profile > Menu (☰) > Your Activity > Download your information, select 'Saved posts', and download the .zip file. In TikTok, go to Settings & privacy > Account > Download your data. Once you have the file, simply drop it into PostRecaller’s importer. Our parser automatically cleans tracking junk, generates AI summaries, and indexes your entire backlog in seconds.",
+      "You can export your saved posts directly from each app’s official data settings. In Instagram, go to Profile > Menu (☰) > Accounts Center > Your information and permissions > Export your information, select 'Saved posts', and choose JSON format. (You can also go to accountscenter.instagram.com on web). In TikTok, go to Settings & privacy > Account > Download your data. Once you have the file, simply drop it into PostRecaller’s importer. Our parser automatically cleans tracking junk, generates AI summaries, and indexes your entire backlog in seconds.",
     guideLink: "/faq#export-instagram",
     guideLabel: "View Instagram & TikTok Export Guide",
   },
