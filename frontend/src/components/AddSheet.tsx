@@ -518,7 +518,7 @@ export function AddSheet() {
                           fontSize: fontSize.lg,
                         }}
                       >
-                        {stage === "duplicate" ? "Already in your vault" : "Saved & organized"}
+                        {stage === "duplicate" ? "Already in your vault" : "Saved to Vault"}
                       </Text>
                     </View>
 
@@ -551,7 +551,7 @@ export function AddSheet() {
                           <PlatformBadge platform={result.platform} size={22} />
                         </View>
                       )}
-                      <View style={{ flex: 1, gap: 4 }}>
+                      <View style={{ flex: 1, gap: 6 }}>
                         <Text
                           numberOfLines={2}
                           style={{
@@ -562,16 +562,42 @@ export function AddSheet() {
                         >
                           {result.title}
                         </Text>
-                        <Text
-                          numberOfLines={2}
-                          style={{
-                            color: c.onSurfaceSecondary,
-                            fontFamily: fonts.regular,
-                            fontSize: fontSize.sm,
-                          }}
-                        >
-                          {result.summary}
-                        </Text>
+                        {result.enrichment_status === "pending" || !result.summary ? (
+                          <View
+                            style={{
+                              flexDirection: "row",
+                              alignItems: "center",
+                              gap: 6,
+                              backgroundColor: c.brandTertiary,
+                              paddingHorizontal: 8,
+                              paddingVertical: 3,
+                              borderRadius: radius.pill,
+                              alignSelf: "flex-start",
+                            }}
+                          >
+                            <ActivityIndicator size={11} color={c.brand} />
+                            <Text
+                              style={{
+                                color: c.brand,
+                                fontFamily: fonts.medium,
+                                fontSize: 11,
+                              }}
+                            >
+                              AI Enrichment in progress…
+                            </Text>
+                          </View>
+                        ) : (
+                          <Text
+                            numberOfLines={2}
+                            style={{
+                              color: c.onSurfaceSecondary,
+                              fontFamily: fonts.regular,
+                              fontSize: fontSize.sm,
+                            }}
+                          >
+                            {result.summary}
+                          </Text>
+                        )}
                       </View>
                     </View>
 

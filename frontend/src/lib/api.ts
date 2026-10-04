@@ -140,7 +140,8 @@ export const api = {
 
   deleteItem: (id: string) => request<void>(`/items/${id}`, { method: "DELETE" }),
 
-  retryEnrich: (id: string) => request<Item>(`/items/${id}/enrich`, { method: "POST" }),
+  retryEnrich: (id: string, sync = true) =>
+    request<Item>(`/items/${id}/enrich?sync=${sync}`, { method: "POST" }),
 
   collections: () =>
     request<{ collections: { intent: string; count: number }[] }>("/collections"),

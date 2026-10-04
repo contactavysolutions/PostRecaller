@@ -14,53 +14,70 @@ import {
 
 const FAQ_ITEMS = [
   {
+    id: "save-mobile",
+    icon: ShareNetwork,
+    question: "1. How do I save a post from Instagram, Facebook, TikTok, or Reddit on my phone?",
+    answer:
+      "Whenever you see a post, Reel, tutorial, or video you want to keep, tap your app's Share button (the paper airplane on Instagram, arrow on TikTok, or Share on Facebook/Reddit) and select 'PostRecaller'. Our app captures the link, cleans tracking junk (?igsh=..., ?utm_source=...), and queues it into your private vault. You can also tap 'Copy Link' and open PostRecaller—it will auto-detect the clipboard link and prompt to save in 1 tap.",
+    guideLink: "/faq#save-from-apps",
+    guideLabel: "View Mobile Sharing Guide",
+  },
+  {
+    id: "how-enrichment-works",
+    icon: Sparkle,
+    question: "2. What happens after I save a link? How does AI enrichment work?",
+    answer:
+      "The moment you tap Save, the post is added to your vault and immediately starts background AI enrichment. The post card shows an active 'Processing AI…' badge while our AI extracts the executive summary, transcripts key takeaways, and assigns smart tags. Within seconds, the card updates automatically in real-time.",
+    guideLink: "/faq",
+    guideLabel: "Learn More in Help Center",
+  },
+  {
     id: "import-social",
     icon: UploadSimple,
-    question: "How do I import my existing saves from Instagram, TikTok, or X?",
+    question: "3. How do I import my existing saved posts from Instagram, TikTok, or Facebook?",
     answer:
-      "You can export your saved posts directly from each app’s official data settings. In Instagram, go to Profile > Menu (☰) > Accounts Center > Your information and permissions > Export your information, select 'Saved posts', and choose JSON format. (You can also go to accountscenter.instagram.com on web). In TikTok, go to Settings & privacy > Account > Download your data. Once you have the file, simply drop it into PostRecaller’s importer. Our parser automatically cleans tracking junk, generates AI summaries, and indexes your entire backlog in seconds.",
+      "You can export your saved posts directly from each app's official settings. In Instagram and Facebook, go to Profile > Menu (☰) > Accounts Center > Your information and permissions > Export your information, select 'Saved posts', and choose JSON format. In TikTok, go to Settings & privacy > Account > Download your data. Once you have the file, simply drag and drop it into PostRecaller's Importer.",
     guideLink: "/faq#export-instagram",
     guideLabel: "View Instagram & TikTok Export Guide",
   },
   {
     id: "import-browser",
     icon: Globe,
-    question: "How do I import my bookmarks from Chrome, Safari, or Firefox?",
+    question: "4. How do I import my bookmarks from Chrome, Safari, Edge, or Firefox?",
     answer:
-      "In Google Chrome, Edge, or Brave, press Ctrl+Shift+O (Cmd+Option+B on Mac), click the three dots (⋮) in the top-right corner, and select 'Export bookmarks'. In Safari, click File > Export > Bookmarks. This saves a clean .html file. Drop this file into PostRecaller, and all your browser links will be instantly cataloged with smart tags and searchable notes.",
+      "In Google Chrome, Edge, or Brave, press Ctrl+Shift+O (Cmd+Option+B on Mac), click the three dots (⋮) in the top-right corner, and select 'Export bookmarks'. In Safari, click File > Export > Bookmarks. This produces an .html file. Drop this file into PostRecaller, and all your browser links will be cataloged with smart tags and searchable summaries.",
     guideLink: "/faq#export-browsers",
     guideLabel: "View Browser Bookmarks Guide",
   },
   {
-    id: "save-mobile",
-    icon: ShareNetwork,
-    question: "How do I save a post from Instagram, Facebook, or Reddit on my phone?",
-    answer:
-      "Whenever you see a post, Reel, or video you love, tap the Share icon (the paper airplane on Instagram, Share on Facebook/Reddit, or the arrow on TikTok). In your phone's share tray, tap 'PostRecaller'. Our app silently captures the link, cleans tracking parameters, extracts key takeaways in the background, and saves it to your private vault.",
-    guideLink: "/faq#save-from-apps",
-    guideLabel: "View Mobile Sharing Guide",
-  },
-  {
-    id: "deleted-posts",
+    id: "beta-limits",
     icon: ShieldCheck,
-    question: "What happens if a creator deletes a post or makes their account private?",
+    question: "5. What are the usage limits during the Public Beta?",
     answer:
-      "Traditional bookmarks break when a creator deletes a video, removes an article, or sets their profile to private ('link rot'). PostRecaller extracts the executive summary, audio/video transcript, and key metadata the moment you save it. Even if the original post disappears from the internet, your knowledge vault preserves the takeaways forever.",
-    guideLink: null,
-  },
-  {
-    id: "beta-free",
-    icon: Sparkle,
-    question: "Is PostRecaller really free during the Public Beta?",
-    answer:
-      "Yes! During our public beta launch, all Pro features—including unlimited saves, full social archive imports, unlimited AI takeaways, and smart auto-categorization—are 100% unlocked for free for all accounts created during beta. No credit card is required to sign up.",
+      "To ensure fast performance and protect our shared infrastructure, PostRecaller provides generous fair-use allowances: up to 200 saved links per day, up to 1,000 links per bookmark file import (25MB max file size), and daily free AI enrichments that reset every night at midnight UTC. All accounts created during beta are 100% free with no credit card required.",
     guideLink: "/register",
     guideLabel: "Claim Free Beta Access",
   },
   {
+    id: "deleted-posts",
+    icon: ShieldCheck,
+    question: "6. What happens if a creator deletes a post or makes their account private?",
+    answer:
+      "Traditional bookmarks break when a creator deletes a video, removes an article, or sets their profile to private ('link rot'). PostRecaller extracts the executive summary, key takeaways, and tags the moment you save it. Even if the original post disappears from the internet, your knowledge vault preserves the takeaways forever.",
+    guideLink: null,
+  },
+  {
+    id: "passwords",
+    icon: Question,
+    question: "7. Does PostRecaller ever ask for or store my social media passwords?",
+    answer:
+      "Never. PostRecaller is 100% passwordless and never requests access to your Instagram, TikTok, Facebook, or Reddit accounts. Intake works purely through standard mobile share links and official data files exported by you.",
+    guideLink: null,
+  },
+  {
     id: "export-data",
     icon: Question,
-    question: "Can I export my data if I ever want to switch tools?",
+    question: "8. Can I export my data if I ever want to switch tools?",
     answer:
       "Absolutely. We believe in zero vendor lock-in. You can export your entire vault at any time in standard JSON or Markdown formats with all summaries, original URLs, and tags intact. Your data belongs entirely to you.",
     guideLink: null,

@@ -94,7 +94,7 @@ export default function ItemDetail() {
   const onRetryEnrich = async () => {
     setEnriching(true);
     try {
-      const updated = await api.retryEnrich(id);
+      const updated = await api.retryEnrich(id, true);
       setItem(updated);
       setTitle(updated.title);
       setSummary(updated.summary);
@@ -108,6 +108,28 @@ export default function ItemDetail() {
       setEnriching(false);
     }
   };
+
+  // Auto-poll if item is currently pending background enrichment
+  useEffect(() => {
+    if (item?.enrichment_status !== "pending") return;
+    const timer = setInterval(async () => {
+      try {
+        const fresh = await api.getItem(id);
+        if (fresh.enrichment_status !== "pending") {
+          setItem(fresh);
+          setTitle(fresh.title);
+          setSummary(fresh.summary);
+          setTags(fresh.tags);
+          setIntent(fresh.intent);
+          triggerRefresh();
+        }
+      } catch {
+        /* ignore */
+      }
+    }, 2500);
+
+    return () => clearInterval(timer);
+  }, [id, item?.enrichment_status, triggerRefresh]);
 
   const onDelete = async () => {
     await api.deleteItem(id);
@@ -148,7 +170,8 @@ export default function ItemDetail() {
   }
 
   const heroH = 300;
-  const needsEnrich = item.enrichment_status === "pending" || item.enrichment_status === "failed" || item.enrichment_status === "manual";
+  const isPending = item.enrichment_status === "pending";
+  const needsEnrich = item.enrichment_status === "failed" || item.enrichment_status === "manual";
 
   const CircleBtn = ({ children, onPress, testID }: any) => (
     <Pressable
@@ -202,7 +225,30 @@ export default function ItemDetail() {
             </View>
           ) : null}
 
-          {needsEnrich ? (
+          {isPending ? (
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 12,
+                backgroundColor: c.brandTertiary,
+                borderRadius: radius.md,
+                padding: spacing.md,
+                borderWidth: 1,
+                borderColor: c.brand + "40",
+              }}
+            >
+              <ActivityIndicator size="small" color={c.brand} />
+              <View style={{ flex: 1, gap: 2 }}>
+                <Text style={{ color: c.onSurface, fontFamily: fonts.medium, fontSize: fontSize.base }}>
+                  AI Enrichment in progress…
+                </Text>
+                <Text style={{ color: c.onSurfaceSecondary, fontFamily: fonts.regular, fontSize: fontSize.sm }}>
+                  Extracting summary, key takeaways, and tags in the background.
+                </Text>
+              </View>
+            </View>
+          ) : needsEnrich ? (
             <Button
               testID="retry-enrich"
               label={enriching ? "Enriching…" : "Enrich with AI"}

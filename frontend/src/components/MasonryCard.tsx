@@ -1,7 +1,7 @@
 import { Image } from "expo-image";
 import { WarningCircle } from "phosphor-react-native";
 import React from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native";
 
 import { PlatformBadge } from "@/src/components/PlatformBadge";
 import { Item } from "@/src/lib/api";
@@ -19,7 +19,8 @@ function imgHeight(id: string): number {
 export function MasonryCard({ item, onPress }: { item: Item; onPress: () => void }) {
   const { c, radius, fonts, fontSize, spacing, shadow } = useTheme();
   const height = imgHeight(item.id);
-  const needsAttention = item.enrichment_status === "pending" || item.enrichment_status === "failed";
+  const isPending = item.enrichment_status === "pending";
+  const isFailed = item.enrichment_status === "failed" || item.enrichment_status === "manual";
 
   return (
     <Pressable
@@ -76,7 +77,26 @@ export function MasonryCard({ item, onPress }: { item: Item; onPress: () => void
           </Text>
         ) : null}
 
-        {needsAttention ? (
+        {isPending ? (
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 6,
+              marginTop: 4,
+              backgroundColor: c.brandTertiary,
+              paddingHorizontal: 8,
+              paddingVertical: 3.5,
+              borderRadius: radius.pill,
+              alignSelf: "flex-start",
+            }}
+          >
+            <ActivityIndicator size={11} color={c.brand} />
+            <Text style={{ color: c.brand, fontFamily: fonts.medium, fontSize: 11 }}>
+              Processing AI…
+            </Text>
+          </View>
+        ) : isFailed ? (
           <View style={{ flexDirection: "row", alignItems: "center", gap: 6, marginTop: 2 }}>
             <WarningCircle size={15} color={c.warning} weight="fill" />
             <Text style={{ color: c.warning, fontFamily: fonts.regular, fontSize: fontSize.sm }}>

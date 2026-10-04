@@ -266,10 +266,16 @@ const VISUAL_GUIDES = [
 // -----------------------------------------------------------------------------
 const GENERAL_FAQS = [
   {
-    id: "passwords",
-    category: "privacy",
-    q: "Does PostRecaller ever ask for or store my social media passwords?",
-    a: "Never. PostRecaller is 100% passwordless and never asks for your Instagram, TikTok, Facebook, or Reddit passwords. We use official data archives (exported directly by you from the platform) and public share links. Your personal social media accounts remain completely untouched and secure.",
+    id: "how-enrichment-works",
+    category: "features",
+    q: "What happens after I share or save a link? How does AI enrichment work?",
+    a: "The moment you tap Save, the post is stored in your vault and immediately queued for background AI enrichment. The post card displays an active 'Processing AI…' badge while our AI extracts the executive summary, transcribes video/audio takeaways, and assigns smart tags. The card updates automatically in real-time within seconds without needing to refresh or restart the app.",
+  },
+  {
+    id: "beta-limits",
+    category: "pricing",
+    q: "What are the usage limits during the Public Beta?",
+    a: "To ensure lightning-fast performance and protect shared infrastructure, PostRecaller provides generous fair-use allowances for all beta users: up to 200 saved links per day, up to 1,000 links per bookmark file import (25MB max file size), and daily free AI enrichments that reset every night at midnight UTC. All accounts created during beta are 100% free with no credit card required.",
   },
   {
     id: "dead-links",
@@ -278,16 +284,16 @@ const GENERAL_FAQS = [
     a: "Standard browser bookmarks and platform saves break when a post is removed ('link rot'). PostRecaller extracts an executive summary, transcripts, and key points the moment a link is added. Even if the original creator deletes the post or sets their profile to private later, your knowledge vault preserves the essential takeaways forever.",
   },
   {
+    id: "passwords",
+    category: "privacy",
+    q: "Does PostRecaller ever ask for or store my social media passwords?",
+    a: "Never. PostRecaller is 100% passwordless and never asks for your Instagram, TikTok, Facebook, or Reddit passwords. We use official data archives (exported directly by you from each platform's settings) and public share links. Your personal social media accounts remain completely untouched and secure.",
+  },
+  {
     id: "platforms-supported",
     category: "features",
     q: "Which social media and web platforms are supported?",
     a: "PostRecaller supports Instagram (Posts, Reels, Carousels), TikTok, YouTube (Videos & Shorts), X (Twitter), Reddit (Posts & Comments), Facebook, LinkedIn, Threads, Pinterest, Medium, Substack, GitHub repositories, Spotify, and any standard webpage or news article.",
-  },
-  {
-    id: "limits",
-    category: "pricing",
-    q: "Is there a limit on how many posts or bookmarks I can import during Beta?",
-    a: "No! During our public beta launch, all accounts enjoy unlimited saves, full social archive imports, unlimited AI summaries, and smart auto-categorization at zero cost. No credit card is required to sign up.",
   },
   {
     id: "export-out",

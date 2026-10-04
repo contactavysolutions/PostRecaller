@@ -149,9 +149,9 @@ export function PricingSection() {
 
             <ul className="space-y-3 pt-4 border-t border-ds-border/60 text-ds-sm text-on-surface">
               {[
-                "Unlimited saved links & media posts",
-                "Full Social Archive Imports (Instagram ZIP, TikTok, X, YouTube)",
-                "Unlimited AI Key Takeaways & Video Transcripts",
+                "Expanded 200 saves per day allowance",
+                "Full Social Archive Imports (Instagram, TikTok, Facebook, Reddit)",
+                "Priority AI Key Takeaways & Video Transcripts",
                 "Smart Auto-Categorization (Recipes, Tutorials, Articles, Goods)",
                 "Full Vault Export (Markdown, JSON, CSV)",
                 "Priority AI Processing Pipeline",
