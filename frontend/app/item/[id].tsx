@@ -109,13 +109,13 @@ export default function ItemDetail() {
     }
   };
 
-  // Auto-poll if item is currently pending background enrichment
+  // Auto-poll if item is currently pending or undergoing background enrichment
   useEffect(() => {
-    if (item?.enrichment_status !== "pending") return;
+    if (item?.enrichment_status !== "pending" && item?.enrichment_status !== "in_progress" && item?.enrichment_status !== "imported") return;
     const timer = setInterval(async () => {
       try {
         const fresh = await api.getItem(id);
-        if (fresh.enrichment_status !== "pending") {
+        if (fresh.enrichment_status !== item?.enrichment_status) {
           setItem(fresh);
           setTitle(fresh.title);
           setSummary(fresh.summary);
@@ -170,7 +170,8 @@ export default function ItemDetail() {
   }
 
   const heroH = 300;
-  const isPending = item.enrichment_status === "pending";
+  const isInProgress = item.enrichment_status === "in_progress";
+  const isPending = item.enrichment_status === "pending" || item.enrichment_status === "imported";
   const needsEnrich = item.enrichment_status === "failed" || item.enrichment_status === "manual";
 
   const CircleBtn = ({ children, onPress, testID }: any) => (
@@ -225,7 +226,7 @@ export default function ItemDetail() {
             </View>
           ) : null}
 
-          {isPending ? (
+          {isInProgress ? (
             <View
               style={{
                 flexDirection: "row",
@@ -241,10 +242,32 @@ export default function ItemDetail() {
               <ActivityIndicator size="small" color={c.brand} />
               <View style={{ flex: 1, gap: 2 }}>
                 <Text style={{ color: c.onSurface, fontFamily: fonts.medium, fontSize: fontSize.base }}>
-                  AI Enrichment in progress…
+                  AI Enrichment In Progress
                 </Text>
                 <Text style={{ color: c.onSurfaceSecondary, fontFamily: fonts.regular, fontSize: fontSize.sm }}>
                   Extracting summary, key takeaways, and tags in the background.
+                </Text>
+              </View>
+            </View>
+          ) : isPending ? (
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 12,
+                backgroundColor: c.surfaceSecondary,
+                borderRadius: radius.md,
+                padding: spacing.md,
+                borderWidth: 1,
+                borderColor: c.border,
+              }}
+            >
+              <View style={{ flex: 1, gap: 2 }}>
+                <Text style={{ color: c.onSurface, fontFamily: fonts.medium, fontSize: fontSize.base }}>
+                  AI Enrichment Pending
+                </Text>
+                <Text style={{ color: c.onSurfaceSecondary, fontFamily: fonts.regular, fontSize: fontSize.sm }}>
+                  Queued for background AI processing. You can enrich immediately using the button below.
                 </Text>
               </View>
             </View>

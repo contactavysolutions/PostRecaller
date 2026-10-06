@@ -60,9 +60,11 @@ export function ItemGrid({
     load("initial");
   }, [load, refreshKey]);
 
-  // Auto-poll softly when any items are actively pending AI enrichment
+  // Auto-poll softly when any items are actively pending or undergoing AI enrichment
   useEffect(() => {
-    const hasPending = items.some((i) => i.enrichment_status === "pending");
+    const hasPending = items.some(
+      (i) => i.enrichment_status === "pending" || i.enrichment_status === "in_progress" || i.enrichment_status === "imported"
+    );
     if (!hasPending) return;
 
     const interval = setInterval(async () => {

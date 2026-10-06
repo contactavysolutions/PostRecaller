@@ -19,7 +19,8 @@ function imgHeight(id: string): number {
 export function MasonryCard({ item, onPress }: { item: Item; onPress: () => void }) {
   const { c, radius, fonts, fontSize, spacing, shadow } = useTheme();
   const height = imgHeight(item.id);
-  const isPending = item.enrichment_status === "pending";
+  const isInProgress = item.enrichment_status === "in_progress";
+  const isPending = item.enrichment_status === "pending" || item.enrichment_status === "imported";
   const isFailed = item.enrichment_status === "failed" || item.enrichment_status === "manual";
 
   return (
@@ -77,7 +78,7 @@ export function MasonryCard({ item, onPress }: { item: Item; onPress: () => void
           </Text>
         ) : null}
 
-        {isPending ? (
+        {isInProgress ? (
           <View
             style={{
               flexDirection: "row",
@@ -93,7 +94,27 @@ export function MasonryCard({ item, onPress }: { item: Item; onPress: () => void
           >
             <ActivityIndicator size={11} color={c.brand} />
             <Text style={{ color: c.brand, fontFamily: fonts.medium, fontSize: 11 }}>
-              Processing AI…
+              AI Enrichment In Progress
+            </Text>
+          </View>
+        ) : isPending ? (
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 6,
+              marginTop: 4,
+              backgroundColor: c.surfaceSecondary,
+              borderWidth: 1,
+              borderColor: c.border,
+              paddingHorizontal: 8,
+              paddingVertical: 3.5,
+              borderRadius: radius.pill,
+              alignSelf: "flex-start",
+            }}
+          >
+            <Text style={{ color: c.onSurfaceSecondary, fontFamily: fonts.medium, fontSize: 11 }}>
+              AI Enrichment Pending
             </Text>
           </View>
         ) : isFailed ? (

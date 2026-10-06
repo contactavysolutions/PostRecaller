@@ -187,7 +187,7 @@ export default function VaultPage() {
 
   // -------- polling for items undergoing background enrichment --------
   const pendingItems = useMemo(
-    () => items.filter((it) => it.enrichment_status === "pending"),
+    () => items.filter((it) => it.enrichment_status === "pending" || it.enrichment_status === "in_progress" || it.enrichment_status === "imported"),
     [items]
   );
 
@@ -208,9 +208,10 @@ export default function VaultPage() {
 
         results.forEach((res) => {
           if (res.status === "fulfilled" && res.value) {
-            const item = res.value;
-            if (item.enrichment_status !== "pending") {
-              updatedMap.set(item.id, item);
+            const freshItem = res.value;
+            const prevItem = pendingItems.find((p) => p.id === freshItem.id);
+            if (prevItem && prevItem.enrichment_status !== freshItem.enrichment_status) {
+              updatedMap.set(freshItem.id, freshItem);
               anyUpdated = true;
             }
           }

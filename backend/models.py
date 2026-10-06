@@ -79,7 +79,7 @@ class Item(BaseDocument):
     author: Optional[str] = None
     thumbnail_url: Optional[str] = None
     embedding: List[float] = Field(default_factory=list)
-    enrichment_status: str = "pending"  # enriched | manual | pending | failed
+    enrichment_status: str = "pending"  # enriched | manual | pending | in_progress | failed
     slug: Optional[str] = None
     is_public: bool = False
     created_at: datetime = Field(default_factory=utcnow)

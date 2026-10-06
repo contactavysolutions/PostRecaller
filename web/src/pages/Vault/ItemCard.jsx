@@ -16,9 +16,10 @@ function PlatformBadge({ platform }) {
 
 export function ItemCard({ item, onClick, index = 0 }) {
   const plat = platformOf(item);
-  const isPending = item.enrichment_status === "pending" || item._optimistic;
+  const isInProgress = item.enrichment_status === "in_progress";
+  const isPending = item.enrichment_status === "pending" || item.enrichment_status === "imported" || item._optimistic;
   const isFailed = item.enrichment_status === "failed";
-  const hasImage = !!item.thumbnail_url && !isPending;
+  const hasImage = !!item.thumbnail_url && !isInProgress && !isPending;
 
   return (
     <article
@@ -50,10 +51,16 @@ export function ItemCard({ item, onClick, index = 0 }) {
       )}
 
       <div className="p-3.5 flex flex-col gap-2">
-        {isPending && (
-          <div className="flex items-center gap-2 px-2.5 py-1 rounded-ds-pill bg-brand-tertiary/80 border border-brand/20 text-brand text-ds-sm w-fit" data-testid="item-card-pending">
+        {isInProgress && (
+          <div className="flex items-center gap-2 px-2.5 py-1 rounded-ds-pill bg-brand-tertiary/80 border border-brand/20 text-brand text-ds-sm w-fit" data-testid="item-card-in-progress">
             <CircleNotch size={14} weight="bold" className="animate-spin text-brand flex-shrink-0" />
-            <span style={{ fontWeight: 500 }}>Enriching in background…</span>
+            <span style={{ fontWeight: 500 }}>AI Enrichment In Progress</span>
+          </div>
+        )}
+        {!isInProgress && isPending && (
+          <div className="flex items-center gap-2 px-2.5 py-1 rounded-ds-pill bg-surface-tertiary/70 border border-ds-border text-on-surface-secondary text-ds-sm w-fit" data-testid="item-card-pending">
+            <span className="w-1.5 h-1.5 rounded-full bg-on-surface-secondary/70 flex-shrink-0" />
+            <span style={{ fontWeight: 500 }}>AI Enrichment Pending</span>
           </div>
         )}
         {isFailed && (
@@ -65,7 +72,7 @@ export function ItemCard({ item, onClick, index = 0 }) {
         <h3 className="text-on-surface text-[14px] leading-[1.35] line-clamp-3" style={{ fontWeight: 500, letterSpacing: "-0.005em" }}>
           {item.title || item.original_url}
         </h3>
-        {isPending ? (
+        {(isInProgress || isPending) ? (
           <div className="flex flex-col gap-2 pt-1 pb-1" aria-hidden>
             <div className="h-3 w-4/5 rounded-full bg-gradient-to-r from-surface-tertiary/80 via-surface-tertiary to-surface-tertiary/80 bg-[length:800px_100%] animate-shimmer" />
             <div className="h-3 w-3/5 rounded-full bg-gradient-to-r from-surface-tertiary/80 via-surface-tertiary to-surface-tertiary/80 bg-[length:800px_100%] animate-shimmer" />

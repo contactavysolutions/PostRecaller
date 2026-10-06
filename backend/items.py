@@ -67,6 +67,11 @@ async def _background_enrich(item_id: str, user_id: str, url: str) -> None:
     """Scrape and enrich a saved item in the background, updating MongoDB upon completion."""
     logger = logging.getLogger(__name__)
     try:
+        # Mark as in_progress so clients see active rotating spinner
+        await db.items.update_one(
+            {"_id": _oid(item_id)},
+            {"$set": {"enrichment_status": "in_progress", "updated_at": utcnow()}},
+        )
         signals = await scraper.scrape(url)
         platform = signals.get("platform") or scraper.detect_platform(url)
 
@@ -289,7 +294,7 @@ async def _process_archive_import(
             "is_note": False,
             "original_url": url,
             "title": b["title"],
-            "summary": f"Imported save from {platform_name}",
+            "summary": "",
             "content": "",
             "platform": platform,
             "intent": None,
@@ -297,7 +302,7 @@ async def _process_archive_import(
             "author": None,
             "thumbnail_url": None,
             "embedding": [],
-            "enrichment_status": "imported",
+            "enrichment_status": "pending",
             "is_public": False,
             "created_at": utcnow(),
         }
