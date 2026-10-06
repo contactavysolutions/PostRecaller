@@ -4,21 +4,31 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#4A5D4E" />
-        <meta name="description" content="Everything you save, finally findable. PostRecaller drops every link — Instagram, TikTok, YouTube, X, Reddit, articles — into one AI-organized vault you can actually search." />
+        <meta name="description" content="Everything you save, finally findable. PostRecaller organizes every link — Instagram, TikTok, YouTube, X, Reddit, and browser bookmarks — into one searchable AI knowledge vault." />
+        <meta name="keywords" content="AI bookmark manager, save social media posts, instagram saved posts manager, tiktok favorites organizer, reddit saved posts exporter, twitter bookmarks search, universal bookmark vault, second brain for bookmarks, AI link organizer, social media saves, chrome bookmarks import" />
+        <meta name="author" content="PostRecaller" />
+        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+        <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+        <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large" />
 
         <link rel="icon" type="image/svg+xml" href="%PUBLIC_URL%/logo.svg" />
 
-        <!-- OpenGraph -->
+        <!-- OpenGraph / Facebook / LinkedIn -->
+        <meta property="og:site_name" content="PostRecaller" />
         <meta property="og:title" content="PostRecaller — Everything you save, finally findable." />
         <meta property="og:description" content="Stop losing the posts, videos, and articles you swear you'll come back to. One AI-organized vault for every link you save." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://postrecaller.com/" />
         <meta property="og:image" content="https://postrecaller.com/og-cover.png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:locale" content="en_US" />
 
-        <!-- Twitter -->
+        <!-- Twitter Card -->
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@postrecaller" />
         <meta name="twitter:title" content="PostRecaller — Everything you save, finally findable." />
-        <meta name="twitter:description" content="One AI-organized vault for every link you save." />
+        <meta name="twitter:description" content="Stop losing the posts, videos, and articles you swear you'll come back to. One AI-organized vault for every link you save." />
         <meta name="twitter:image" content="https://postrecaller.com/og-cover.png" />
 
         <link rel="canonical" href="https://postrecaller.com/" />
@@ -30,16 +40,57 @@
         <link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500&display=swap" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
 
-        <!-- JSON-LD -->
+        <!-- Schema.org Comprehensive Structured Data (JSON-LD) -->
         <script type="application/ld+json">
         {
           "@context": "https://schema.org",
-          "@type": "SoftwareApplication",
-          "name": "PostRecaller",
-          "description": "AI-organized vault for every link you save from Instagram, TikTok, YouTube, X, Reddit, and the web.",
-          "applicationCategory": "ProductivityApplication",
-          "operatingSystem": "Web, Mobile Web",
-          "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+          "@graph": [
+            {
+              "@type": "WebApplication",
+              "@id": "https://postrecaller.com/#webapp",
+              "name": "PostRecaller",
+              "url": "https://postrecaller.com/",
+              "description": "AI-organized vault for every link you save from Instagram, TikTok, YouTube, X, Reddit, and browser bookmarks.",
+              "applicationCategory": "ProductivityApplication",
+              "operatingSystem": "Web, iOS, Android",
+              "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "USD"
+              },
+              "featureList": [
+                "Universal Social Media Saves Intake",
+                "Instagram, TikTok, Reddit, X Bookmarks Importer",
+                "AI Content Summarization & Topic Extraction",
+                "Natural Language Semantic Search",
+                "Intent-Based Buckets & Smart Collections"
+              ]
+            },
+            {
+              "@type": "Organization",
+              "@id": "https://postrecaller.com/#organization",
+              "name": "PostRecaller",
+              "url": "https://postrecaller.com/",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://postrecaller.com/logo.png"
+              }
+            },
+            {
+              "@type": "WebSite",
+              "@id": "https://postrecaller.com/#website",
+              "url": "https://postrecaller.com/",
+              "name": "PostRecaller",
+              "publisher": {
+                "@id": "https://postrecaller.com/#organization"
+              },
+              "potentialAction": {
+                "@type": "SearchAction",
+                "target": "https://postrecaller.com/vault?q={search_term_string}",
+                "query-input": "required name=search_term_string"
+              }
+            }
+          ]
         }
         </script>
 

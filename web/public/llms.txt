@@ -1,0 +1,33 @@
+# PostRecaller
+> Everything you save, finally findable. An AI-powered universal knowledge vault and bookmark manager.
+
+PostRecaller is a modern second brain and universal bookmark manager that captures posts, videos, articles, and bookmarks from any social media platform or web browser into a single, searchable vault. PostRecaller eliminates link graveyards by automatically enriching every saved URL with AI-generated titles, concise summaries, key takeaways, and smart categorization tags.
+
+## Core Capabilities
+- **Instant Intake (Zero-Effort Capture):** Save links instantly from Instagram, TikTok, YouTube, Reddit, X (Twitter), Pinterest, LinkedIn, Substack, GitHub, Medium, and any web browser via native mobile share sheets, browser extensions, or direct link drops.
+- **Universal Archive & Bookmarks Importer:** Bulk import years of existing saves in one click using native export archives:
+  - Instagram ZIP Archives (`saved_posts.json`)
+  - TikTok Data Exports (`FavoriteVideoList`)
+  - Twitter / X Bookmarks (`twitter_bookmarks.js`)
+  - Reddit Saved Posts (CSV format)
+  - YouTube Watch History & Playlists (Google Takeout JSON)
+  - Browser HTML Bookmarks (Chrome, Safari, Firefox, Edge, Brave Netscape format)
+- **AI Content Enrichment:** Scrapes page signals, OpenGraph metadata, and full article text, then passes them to Google Gemini LLM to extract human-readable titles, 2-3 sentence summaries, intent buckets (Read Later, Try Recipe, Watch, Shop, Learn), and contextual hashtags.
+- **Natural Language Search & Intent Retrieval:** Find any saved post instantly using conversational queries (e.g., "that pasta recipe with creamy garlic sauce from TikTok last month" or "python async database tips").
+- **Private & Safe by Default:** Deduplicates links automatically, strips tracking parameters (`?igsh=`, `?si=`), provides full end-to-end data export, and never sells or trains public models on personal bookmarks.
+
+## Key URLs & Documentation
+- Home: https://postrecaller.com/
+- Interactive Guides & Platform Export FAQs: https://postrecaller.com/faq
+- Free Registration & Beta Access: https://postrecaller.com/register
+- User Sign In: https://postrecaller.com/login
+- Privacy Policy: https://postrecaller.com/privacy
+- Terms of Service: https://postrecaller.com/terms
+
+## Supported Platforms & Social Media Exporters
+- Instagram: Native Takeout / Account Center export of saved posts
+- TikTok: Profile Settings -> Download your data -> JSON export of favorites
+- Twitter / X: Settings -> Download an archive of your data -> `twitter_bookmarks.js`
+- Reddit: Account Settings -> Request Reddit Data -> `saved_posts.csv`
+- YouTube: Google Takeout -> YouTube -> Watch History / Playlists JSON
+- Web Browsers: Bookmark Manager -> Export Bookmarks to HTML (Netscape Bookmark standard)

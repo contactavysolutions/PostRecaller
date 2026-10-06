@@ -1,8 +1,55 @@
+# PostRecaller — Universal AI Knowledge Vault & Bookmark Manager
+# https://postrecaller.com
+
 User-agent: *
 Allow: /
+Allow: /faq
+Allow: /pricing
+Allow: /login
+Allow: /register
+Allow: /privacy
+Allow: /terms
+Allow: /llms.txt
 Disallow: /admin
 Disallow: /vault
+Disallow: /api/
 Disallow: /reset-password
 Disallow: /forgot-password
 
+# Search Engine Crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+# AI Knowledge Crawlers (SearchGPT, Perplexity, Claude, Gemini)
+User-agent: GPTBot
+Allow: /
+Disallow: /vault
+Disallow: /admin
+Disallow: /api/
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /vault
+Disallow: /admin
+Disallow: /api/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /vault
+Disallow: /admin
+Disallow: /api/
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /vault
+Disallow: /admin
+Disallow: /api/
+
+# Sitemap & LLM context
 Sitemap: https://postrecaller.com/sitemap.xml
