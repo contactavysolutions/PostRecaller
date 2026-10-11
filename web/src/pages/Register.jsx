@@ -4,6 +4,7 @@ import { ArrowRight, Warning } from "@phosphor-icons/react";
 import { toast } from "sonner";
 
 import { AuthShell, Field } from "@/components/AuthShell";
+import { SocialAuthButton, OrDivider, AuthTrustFooter } from "@/components/SocialAuthButton";
 import { api, auth } from "@/lib/api";
 import { IS_WAITLIST_MODE } from "@/constants/config";
 
@@ -22,6 +23,21 @@ export default function Register() {
   const [confirm, setConfirm] = useState("");
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
+
+  const handleGoogleSuccess = async (idToken) => {
+    setSubmitting(true);
+    try {
+      const res = await api.googleAuth(idToken, inviteToken || undefined);
+      auth.token = res.access_token;
+      toast.success("Welcome to PostRecaller");
+      if (res.user?.is_admin) nav("/admin", { replace: true });
+      else nav("/vault", { replace: true });
+    } catch (err) {
+      toast.error(err?.message || "Google registration failed");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   // Preflight the invite token.
   useEffect(() => {
@@ -142,54 +158,67 @@ export default function Register() {
         </span>
       }
     >
-      <form onSubmit={submit} className="flex flex-col gap-4">
-        <Field label="Email" htmlFor="reg-email" error={errors.email} testId="register-email-field">
-          <input
-            id="reg-email"
-            type="email"
-            autoComplete="email"
-            data-testid="register-email-input"
-            value={email}
-            readOnly={emailLocked}
-            onChange={(e) => setEmail(e.target.value)}
-            className={`field-input ${errors.email ? "field-input-error" : ""} ${emailLocked ? "opacity-70 cursor-not-allowed" : ""}`}
-          />
-        </Field>
-        <Field label="Password" htmlFor="reg-pw" error={errors.password} testId="register-password-field">
-          <input
-            id="reg-pw"
-            type="password"
-            autoComplete="new-password"
-            data-testid="register-password-input"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className={`field-input ${errors.password ? "field-input-error" : ""}`}
-            placeholder="At least 6 characters"
-          />
-        </Field>
-        <Field label="Confirm password" htmlFor="reg-pw-c" error={errors.confirm} testId="register-confirm-field">
-          <input
-            id="reg-pw-c"
-            type="password"
-            autoComplete="new-password"
-            data-testid="register-confirm-input"
-            value={confirm}
-            onChange={(e) => setConfirm(e.target.value)}
-            className={`field-input ${errors.confirm ? "field-input-error" : ""}`}
-          />
-        </Field>
+      <div className="flex flex-col">
+        {/* Modern Google Social Sign-Up */}
+        <SocialAuthButton
+          onSuccess={handleGoogleSuccess}
+          disabled={submitting}
+          text={inviteToken ? "Claim invite with Google" : "Sign up with Google"}
+        />
 
-        <p className="text-ds-sm text-on-surface-secondary">
-          By creating an account, you agree to our{" "}
-          <Link to="/terms" className="text-on-surface hover:underline">Terms</Link> and{" "}
-          <Link to="/privacy" className="text-on-surface hover:underline">Privacy Policy</Link>.
-        </p>
+        <OrDivider label="or sign up with email" />
 
-        <button type="submit" data-testid="register-submit" disabled={submitting} className="btn-brand mt-1">
-          {submitting ? "Creating account…" : "Create my vault"}
-          {!submitting && <ArrowRight size={18} weight="bold" />}
-        </button>
-      </form>
+        <form onSubmit={submit} className="flex flex-col gap-4">
+          <Field label="Email" htmlFor="reg-email" error={errors.email} testId="register-email-field">
+            <input
+              id="reg-email"
+              type="email"
+              autoComplete="email"
+              data-testid="register-email-input"
+              value={email}
+              readOnly={emailLocked}
+              onChange={(e) => setEmail(e.target.value)}
+              className={`field-input ${errors.email ? "field-input-error" : ""} ${emailLocked ? "opacity-70 cursor-not-allowed" : ""}`}
+            />
+          </Field>
+          <Field label="Password" htmlFor="reg-pw" error={errors.password} testId="register-password-field">
+            <input
+              id="reg-pw"
+              type="password"
+              autoComplete="new-password"
+              data-testid="register-password-input"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className={`field-input ${errors.password ? "field-input-error" : ""}`}
+              placeholder="At least 6 characters"
+            />
+          </Field>
+          <Field label="Confirm password" htmlFor="reg-pw-c" error={errors.confirm} testId="register-confirm-field">
+            <input
+              id="reg-pw-c"
+              type="password"
+              autoComplete="new-password"
+              data-testid="register-confirm-input"
+              value={confirm}
+              onChange={(e) => setConfirm(e.target.value)}
+              className={`field-input ${errors.confirm ? "field-input-error" : ""}`}
+            />
+          </Field>
+
+          <p className="text-ds-sm text-on-surface-secondary">
+            By creating an account, you agree to our{" "}
+            <Link to="/terms" className="text-on-surface hover:underline">Terms</Link> and{" "}
+            <Link to="/privacy" className="text-on-surface hover:underline">Privacy Policy</Link>.
+          </p>
+
+          <button type="submit" data-testid="register-submit" disabled={submitting} className="btn-brand mt-1">
+            {submitting ? "Creating account…" : "Create my vault"}
+            {!submitting && <ArrowRight size={18} weight="bold" />}
+          </button>
+        </form>
+
+        <AuthTrustFooter />
+      </div>
     </AuthShell>
   );
 }

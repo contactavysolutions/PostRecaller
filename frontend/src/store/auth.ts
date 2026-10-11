@@ -9,6 +9,7 @@ type AuthState = {
   user: User | null;
   hydrate: () => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
+  loginWithGoogle: (idToken: string, inviteToken?: string) => Promise<void>;
   register: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   refreshMe: () => Promise<void>;
@@ -36,6 +37,12 @@ export const useAuth = create<AuthState>((set, get) => ({
 
   login: async (email, password) => {
     const res = await api.login(email, password);
+    await storage.secureSet(TOKEN_KEY, res.access_token);
+    set({ token: res.access_token, user: res.user });
+  },
+
+  loginWithGoogle: async (idToken, inviteToken) => {
+    const res = await api.googleAuth(idToken, inviteToken);
     await storage.secureSet(TOKEN_KEY, res.access_token);
     set({ token: res.access_token, user: res.user });
   },

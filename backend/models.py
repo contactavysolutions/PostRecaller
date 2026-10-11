@@ -47,7 +47,10 @@ class DailyUsage(BaseModel):
 
 class User(BaseDocument):
     email: EmailStr
-    password_hash: str
+    password_hash: Optional[str] = None
+    auth_provider: str = "local"  # local | google | apple
+    name: Optional[str] = None
+    avatar_url: Optional[str] = None
     plan: str = "free"  # free | pro
     plan_expires_at: Optional[datetime] = None
     is_admin: bool = False
@@ -58,6 +61,8 @@ class User(BaseDocument):
 class UserPublic(BaseModel):
     id: str
     email: EmailStr
+    name: Optional[str] = None
+    avatar_url: Optional[str] = None
     plan: str = "free"
     is_admin: bool = False
     ai_used_today: int = 0
@@ -95,6 +100,11 @@ class RegisterIn(BaseModel):
 class LoginIn(BaseModel):
     email: EmailStr
     password: str
+
+
+class GoogleAuthIn(BaseModel):
+    id_token: str
+    invite_token: Optional[str] = None
 
 
 class ForgotPasswordIn(BaseModel):

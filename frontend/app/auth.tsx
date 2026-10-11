@@ -22,6 +22,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Button } from "@/src/components/Button";
 import { Input } from "@/src/components/Input";
 import { LogoIcon } from "@/src/components/LogoIcon";
+import { SocialAuthButtons } from "@/src/components/SocialAuthButtons";
 import { useAuth } from "@/src/store/auth";
 import { useTheme } from "@/src/theme/ThemeContext";
 
@@ -159,6 +160,9 @@ export default function AuthScreen() {
                 </Text>
               </Pressable>
             </View>
+
+            {/* Social Media Login (Google & Apple) */}
+            <SocialAuthButtons isRegister={isRegister} />
 
             {/* Form Fields: Fully Visible Above The Fold */}
             <View style={styles.formFields}>

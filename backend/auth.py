@@ -6,6 +6,7 @@ import secrets
 from datetime import datetime, timedelta, timezone
 
 import bcrypt
+import httpx
 import jwt
 from bson import ObjectId
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
@@ -14,6 +15,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from config import (
     ACCESS_TOKEN_EXPIRE_DAYS,
     ADMIN_EMAILS,
+    GOOGLE_CLIENT_ID,
     JWT_ALGORITHM,
     JWT_SECRET,
     FREE_DAILY_AI_LIMIT,
@@ -22,6 +24,7 @@ from config import (
 from mailer import send_reset_code_email, send_welcome_email
 from models import (
     ForgotPasswordIn,
+    GoogleAuthIn,
     LoginIn,
     RegisterIn,
     ResetPasswordIn,
@@ -81,12 +84,51 @@ def _public(user: dict) -> UserPublic:
     return UserPublic(
         id=str(user["_id"]),
         email=user["email"],
+        name=user.get("name"),
+        avatar_url=user.get("avatar_url"),
         plan=user.get("plan", "free"),
         is_admin=user.get("is_admin", False),
         ai_used_today=used,
         ai_limit=FREE_DAILY_AI_LIMIT,
         created_at=user.get("created_at"),
     )
+
+
+async def verify_google_token(id_token: str) -> dict:
+    """Verifies a Google OAuth ID token using Google's tokeninfo endpoint."""
+    if not id_token:
+        raise HTTPException(status_code=400, detail="Missing Google ID token")
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        try:
+            resp = await client.get(
+                "https://oauth2.googleapis.com/tokeninfo",
+                params={"id_token": id_token},
+            )
+        except Exception as e:
+            raise HTTPException(status_code=503, detail=f"Failed to reach Google auth server: {e}")
+
+    if resp.status_code != 200:
+        raise HTTPException(status_code=401, detail="Invalid Google token")
+
+    data = resp.json()
+
+    # Enforce audience verification if GOOGLE_CLIENT_ID is configured
+    if GOOGLE_CLIENT_ID and data.get("aud") != GOOGLE_CLIENT_ID:
+        raise HTTPException(status_code=401, detail="Google token client ID mismatch")
+
+    # Check token expiration
+    try:
+        exp = int(data.get("exp", 0))
+        if exp < int(datetime.now(timezone.utc).timestamp()):
+            raise HTTPException(status_code=401, detail="Google token has expired")
+    except (ValueError, TypeError):
+        raise HTTPException(status_code=401, detail="Invalid Google token expiration")
+
+    email = (data.get("email") or "").lower().strip()
+    if not email:
+        raise HTTPException(status_code=400, detail="Google account does not have an email")
+
+    return data
 
 
 async def get_current_user(
@@ -203,7 +245,7 @@ async def register(request: Request, body: RegisterIn):
 async def login(request: Request, body: LoginIn):
     email = body.email.lower()
     user = await db.users.find_one({"email": email})
-    if not user or not verify_password(body.password, user["password_hash"]):
+    if not user or not user.get("password_hash") or not verify_password(body.password, user["password_hash"]):
         raise HTTPException(status_code=401, detail="Incorrect email or password")
     if user.get("is_deleted"):
         raise HTTPException(status_code=401, detail="Account deleted")
@@ -211,6 +253,81 @@ async def login(request: Request, body: LoginIn):
         raise HTTPException(status_code=403, detail="Account suspended")
     token = create_access_token(str(user["_id"]), email, user.get("is_admin", False))
     # Return a token & user shape compatible with older mobile clients.
+    return {
+        "access_token": token,
+        "token_type": "bearer",
+        "user": _public(user).model_dump(),
+    }
+
+
+@router.post("/google")
+@limiter.limit("10/minute")
+async def google_auth(request: Request, body: GoogleAuthIn):
+    payload = await verify_google_token(body.id_token)
+    email = payload["email"].lower().strip()
+    name = payload.get("name")
+    avatar = payload.get("picture")
+    is_admin_email = email in ADMIN_EMAILS
+
+    user = await db.users.find_one({"email": email})
+
+    if user:
+        if user.get("is_deleted"):
+            raise HTTPException(status_code=401, detail="Account deleted")
+        if user.get("is_suspended"):
+            raise HTTPException(status_code=403, detail="Account suspended")
+
+        updates = {}
+        if name and not user.get("name"):
+            updates["name"] = name
+        if avatar and not user.get("avatar_url"):
+            updates["avatar_url"] = avatar
+        if user.get("auth_provider") != "google" and not user.get("password_hash"):
+            updates["auth_provider"] = "google"
+
+        if updates:
+            await db.users.update_one({"_id": user["_id"]}, {"$set": updates})
+            user.update(updates)
+    else:
+        # Auto-register new user via Google
+        invite_doc = None
+        if body.invite_token:
+            invite_doc = await db.invites.find_one({"token_hash": hash_invite_token(body.invite_token)})
+            if invite_doc and not invite_doc.get("used_at"):
+                exp = invite_doc.get("expires_at")
+                if exp and exp.tzinfo is None:
+                    exp = exp.replace(tzinfo=timezone.utc)
+                if not (exp and utcnow() <= exp):
+                    invite_doc = None
+
+        new_user = User(
+            email=email,
+            password_hash=None,
+            auth_provider="google",
+            name=name,
+            avatar_url=avatar,
+            is_admin=is_admin_email,
+        )
+        doc = new_user.to_mongo()
+        res = await db.users.insert_one(doc)
+        doc["_id"] = res.inserted_id
+        user = doc
+
+        if invite_doc:
+            await db.invites.update_one(
+                {"_id": invite_doc["_id"]},
+                {"$set": {"used_at": utcnow(), "used_by_user_id": str(res.inserted_id)}},
+            )
+            wl_id = invite_doc.get("waitlist_id")
+            if wl_id:
+                await db.waitlist.update_one(
+                    {"_id": wl_id if isinstance(wl_id, ObjectId) else ObjectId(str(wl_id))},
+                    {"$set": {"status": "registered", "registered_at": utcnow()}},
+                )
+
+        asyncio.create_task(send_welcome_email(email))
+
+    token = create_access_token(str(user["_id"]), email, user.get("is_admin", False))
     return {
         "access_token": token,
         "token_type": "bearer",

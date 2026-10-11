@@ -63,6 +63,8 @@ export const api = {
     client.post("/auth/register", { email, password, invite_token }).then((r) => r.data),
   login: (email, password) =>
     client.post("/auth/login", { email, password }).then((r) => r.data),
+  googleAuth: (id_token, invite_token) =>
+    client.post("/auth/google", { id_token, invite_token }).then((r) => r.data),
   me: () => client.get("/auth/me").then((r) => r.data),
   forgotPassword: (email) =>
     client.post("/auth/forgot-password", { email }).then((r) => r.data),

@@ -4,6 +4,7 @@ import { ArrowRight } from "@phosphor-icons/react";
 import { toast } from "sonner";
 
 import { AuthShell, Field } from "@/components/AuthShell";
+import { SocialAuthButton, OrDivider, AuthTrustFooter } from "@/components/SocialAuthButton";
 import { api, auth } from "@/lib/api";
 import { IS_WAITLIST_MODE } from "@/constants/config";
 
@@ -15,6 +16,21 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
+
+  const handleGoogleSuccess = async (idToken) => {
+    setSubmitting(true);
+    try {
+      const res = await api.googleAuth(idToken);
+      auth.token = res.access_token;
+      toast.success("Welcome to PostRecaller");
+      if (res.user?.is_admin) nav("/admin", { replace: true });
+      else nav("/vault", { replace: true });
+    } catch (err) {
+      toast.error(err?.message || "Google sign-in failed");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   const submit = async (e) => {
     e.preventDefault();
@@ -64,42 +80,55 @@ export default function Login() {
         </div>
       }
     >
-      <form onSubmit={submit} className="flex flex-col gap-4">
-        <Field label="Email" htmlFor="login-email" error={errors.email} testId="login-email-field">
-          <input
-            id="login-email"
-            type="email"
-            autoComplete="email"
-            data-testid="login-email-input"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className={`field-input ${errors.email ? "field-input-error" : ""}`}
-            placeholder="you@example.com"
-          />
-        </Field>
-        <Field label="Password" htmlFor="login-password" error={errors.password} testId="login-password-field">
-          <input
-            id="login-password"
-            type="password"
-            autoComplete="current-password"
-            data-testid="login-password-input"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className={`field-input ${errors.password ? "field-input-error" : ""}`}
-            placeholder="••••••••"
-          />
-        </Field>
-
-        <button
-          type="submit"
-          data-testid="login-submit"
+      <div className="flex flex-col">
+        {/* Modern Google Social Sign-In */}
+        <SocialAuthButton
+          onSuccess={handleGoogleSuccess}
           disabled={submitting}
-          className="btn-brand mt-2"
-        >
-          {submitting ? "Signing in…" : "Sign in"}
-          {!submitting && <ArrowRight size={18} weight="bold" />}
-        </button>
-      </form>
+          text="Continue with Google"
+        />
+
+        <OrDivider label="or continue with email" />
+
+        <form onSubmit={submit} className="flex flex-col gap-4">
+          <Field label="Email" htmlFor="login-email" error={errors.email} testId="login-email-field">
+            <input
+              id="login-email"
+              type="email"
+              autoComplete="email"
+              data-testid="login-email-input"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className={`field-input ${errors.email ? "field-input-error" : ""}`}
+              placeholder="you@example.com"
+            />
+          </Field>
+          <Field label="Password" htmlFor="login-password" error={errors.password} testId="login-password-field">
+            <input
+              id="login-password"
+              type="password"
+              autoComplete="current-password"
+              data-testid="login-password-input"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className={`field-input ${errors.password ? "field-input-error" : ""}`}
+              placeholder="••••••••"
+            />
+          </Field>
+
+          <button
+            type="submit"
+            data-testid="login-submit"
+            disabled={submitting}
+            className="btn-brand mt-2"
+          >
+            {submitting ? "Signing in…" : "Sign in"}
+            {!submitting && <ArrowRight size={18} weight="bold" />}
+          </button>
+        </form>
+
+        <AuthTrustFooter />
+      </div>
     </AuthShell>
   );
 }

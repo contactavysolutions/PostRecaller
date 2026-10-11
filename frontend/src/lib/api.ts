@@ -67,6 +67,8 @@ async function request<T>(
 export type User = {
   id: string;
   email: string;
+  name?: string;
+  avatar_url?: string;
   plan: string;
   is_admin: boolean;
   ai_used_today: number;
@@ -103,6 +105,13 @@ export const api = {
     request<{ access_token: string; user: User }>("/auth/login", {
       method: "POST",
       body: { email, password },
+      auth: false,
+    }),
+
+  googleAuth: (id_token: string, invite_token?: string) =>
+    request<{ access_token: string; user: User }>("/auth/google", {
+      method: "POST",
+      body: { id_token, invite_token },
       auth: false,
     }),
 
