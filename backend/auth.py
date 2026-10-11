@@ -81,13 +81,15 @@ def _today() -> str:
 def _public(user: dict) -> UserPublic:
     usage = user.get("daily_usage") or {}
     used = usage.get("ai_enrichments", 0) if usage.get("date") == _today() else 0
+    email = (user.get("email") or "").lower()
+    is_admin = bool(user.get("is_admin") or email in ADMIN_EMAILS)
     return UserPublic(
         id=str(user["_id"]),
         email=user["email"],
         name=user.get("name"),
         avatar_url=user.get("avatar_url"),
         plan=user.get("plan", "free"),
-        is_admin=user.get("is_admin", False),
+        is_admin=is_admin,
         ai_used_today=used,
         ai_limit=FREE_DAILY_AI_LIMIT,
         created_at=user.get("created_at"),
@@ -284,6 +286,8 @@ async def google_auth(request: Request, body: GoogleAuthIn):
             updates["avatar_url"] = avatar
         if user.get("auth_provider") != "google" and not user.get("password_hash"):
             updates["auth_provider"] = "google"
+        if is_admin_email and not user.get("is_admin"):
+            updates["is_admin"] = True
 
         if updates:
             await db.users.update_one({"_id": user["_id"]}, {"$set": updates})
