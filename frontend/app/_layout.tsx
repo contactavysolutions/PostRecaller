@@ -69,10 +69,10 @@ export default function RootLayout() {
     installExtensionErrorGuard();
     hydrate();
 
-    // Failsafe: hide native splash screen within 2.5 seconds no matter what
+    // Failsafe: hide native splash screen within 1.5 seconds maximum
     const timer = setTimeout(() => {
       SplashScreen.hideAsync().catch(() => {});
-    }, 2500);
+    }, 1500);
     return () => clearTimeout(timer);
   }, [hydrate]);
 

@@ -16,6 +16,8 @@ type AuthState = {
   deleteAccount: () => Promise<void>;
 };
 
+const USER_KEY = "postrecaller_cached_user";
+
 export const useAuth = create<AuthState>((set, get) => ({
   hydrated: false,
   token: null,
@@ -24,13 +26,29 @@ export const useAuth = create<AuthState>((set, get) => ({
   hydrate: async () => {
     const token = await storage.secureGet<string | null>(TOKEN_KEY, null);
     if (token) {
+      // Instantly hydrate with cached user so the splash screen dismisses in milliseconds
+      let cachedUser: User | null = null;
       try {
-        const user = await api.me();
-        set({ token, user, hydrated: true });
-        return;
-      } catch {
-        await storage.secureRemove(TOKEN_KEY);
-      }
+        const raw = await storage.getItem<string | null>(USER_KEY, null);
+        if (raw) cachedUser = JSON.parse(raw) as User;
+      } catch {}
+      set({ token, user: cachedUser, hydrated: true });
+
+      // Silently refresh profile in background without blocking app startup
+      api
+        .me()
+        .then(async (user) => {
+          await storage.setItem(USER_KEY, JSON.stringify(user));
+          set({ user });
+        })
+        .catch(async (err: any) => {
+          if (err?.status === 401 || err?.status === 403) {
+            await storage.secureRemove(TOKEN_KEY);
+            await storage.removeItem(USER_KEY);
+            set({ token: null, user: null });
+          }
+        });
+      return;
     }
     set({ token: null, user: null, hydrated: true });
   },
@@ -38,12 +56,14 @@ export const useAuth = create<AuthState>((set, get) => ({
   login: async (email, password) => {
     const res = await api.login(email, password);
     await storage.secureSet(TOKEN_KEY, res.access_token);
+    await storage.setItem(USER_KEY, JSON.stringify(res.user));
     set({ token: res.access_token, user: res.user });
   },
 
   loginWithGoogle: async (idToken, inviteToken) => {
     const res = await api.googleAuth(idToken, inviteToken);
     await storage.secureSet(TOKEN_KEY, res.access_token);
+    await storage.setItem(USER_KEY, JSON.stringify(res.user));
     set({ token: res.access_token, user: res.user });
   },
 
@@ -55,12 +75,14 @@ export const useAuth = create<AuthState>((set, get) => ({
 
   logout: async () => {
     await storage.secureRemove(TOKEN_KEY);
+    await storage.removeItem(USER_KEY);
     set({ token: null, user: null });
   },
 
   refreshMe: async () => {
     try {
       const user = await api.me();
+      await storage.setItem(USER_KEY, JSON.stringify(user));
       set({ user });
     } catch {
       /* ignore */
@@ -70,6 +92,7 @@ export const useAuth = create<AuthState>((set, get) => ({
   deleteAccount: async () => {
     await api.deleteAccount();
     await storage.secureRemove(TOKEN_KEY);
+    await storage.removeItem(USER_KEY);
     set({ token: null, user: null });
   },
 }));
